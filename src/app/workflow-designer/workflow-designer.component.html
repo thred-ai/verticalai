@@ -70,7 +70,7 @@
             </ion-item>
             <div class="ion-padding" slot="content">
               <div class="wrap-input1 w-100 pt-3 px-0">
-                <p class="w-100 mb-3 text-white">Display image</p>
+                <p class="w-100 mb-3 text-white">Project Icon</p>
 
                 <div
                   class="w-auto rounded-icon shadow d-flex justify-content-center align-items-center mb-3"
@@ -112,11 +112,11 @@
 
               <div class="w-100 mb-3">
                 <verticalai-text-field
-                  [title]="'Model Name'"
+                  [title]="'Project Name'"
                   [bgColor]="'#1F1F1F'"
                   [value]="workflow.name"
                   [defaultValue]="workflow.name"
-                  [placeholder]="'Model Name'"
+                  [placeholder]="'Project Name'"
                   (changed)="workflow.name = $event; saveLayout()"
                 >
                 </verticalai-text-field>

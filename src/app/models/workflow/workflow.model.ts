@@ -53,7 +53,7 @@ export class Workflow {
     this.created = created;
     this.modified = modified ?? created;
     this.creatorName = creatorName ?? 'Unknown Developer';
-    this.name = name ?? 'My New Agent';
+    this.name = name ?? 'My Project';
     this.rating = rating ?? 0;
     this.downloads = downloads ?? 0;
     this.status = status ?? 0;
