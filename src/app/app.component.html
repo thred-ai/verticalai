@@ -3,6 +3,7 @@
     class="w-100 border-table-bottom bg-theme-2"
     style="height: 70px; position: fixed; z-index: 50; top: 0"
     id="top-bar"
+    *ngIf="!(location.path() | isRoute : ['dashboard'])"
   >
     <div
       class="w-100 h-100 justify-content-between align-items-center d-flex"
@@ -89,7 +90,7 @@
                   <div
                     class="popover-body-padding bg-theme border-table text-center px-3"
                     id="profile-menu"
-                    style="min-width: 250px;"
+                    style="min-width: 250px"
                   >
                     <div class="big-design-header" style="height: 40px">
                       <mat-icon
@@ -121,9 +122,7 @@
                       />
                     </div>
                     <span
-                      class="fw-bolder text-{{
-                        mode
-                      }} px-2 d-none d-md-block"
+                      class="fw-bolder text-{{ mode }} px-2 d-none d-md-block"
                       style="font-size: medium"
                     >
                       {{
@@ -180,8 +179,10 @@
     </div>
   </div>
   <div
-    class="w-100 bar-{{ mode }} layout-container-grow"
-    style="margin-top: 70px"
+    class="w-100 bar-{{ mode }} layout-container-grow-{{
+      (location.path() | isRoute : ['dashboard']) ? 'full' : ''
+    }}"
+    [style.margin-top.px]="(location.path() | isRoute : ['dashboard']) ? 0 : 70"
   >
     <router-outlet (activate)="onActivate($event)"></router-outlet>
   </div>
