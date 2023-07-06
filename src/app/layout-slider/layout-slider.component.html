@@ -1,0 +1,30 @@
+<div
+  class="w-100 d-flex justify-content-center align-content-center flex-column"
+>
+  <mat-form-field
+    class="rounded-15 ms-0"
+    style="width: 60px; aspect-ratio: 2"
+    appearance="outline"
+    floatLabel="never"
+  >
+    <input
+      matInput
+      currencyMask
+      [options]="customCurrencyMaskConfig"
+      type="text"
+      name="name"
+      [ngModel]="value"
+      (ngModelChange)="valueChange.emit(inputVal($event))"
+      placeholder="0"
+    />
+  </mat-form-field>
+  <ion-range
+    [ticks]="false"
+    [snaps]="true"
+    [pin]="true"
+    [min]="0"
+    [max]="100"
+    [value]="value"
+    (ionChange)="valueChange.emit(sliderVal($event))"
+  ></ion-range>
+</div>

@@ -1,0 +1,736 @@
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
+import {
+  BranchedStep,
+  Definition,
+  Designer,
+  GlobalEditorContext,
+  Properties,
+  Step,
+  StepEditorContext,
+  StepsConfiguration,
+  ToolboxConfiguration,
+  ToolboxGroupConfiguration,
+} from 'sequential-workflow-designer';
+import { DesignerComponent } from 'sequential-workflow-designer-angular';
+import { Dict, LoadService } from '../load.service';
+import { Workflow } from '../models/workflow/workflow.model';
+import { AIModelType } from '../models/workflow/ai-model-type.model';
+import { Trigger } from '../models/workflow/trigger.model';
+import { TrainingData } from '../models/workflow/training-data.model';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Key } from '../models/workflow/key.model';
+import { APIRequest } from '../models/workflow/api-request.model';
+import { ApiEditorComponent } from '../api-editor/api-editor.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CodeEditorComponent } from '../code-editor/code-editor.component';
+import { WorkflowCodeComponent } from '../workflow-code/workflow-code.component';
+import { WorkflowComponent } from '../workflow/workflow.component';
+
+@Component({
+  selector: 'verticalai-workflow-designer',
+  templateUrl: './workflow-designer.component.html',
+  styleUrls: ['./workflow-designer.component.scss'],
+})
+export class WorkflowDesignerComponent
+  implements OnInit, AfterViewInit, AfterViewChecked
+{
+  designer?: Designer;
+
+  public definitionJSON?: string;
+
+  @Input() workflow?: Workflow;
+  openLayouts = ['g-comp', 'general', 'config'];
+
+  @ViewChild('gridModeSwitch', { read: ElementRef }) element:
+    | ElementRef
+    | undefined;
+
+  //
+  @Input() models: Dict<AIModelType> = {};
+  flowModels: Dict<AIModelType> = {};
+
+  @Input() triggers: Dict<Trigger> = {};
+  @Input() trainingData: Dict<TrainingData> = {};
+  @Input() apiKeys: Dict<Key> = {};
+  @Input() apiRequests: Dict<APIRequest> = {};
+  @Input() theme: 'light' | 'dark' = 'light';
+
+  dataTriggers: Trigger[] = [];
+
+  get pluginGroup(): ToolboxGroupConfiguration {
+    return {
+      name: 'Plugins',
+      steps: [
+        {
+          componentType: 'task',
+          name: 'Twilio',
+          properties: {
+            defaultName: 'Twilio',
+          },
+          type: 'twilio',
+        },
+      ],
+    };
+  }
+
+  get flowGroup(): ToolboxGroupConfiguration {
+    return {
+      name: 'Flow',
+      steps: [
+        {
+          componentType: 'switch',
+          name: 'Branch Agent',
+          properties: {
+            defaultName: 'Branch Agent',
+            order: {
+              'Option 1': 0,
+              'Option 2': 1,
+            },
+          },
+          type: 'switch',
+          id: 'decision',
+          branches: {
+            'Option 1': [],
+            'Option 2': [],
+          },
+        } as Step,
+        {
+          componentType: 'container',
+          name: 'Loop Agent',
+          properties: {
+            defaultName: 'Loop Agent',
+            frequency: 1,
+          },
+          type: 'container',
+          id: 'loop',
+          sequence: [],
+        } as Step,
+        {
+          componentType: 'task',
+          name: 'Breakpoint',
+          properties: {
+            defaultName: 'Breakpoint',
+            type: 'break',
+          },
+          type: 'break',
+          id: 'break',
+          sequence: [],
+        } as Step,
+      ],
+    };
+  }
+
+  get taskGroup(): ToolboxGroupConfiguration {
+    return {
+      name: 'Tasks',
+      steps: [
+        {
+          componentType: 'task',
+          name: 'Custom Agent',
+          properties: {
+            defaultName: 'Custom Agent',
+            type: 'api',
+          },
+          type: 'api',
+          id: 'api',
+          sequence: [],
+        } as Step,
+        {
+          componentType: 'task',
+          name: 'Web Agent',
+          properties: {
+            defaultName: 'Web Agent',
+            type: 'web',
+          },
+          type: 'web',
+          id: 'web',
+          sequence: [],
+        } as Step,
+        {
+          componentType: 'task',
+          name: 'Script Agent',
+          properties: {
+            defaultName: 'Script Agent',
+            type: 'js',
+          },
+          type: 'js',
+          id: 'js',
+          sequence: [],
+        } as Step,
+      ],
+    };
+  }
+
+  @Output() detailsChanged = new EventEmitter<Workflow>();
+  @Output() iconChanged = new EventEmitter<File>();
+  @Output() trainingDataChanged = new EventEmitter<TrainingData>();
+  @Output() apiKeyChanged = new EventEmitter<Key>();
+  @Output() apiRequestChanged = new EventEmitter<APIRequest>();
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private clipboard: Clipboard,
+    private dialog: MatDialog,
+    private renderer: Renderer2,
+    private loadService: LoadService,
+    private workflowComponent: WorkflowComponent
+  ) {}
+
+  @ViewChildren('geditor') divs?: QueryList<ElementRef>;
+
+  ngAfterViewChecked(): void {}
+
+  copy(text: string) {
+    this.clipboard.copy(text);
+  }
+
+  openAPIEditor(api: APIRequest, step: Step) {
+    let editor = this.dialog.open(ApiEditorComponent, {
+      height: 'calc(var(--vh, 1vh) * 70)',
+      width: 'calc(var(--vh, 1vh) * 70)',
+      maxWidth: '100vw',
+      panelClass: 'app-full-bleed-dialog',
+
+      data: {
+        api,
+      },
+    });
+
+    editor.afterClosed().subscribe((value) => {
+      if (value && value != '') {
+        let api = value as APIRequest;
+        this.apiRequestChanged.emit(api);
+        setTimeout(() => {
+          this.refreshStepEditor(step);
+        }, 500);
+      }
+    });
+  }
+
+  openCodeEditor(
+    script: string,
+    step: Step,
+    context: StepEditorContext,
+    type: string,
+    name: string,
+    callback: (data: Dict<any>) => any,
+    c = callback.bind(this)
+  ) {
+    let editor = this.dialog.open(CodeEditorComponent, {
+      height: 'calc(var(--vh, 1vh) * 70)',
+      width: 'calc(var(--vh, 1vh) * 70)',
+      maxWidth: '100vw',
+      panelClass: 'app-full-bleed-dialog',
+
+      data: {
+        script,
+        type,
+      },
+    });
+
+    editor.afterClosed().subscribe((api) => {
+      console.log(api);
+      if (api != undefined) {
+        let value = api as string;
+        c({
+          step,
+          context,
+          name,
+          value,
+          type,
+        });
+      }
+    });
+  }
+
+  setStepProperty(data: Dict<any>) {
+    let step = data['step'] as Step;
+    let context = data['context'] as StepEditorContext;
+    let name = data['name'] as string;
+    let value = data['value'] as any;
+
+    if (step) {
+      step.properties[name] = value;
+      context?.notifyPropertiesChanged();
+      setTimeout(() => {
+        this.refreshStepEditor(step);
+      }, 500);
+    }
+  }
+
+  // encodeURIComponent(JSON.stringify(<INPUT>))
+
+  saveTrainingData(data: Dict<any>) {
+    console.log('oi');
+    let step = data['step'] as Step;
+    let value = data['value'] as any;
+    let type = data['type'] as string;
+    let id = step.id;
+
+    if (step) {
+      var uploadData = value;
+
+      let trainingData = new TrainingData(id, type, uploadData);
+      this.trainingDataChanged.emit(trainingData);
+
+      this.refreshStepEditor(step);
+    }
+  }
+
+  saveReplacedInput(data: Dict<any>) {
+    console.log('oi');
+    let step = data['step'] as Step;
+    let value = data['value'] as any;
+    let context = data['context'] as StepEditorContext;
+
+    if (step) {
+      var uploadData = value;
+
+      this.updateProperty(
+        step.properties,
+        'overrideInput',
+        uploadData,
+        context
+      );
+
+      // this.refreshStepEditor(step);
+    }
+  }
+
+  saveAPIKey(id: string, data: string = '') {
+    let apiKey = new Key(id, data);
+    this.apiKeyChanged.emit(apiKey);
+  }
+
+  ngAfterViewInit(): void {
+    let title = document.getElementsByClassName('sqd-toolbox-header-title')[0];
+
+    if (title) {
+      title.innerHTML = 'Components';
+    }
+
+    this.setAPISVG();
+    this.setIcon();
+  }
+
+  setIcon() {
+    if (this.element) {
+      const targetSpan: HTMLElement = this.element.nativeElement.querySelector(
+        '.mat-slide-toggle-thumb'
+      );
+      while (targetSpan.firstChild) {
+        targetSpan.firstChild.remove();
+      }
+      const elem = this.renderer.createElement('mat-icon');
+      const icon = this.showingGrid ? 'grid_on' : 'grid_off';
+      elem.setAttribute(
+        'class',
+        'mat-icon notranslate material-icons mat-icon-no-color light-mode-switch-icon rounded-circle'
+      );
+      elem.textContent = icon;
+      targetSpan.appendChild(elem);
+    }
+  }
+
+  @ViewChild('sqdDesigner') public sqdDesigner?: DesignerComponent;
+
+  public toolboxConfiguration: ToolboxConfiguration = {
+    groups: [],
+  };
+
+  toolBar?: HTMLDivElement;
+
+  setToolbarLoc() {
+    setTimeout(() => {
+      var content =
+        this.toolBar ??
+        (document.getElementsByClassName('sqd-scrollbox')[0] as HTMLDivElement);
+      var parent = document.getElementById('g-comp') as HTMLDivElement;
+
+      console.log(content);
+
+      if (content && parent && parent.firstChild != content) {
+        // let newElem = content.cloneNode(true)
+        // console.log(newElem)
+        parent.firstChild?.remove();
+        parent.appendChild(content);
+        this.toolBar = content;
+
+        window.dispatchEvent(new Event('resize'));
+      }
+    }, 500);
+  }
+
+  showingGrid = true;
+
+  set showGrid(value: boolean) {
+    this.showingGrid = value;
+    this.setIcon();
+    if (value) {
+      document.documentElement.style.setProperty(
+        '--gridColor',
+        this.loadService.themes[this.theme].gridColor
+      );
+    } else {
+      document.documentElement.style.setProperty('--gridColor', `transparent`);
+    }
+  }
+
+  changeBranchName(
+    newName: string,
+    step: BranchedStep,
+    i: number,
+    context: StepEditorContext
+  ) {
+    const map1 = new Map();
+    const map2 = new Map();
+
+    Object.keys(step.branches).forEach((key, index) => {
+      if (index == i) {
+        map1.set(newName, step.branches[key]);
+        map2.set(newName, index);
+        return;
+      }
+      map1.set(key, step.branches[key]);
+      map2.set(key, index);
+    });
+
+    step.branches = Object.fromEntries(map1);
+    step.properties['order'] = Object.fromEntries(map2);
+
+    context.notifyChildrenChanged();
+  }
+
+  changeTriggerType(newType: string, context: GlobalEditorContext) {
+    this.workflow!.layout.properties['trigger'] = newType;
+
+    context.notifyPropertiesChanged();
+  }
+
+  changeTrainingType(type: string, step: Step, context: StepEditorContext) {
+    context.notifyChildrenChanged();
+
+    this.saveTrainingData({ step, type, context, value: '' });
+
+    setTimeout(() => {
+      context.notifyChildrenChanged();
+
+      this.refreshStepEditor(step);
+      context.notifyChildrenChanged();
+    }, 100);
+  }
+
+  definitionChanged(definition: Definition) {
+    this.workflow!.layout = definition;
+    this.setAPISVG();
+    this.saveLayout();
+  }
+
+  newBranch(step: BranchedStep, context: StepEditorContext, editor: any) {
+    const map1 = new Map();
+    const map2 = new Map();
+
+    Object.keys(step.branches).forEach((key, index) => {
+      map1.set(key, step.branches[key]);
+      map2.set(key, index);
+    });
+
+    let name = `Option ${(Object.keys(step.branches) as string[]).length + 1}`;
+
+    if (this.isNameTaken(name, step)) {
+      var index = 1;
+      do {
+        index += 1;
+        name = `Option ${
+          (Object.keys(step.branches) as string[]).length + index
+        }`;
+      } while (this.isNameTaken(name, step));
+    }
+    map1.set(name, []);
+    map2.set(name, map1.size - 1);
+
+    step.branches = Object.fromEntries(map1);
+    step.properties['order'] = Object.fromEntries(map2);
+
+    context.notifyChildrenChanged();
+
+    this.designer?.clearSelectedStep();
+
+    setTimeout(() => {
+      this.designer?.selectStepById(step.id);
+    }, 5);
+  }
+
+  deleteBranch(
+    step: BranchedStep,
+    context: StepEditorContext,
+    nameToRemove: string
+  ) {
+    const map1 = new Map();
+    const map2 = new Map();
+
+    let branches = Object.keys(step.branches);
+
+    if (branches.length == 2) {
+      return;
+    }
+    branches.forEach((key, index) => {
+      if (key != nameToRemove) {
+        map1.set(key, step.branches[key]);
+      }
+    });
+
+    var index = 0;
+    map1.forEach((m: any, key: string) => {
+      map2.set(key, index);
+      index += 1;
+    });
+
+    step.branches = Object.fromEntries(map1);
+    step.properties['order'] = Object.fromEntries(map2);
+
+    context.notifyChildrenChanged();
+
+    this.refreshStepEditor(step);
+  }
+
+  refreshStepEditor(step: Step) {
+    this.designer?.clearSelectedStep();
+
+    setTimeout(() => {
+      this.designer?.selectStepById(step.id);
+    }, 5);
+  }
+
+  public readonly stepsConfiguration: StepsConfiguration = {
+    iconUrlProvider: (componentType: string, type: string) => {
+      switch (componentType) {
+        //@ts-ignore
+        case 'task':
+          switch (type) {
+            default:
+              let id2 = type.split('-')[1];
+              if (id2) {
+                console.log(type);
+                let same = this.models[id2].models[type];
+                if (same) {
+                  return same.imgUrl;
+                }
+              }
+          }
+        default:
+          return `assets/${type}.png`;
+      }
+    },
+    canMoveStep: (sourceSequence, step, targetSequence, targetIndex) => {
+      return true;
+    },
+    canInsertStep: (step, targetSequence, targetIndex) => {
+      return true;
+    },
+    isDeletable: (step, parentSequence) => {
+      return true;
+    },
+    isDraggable: (step, parentSequence) => {
+      return true;
+    },
+    validator: () => true,
+  };
+
+  isNameTaken(name: string, step: BranchedStep) {
+    if (step.branches[name]) {
+      return true;
+    }
+    return false;
+  }
+
+  done = false;
+
+  public ngOnInit() {
+    // // this.workflowComponent.workflow.subscribe(w => {
+    //   // if (w){
+    //     this.workflow = undefined
+    //     this.designer = undefined
+
+    //     this.cdr.detectChanges()
+    //     this.workflow = w
+    //   }
+    // // })
+
+    this.done = true;
+
+    if (this.toolboxConfiguration.groups.length == 0) {
+      let modelGroups: ToolboxGroupConfiguration[] = Object.values(
+        this.models
+      ).map((modelType) => {
+        return {
+          name: `${modelType.name}s`,
+          steps: Object.values(modelType.models).map((model) => {
+            return {
+              componentType: 'task',
+              name: model.name,
+              properties: {
+                defaultName: model.name,
+                type: 'model',
+              },
+              type: model.id,
+            };
+          }),
+        };
+      });
+
+      console.log(this.triggers);
+
+      this.dataTriggers = Object.values(this.triggers);
+
+      let gpt = this.models['LLM'].models['gpt-LLM'];
+
+      if (gpt) {
+        this.flowModels['FLOW'] = new AIModelType('Flow', 'FLOW', {
+          switch: gpt,
+        });
+      }
+
+      console.log(this.models);
+
+      this.toolboxConfiguration.groups = modelGroups.concat([
+        this.flowGroup,
+        this.taskGroup,
+      ]);
+
+      var elementResizeDetectorMaker = require('element-resize-detector');
+
+      var erd = elementResizeDetectorMaker();
+
+      // // With the ultra fast scroll-based approach.
+      // // This is the recommended strategy.
+      // var erdUltraFast = elementResizeDetectorMaker({
+      //   strategy: "scroll" //<- For ultra performance.
+      // });
+
+      erd.listenTo(document.getElementById('test'), (element: HTMLElement) => {
+        var width = element.offsetWidth;
+        var height = element.offsetHeight;
+        console.log('Size: ' + width + 'x' + height);
+        window.dispatchEvent(new Event('resize'));
+      });
+    }
+  }
+
+  public onDesignerReady(designer: Designer) {
+    this.designer = designer;
+    console.log('designer ready', this.designer);
+  }
+
+  setOpenLayouts(event: any) {
+    let id = event?.srcElement?.id;
+
+    if (id == 'accordion' || id == 'g-accordion') {
+      this.openLayouts = event.detail.value;
+    }
+  }
+
+  public saveLayout() {
+    // this.definition = definition;
+
+    this.detailsChanged.emit(this.workflow);
+  }
+
+  public updateName(step: Step, event: Event, context: StepEditorContext) {
+    step.name = (event.target as HTMLInputElement).value;
+    context.notifyNameChanged();
+  }
+
+  public updateProperty(
+    properties: Properties,
+    name: string,
+    value: any,
+    context: GlobalEditorContext | StepEditorContext
+  ) {
+    properties[name] = value;
+    context.notifyPropertiesChanged();
+  }
+
+  public reloadDefinitionClicked() {
+    // this.definition = createDefinition();
+    this.updateDefinitionJSON();
+  }
+
+  private updateDefinitionJSON() {
+    this.definitionJSON = JSON.stringify(this.workflow?.layout, null, 2);
+    console.log(this.definitionJSON);
+  }
+
+  // @ViewChild('imgIcon') imgIcon?: ElementRef<HTMLImageElement>;
+
+  async fileChangeEvent(event: any, type = 1): Promise<void> {
+    console.log(event);
+
+    let file = event.target.files[0];
+
+    let buffer = await file.arrayBuffer();
+
+    var blob = new Blob([buffer]);
+
+    var reader = new FileReader();
+    reader.onload = (event: any) => {
+      var base64 = event.target.result;
+
+      let imgIcon = document.getElementById('imgIcon') as HTMLImageElement;
+      imgIcon!.src = base64;
+
+      this.iconChanged.emit(file);
+    };
+
+    reader.readAsDataURL(blob);
+  }
+
+  setAPISVG() {
+    // setTimeout(() => {
+    //   let elem = document.getElementsByClassName(
+    //     'sqd-root-start-stop-icon'
+    //   )[0] as SVGPathElement;
+    //   if (elem) {
+    //     console.log('ELEM');
+    //     let elem2 = elem.parentNode as SVGGElement;
+    //     if (elem2) {
+    //       elem?.setAttribute(
+    //         'd',
+    //         'M 28.945312 -0.140625 C 13.019531 -0.140625 0.117188 12.746094 0.117188 28.660156 L 0.117188 259.058594 C 0.117188 274.972656 13.019531 287.859375 28.945312 287.859375 L 346.054688 287.859375 C 361.980469 287.859375 374.882812 274.972656 374.882812 259.058594 L 374.882812 28.660156 C 374.882812 12.746094 361.980469 -0.140625 346.054688 -0.140625 Z M 75.820312 86.257812 L 111.714844 86.257812 L 150.480469 201.460938 L 118.527344 201.460938 L 111.320312 176.148438 L 73.679688 176.148438 L 66.246094 201.460938 L 37.136719 201.460938 Z M 173.085938 86.257812 L 223.589844 86.257812 C 248.371094 86.257812 265.144531 102.398438 265.144531 127.152344 C 265.144531 151.660156 247.488281 167.679688 221.847656 167.679688 L 202.394531 167.679688 L 202.394531 201.460938 L 173.085938 201.460938 Z M 302.8125 86.257812 L 332.121094 86.257812 L 332.121094 201.460938 L 302.8125 201.460938 Z M 202.421875 108.757812 L 202.421875 145.574219 L 215.679688 145.574219 C 228.148438 145.574219 235.5 139.175781 235.5 127.210938 C 235.484375 115.070312 228.230469 108.757812 215.847656 108.757812 Z M 91.894531 112.21875 L 79.253906 155.082031 L 105.800781 155.082031 L 93.414062 112.21875 Z M 91.894531 112.21875'
+    //       );
+    //       elem?.setAttribute('transform', 'scale(0.04583333333333333)');
+    //       elem2?.setAttribute('transform', 'translate(6, 9)');
+    //     }
+    //   }
+    // let elems = document.getElementsByClassName(
+    //   'sqd-root-start-stop-icon'
+    // )[1] as SVGPathElement;
+    // if (elems) {
+    //   console.log('ELEM');
+    //   let elem2 = elems.parentNode as SVGGElement;
+    //   if (elem2) {
+    //     elems?.setAttribute(
+    //       'd',
+    //       'M 283.265625 59.023438 L 260.585938 36.375 L 158.972656 137.941406 L 181.648438 160.589844 Z M 351.300781 36.375 L 181.570312 205.8125 L 114.734375 139.0625 L 92.054688 161.710938 L 181.570312 251.113281 L 373.902344 59.023438 Z M 1.417969 161.710938 L 90.933594 251.113281 L 113.613281 228.464844 L 24.097656 139.0625 Z M 1.417969 161.710938'
+    //     );
+    //     elems?.setAttribute('transform', 'scale(0.04583333333333333)');
+    //     elem2?.setAttribute('transform', 'translate(6, 9)');
+    //   }
+    // }
+    // }, 1);
+  }
+}

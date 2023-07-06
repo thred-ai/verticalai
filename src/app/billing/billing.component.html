@@ -1,0 +1,211 @@
+<div class="w-100 h-100 px-0">
+  <form class="w-100" [formGroup]="billingForm" novalidate>
+    <div class="big-design-header px-0 w-100" mat-dialog-title>
+      <p class="w-100 my-3 text-light fw-bold" style="font-size: medium">
+        Billing
+      </p>
+    </div>
+      <div class=" pb-0 w-100 mx-0">
+        <div class="w-100">
+          <!-- Item-->
+          <mat-card class="shipping-card mt-0 w-100 bg-theme"> 
+            <mat-card-content>
+              <div class="row">
+                <div class="col px-3">
+                  <mat-form-field class="w-100 my-2 bg-theme-2" appearance="fill">
+                    <mat-label class="text-secondary">Cardholder Name</mat-label>
+                    <input
+                      class="text-light"
+                      matInput
+                      formControlName="cardholder"
+                    />
+                    <mat-error
+                      *ngIf="
+                        billingForm.controls['cardholder'].hasError('required')
+                      "
+                    >
+                      Cardholder name is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col px-3">
+                  <mat-form-field class="w-100 my-2 bg-theme-2" appearance="fill">
+                    <mat-label class="text-secondary">Company (Optional)</mat-label>
+                    <input
+                      class="text-light"
+                      matInput
+                      formControlName="company"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-3 mt-3 px-3">
+                <div class="col p-2 bg-theme-2">
+                  <ngx-stripe-card
+                    [options]="cardOptions"
+                    [elementsOptions]="elementsOptions"
+                  >
+                  </ngx-stripe-card>
+                </div>
+              </div>
+            </mat-card-content>
+            <!-- <mat-card-actions>
+                        <button mat-raised-button color="primary" type="submit">Submit</button>
+                      </mat-card-actions> -->
+          </mat-card>
+        </div>
+      </div>
+
+      <div class=" pb-0 mb-0 w-100 mx-0">
+        <div class="w-100">
+          <!-- Item-->
+          <mat-card class="shipping-card mt-0 w-100 mx-0 bg-theme">
+            <mat-card-header> </mat-card-header>
+            <mat-card-content>
+              <div class="row mb-0">
+                <div class="col px-3">
+                  <mat-form-field class="w-100 mt-2 mb-0 bg-theme-2" appearance="fill">
+                    <mat-label class="text-secondary">Address</mat-label>
+                    <input
+                      class="text-light"
+                      matInput
+                      formControlName="address"
+                    />
+                    <mat-error
+                      *ngIf="
+                        billingForm.controls['address'].hasError('required')
+                      "
+                    >
+                      Address is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mt-0" *ngIf="!hasUnitNumber">
+                <div class="col px-3 mb-2 mt-0 ">
+                  <button
+                    class="text-light"
+                    mat-button
+                    (click)="hasUnitNumber = !hasUnitNumber"
+                  >
+                    + Add C/O, Apt, Suite, Unit
+                  </button>
+                </div>
+              </div>
+              <div class="row" *ngIf="hasUnitNumber">
+                <div class="col px-3">
+                  <mat-form-field class="w-100 my-2 bg-theme-2" appearance="fill">
+                    <mat-label class="text-secondary">Address 2</mat-label>
+                    <textarea
+                      class="text-light"
+                      matInput
+                      formControlName="address2"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col px-3">
+                  <mat-form-field
+                    class="w-100 my-2 text-light bg-theme-2"
+                    appearance="fill"
+                  >
+                    <mat-select
+                      formControlName="country"
+                      (selectionChange)="
+                        states = addresses.getCountryByShort(
+                          $event.value
+                        ).states
+                      "
+                    >
+                      <mat-select-trigger class="text-light">
+                        {{ billingForm.controls["country"].value }}
+                      </mat-select-trigger>
+                      <mat-option
+                        class="not-empty-select text-light bg-theme-2"
+                        *ngFor="let country of countries"
+                        [value]="country.shortName"
+                      >
+                        {{ country.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-label class="text-secondary">Country</mat-label>
+                    <mat-error
+                      *ngIf="
+                        billingForm.controls['country'].hasError('required')
+                      "
+                    >
+                      Country is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col px-3">
+                  <mat-form-field class="w-100 my-2 bg-theme-2" appearance="fill">
+                    <input class="text-light" matInput formControlName="city" />
+                    <mat-label class="text-secondary">City</mat-label>
+                    <mat-error
+                      *ngIf="billingForm.controls['city'].hasError('required')"
+                    >
+                      City is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col px-3">
+                  <mat-form-field class="w-100 my-2 bg-theme-2" appearance="fill">
+                    <mat-select formControlName="state">
+                      <mat-select-trigger class="text-light">
+                        {{ billingForm.controls["state"].value }}
+                      </mat-select-trigger>
+                      <mat-option
+                        class="not-empty-select text-light bg-theme-2"
+                        *ngFor="let state of (states | dictToArr).reverse()"
+                        [value]="state.name"
+                      >
+                        {{ state.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-label class="text-secondary">Province/State</mat-label>
+                    <mat-error
+                      *ngIf="billingForm.controls['state'].hasError('required')"
+                    >
+                      State is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col px-3">
+                  <mat-form-field class="w-100 my-2 bg-theme-2" appearance="fill">
+                    <input
+                      class="text-light"
+                      matInput
+                      #postalCode
+                      maxlength="10"
+                      formControlName="postalCode"
+                    />
+                    <mat-label class="text-secondary">Postal Code</mat-label>
+                    <!-- <mat-hint align="end">{{ postalCode.value.length }} / 5</mat-hint> -->
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button
+                mat-raised-button
+                class="bg-orange text-white"
+                (click)="createToken()"
+              >
+                {{ loading ? "Saving" : "Save" }}
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm ms-2 m-auto"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+  </form>
+</div>

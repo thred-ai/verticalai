@@ -1,0 +1,175 @@
+<!-- <div class="w-100 text-center text-white d-flex justify-content-center align-items-center" style="height: 35px">
+  * Code Engine is under maintanence for 48 hours. Deployed Code will not run.*
+</div> -->
+
+<div
+  class="w-100 bg-dark"
+  style="height: calc(calc(var(--vh, 1vh) * 100) - 70px)"
+  (keydown)="onKeyDown($event)"
+>
+  <!-- <div
+    class="px-2 vw-100 d-flex justify-content-between align-items-center bg-theme-2"
+    style="height: 70px; border-bottom: #7f7f7f solid 0.5px"
+  >
+    <div class="d-flex justify-content-center align-items-center my-auto">
+      <p
+        class="btn bg-transparent rounded-circle fw-bold text-white border-0 d-flex justify-content-between align-content-center px-2 py-2 my-auto"
+        (click)="close()"
+      >
+        <mat-icon class="me-0" style="aspect-ratio: 1"> close </mat-icon>
+      </p>
+    </div>
+    <div class="d-flex justify-content-center align-items-center my-auto">
+      
+
+      <p
+        class="btn bg-dark me-3 rounded-circle fw-bold text-white border-0 d-flex d-md-none justify-content-between align-content-center px-2 py-2 my-auto"
+        (click)="openTestEditor()"
+      >
+        <mat-icon class="me-0 fw-bold" style="aspect-ratio: 1">
+          terminal
+        </mat-icon>
+      </p>
+      <button
+        class="btn bg-dark border-0 me-3 rounded-10 fw-bold text-white d-none d-md-flex justify-content-between align-content-center px-3 py-2 my-auto"
+        (click)="openTestEditor()"
+      >
+        <ng-container> Run</ng-container>
+        <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+          play_arrow
+        </mat-icon>
+      </button>
+      <p
+        class="btn bg-orange rounded-circle fw-bold text-white border-0 d-flex d-md-none justify-content-between align-content-center px-2 py-2 my-auto"
+        (click)="publish()"
+      >
+        <mat-icon class="me-0 fw-bold" style="aspect-ratio: 1"> done </mat-icon>
+      </p>
+      <button
+        class="btn bg-orange border-0 rounded-10 fw-bold text-white d-none d-md-flex justify-content-between align-content-center px-3 py-2 my-auto"
+        (click)="publish()"
+      >
+        <ng-container *ngIf="loading; else buttonTitles">
+          {{ edited ? "Saving" : "Publishing" }}
+          <span
+            class="spinner-border spinner-border-sm ms-2 m-auto"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </ng-container>
+
+        <ng-template #buttonTitles>
+          <ng-container>
+            {{ edited ? "Save AI System" : "Publish" }}</ng-container
+          >
+          <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+            check_circle
+          </mat-icon>
+        </ng-template>
+      </button>
+    </div>
+  </div> -->
+  <div
+    class="w-100 h-100 d-flex justify-content-between align-content-start"
+    style="overflow-y: hidden"
+    *ngIf="
+      workflow.value && executable && openFileId && items.value;
+      else noWorkflow
+    "
+  >
+    <app-icon-sidebar (openProj)="setWorkflow($event)"></app-icon-sidebar>
+    <app-file-sidebar
+      [hidden]="mode != 'sidebar'"
+      [models]="models"
+      [triggers]="triggers"
+      [trainingData]="trainingData"
+      [apiKeys]="apiKeys"
+      [apiRequests]="apiRequests"
+      [workflow]="workflow.value"
+      [executable]="executable"
+      [items]="items.value"
+      (detailsChanged)="publish()"
+      [selectedFile]="openFileId"
+      (selectedFileChanged)="selectFile($event)"
+    >
+    </app-file-sidebar>
+    <app-storage [hidden]="mode != 'storage'"> </app-storage>
+
+    <as-split class="w-100 h-100" class="vertical" direction="vertical">
+      <as-split-area class="horizontal" [size]="70">
+        <as-split class="w-100 h-100" direction="horizontal">
+          <as-split-area [size]="40">
+            <div
+              class="w-100 h-100 d-flex justify-content-between align-items-start"
+            >
+              <div class="w-100 h-100" *ngIf="executable.agents[openFileId]">
+                <app-workflow-code
+                  [code]="
+                    executable.agents[openFileId] &&
+                    executable.agents[openFileId].source
+                      ? executable.agents[openFileId].source!
+                      : defaultCode(executable.agents[openFileId].type)
+                  "
+                  (codeChanged)="
+                    edited = true;
+                    executable.agents[openFileId]
+                      ? (executable.agents[openFileId].source = $event)
+                      : (executable.agents[openFileId] = {
+                          id: openFileId,
+                          source: $event,
+                          compiled: null,
+                          type: executable.agents[openFileId].type
+                        });
+                    save(5)
+                  "
+                ></app-workflow-code>
+              </div>
+            </div>
+          </as-split-area>
+          <as-split-area [size]="60">
+            <verticalai-workflow-designer
+              [models]="models"
+              [triggers]="triggers"
+              [trainingData]="trainingData"
+              [apiKeys]="apiKeys"
+              [apiRequests]="apiRequests"
+              [workflow]="workflow.value"
+              [theme]="theme"
+              (detailsChanged)="edited = true; workflow.next($event); save()"
+              (iconChanged)="edited = true; workflowIcon = $event; save(0)"
+              (trainingDataChanged)="
+                edited = true; newTrainingData = $event; save(2)
+              "
+              (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
+              (apiRequestChanged)="
+                edited = true; newAPIRequest = $event; save(4)
+              "
+            >
+            </verticalai-workflow-designer>
+          </as-split-area>
+        </as-split>
+      </as-split-area>
+
+      <as-split-area [size]="30">
+        <div
+          class="h-100 d-flex justify-content-between align-items-end flex-column w-100"
+        >
+          <div class="terminal-width h-100 bg-black">
+            <app-terminal [model]="workflow.value"></app-terminal>
+          </div>
+        </div>
+      </as-split-area>
+    </as-split>
+  </div>
+
+  <ng-template #noWorkflow>
+    <div
+      class="layout-container bg-dark d-flex flex-column justify-content-center align-items-center"
+    >
+      <verticalai-loader
+        [mode]="'light'"
+        [text]="'Loading...'"
+      ></verticalai-loader>
+    </div>
+  </ng-template>
+</div>

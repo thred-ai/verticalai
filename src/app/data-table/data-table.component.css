@@ -1,0 +1,28 @@
+.nft-img {
+  width: 47.5px;
+  height: 47.5px;
+  object-fit: cover;
+}
+
+.single-line {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inherit;
+}
+
+.nft-name {
+  max-width: 130px;
+}
+
+.mat-row:hover > .mat-cell {
+  background-color: #3c64f310;
+}
+
+.nft-name {
+  max-width: 130px;
+}
+
+.mat-cell {
+  cursor: pointer;
+}

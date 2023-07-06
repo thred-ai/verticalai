@@ -1,0 +1,127 @@
+<div
+  class="bg-theme-2 h-100 border-table-right d-flex flex-column justify-content-start align-items-center py-3"
+  style="width: 70px !important; min-width: 70px !important"
+>
+  <div
+    class="rounded-circle mx-3 icons bg-pink"
+    style="
+      border-style: solid;
+      border-width: 0.2rem;
+      border-color: rgb(255, 232, 248);
+      height: fit-content;
+    "
+    *ngIf="loadedUser"
+  >
+    <img
+      *ngIf="loadedUser.url"
+      class="w-100 p-0 m-auto rounded-circle"
+      style="object-fit: contain; aspect-ratio: 1"
+      [src]="loadedUser.url"
+    />
+  </div>
+
+  <div
+    class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
+    style="aspect-ratio: 1"
+    role="button"
+  >
+    <mat-icon class="fw-bold">storage</mat-icon>
+  </div>
+
+  <div
+    class="text-light fw-bold d-flex justify-content-center align-items-start mt-4 mx-2 rounded-pill"
+    style="overflow: hidden !important"
+  >
+    <mat-accordion class="w-100 py-0">
+      <mat-expansion-panel
+        class="shadow-0 w-100 bg-theme-2"
+        [(expanded)]="expandedProjects"
+        hideToggle
+      >
+        <mat-expansion-panel-header
+          class="w-100 p-0 m-0 text-light d-flex justify-content-center align-items-start"
+          style="aspect-ratio: 1"
+        >
+          <mat-icon class="fw-bold mx-auto my-auto">widgets</mat-icon>
+        </mat-expansion-panel-header>
+        <div class="w-100" *ngIf="loadedUser">
+          <div
+            class="rounded-circle mx-auto mt-3 mb-2 icons bg-orange text-white d-flex justify-content-center align-items-center"
+            style="width: 70%; aspect-ratio: 1"
+            (click)="openProj.emit()"
+          >
+            <mat-icon class="m-auto rounded-circle fw-bold">add</mat-icon>
+          </div>
+
+          <div
+            class="mx-auto rounded-pill"
+            style="overflow: scroll; width: 70%; max-height: 40vh"
+          >
+            <div
+              class="rounded-circle w-100 mt-3 icons border border-{{
+                selectedWorkflow && selectedWorkflow == proj.id
+                  ? 'white'
+                  : 'table'
+              }}"
+              style="height: fit-content"
+              (click)="openProj.emit(proj.id)"
+              *ngFor="let proj of loadedUser.utils"
+              [mdbPopover]="template"
+              placement="right"
+              trigger="hover"
+              role="button"
+            >
+              <img
+                *ngIf="proj.displayUrl"
+                class="w-100 p-0 m-auto rounded-circle"
+                style="object-fit: contain; aspect-ratio: 1"
+                [src]="proj.displayUrl"
+              />
+
+              <ng-template #template>
+                <div class="popover-body-padding bg-theme border-table rounded">
+                  <b class="fw-bold mb-4 text-light">{{ proj.name }}</b>
+                  <br />
+
+                  <ng-container *ngIf="proj | workflowModels as models">
+                    <ng-container *ngIf="models.length > 0">
+                      <br />
+                      <b class="fw-normal mb-4 text-light">Models</b>
+                      <br />
+                      <div
+                        *ngFor="let n of models ?? []"
+                        class="d-flex justify-content-between align-items-center py-1"
+                      >
+                        <div
+                          class="bg-white rounded-circle shadow d-flex justify-content-center align-items-center"
+                          style="
+                            object-fit: contain;
+                            aspect-ratio: 1;
+                            overflow: hidden;
+                            width: 45px;
+                          "
+                        >
+                          <img
+                            class="m-auto rounded-circle"
+                            style="object-fit: contain; height: 85%; width: 85%"
+                            [src]="n.model.imgUrl"
+                          />
+                        </div>
+                        <span class="w-100 ps-2 text-light fw-normal">
+                          {{ n.model.name }}
+                          <span class="ms-1" style="color: rgb(179, 179, 179)">
+                            [{{ n.count }}]</span
+                          >
+                        </span>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>
