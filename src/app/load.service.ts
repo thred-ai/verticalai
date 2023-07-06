@@ -868,7 +868,7 @@ export class LoadService {
     console.log(uploadData)
     await new Promise((resolve, reject) => {
       this.functions
-      .httpsCallable('saveCodes')({appId: id, uploadData})
+      .httpsCallable('saveCodes')({id, uploadData})
       .pipe(first())
       .subscribe(
         async (resp) => {
