@@ -311,94 +311,6 @@
               </div>
             </ion-accordion>
 
-            <ng-container
-              *ngIf="
-                editor.step.componentType == 'switch' ||
-                editor.step.properties.type == 'model'
-              "
-            >
-              <ng-container
-                *ngIf="
-                  editor.step.type == 'switch'
-                    ? 'FLOW'
-                    : (editor.step.type | split : '-')[1] as modelId
-                "
-              >
-                <ng-container
-                  *ngIf="
-                    editor.step.type == 'switch'
-                      ? flowModels
-                      : models as yModels
-                  "
-                >
-                  <ion-accordion value="training" class="bg-transparent">
-                    <ion-item slot="header" class="text-light" [color]="theme">
-                      <ion-label>Context</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                      <ng-container
-                        *ngIf="
-                          yModels[modelId].models[editor.step.type]
-                            .trainable as trainingTypes;
-                          else notTrainable
-                        "
-                      >
-                        <ng-container
-                          *ngIf="
-                            trainingData[editor.step.id] ??
-                              {
-                                id: editor.step.id,
-                                data: '',
-                                type: 'plaintext'
-                              } as modelData;
-                            else notTrainable
-                          "
-                        >
-                          <ng-container
-                            *ngIf="trainingTypes.length > 0; else notTrainable"
-                          >
-                            <ng-container *ngIf="'plaintext' as dataType">
-                              <div class="w-100 mb-3">
-                                <verticalai-text-field
-                                  [title]="'Context Data'"
-                                  [value]="modelData.data"
-                                  [type]="'text'"
-                                  [disabled]="true"
-                                  [btn]="true"
-                                  [btnIcon]="'code_blocks'"
-                                  [bgColor]="'#1F1F1F'"
-                                  [defaultValue]="''"
-                                  [placeholder]="'Enter Data'"
-                                  [clickable]="true"
-                                  (btnClicked)="
-                                    openCodeEditor(
-                                      modelData.data,
-                                      editor.step,
-                                      editor.context,
-                                      dataType,
-                                      'data-' + dataType,
-                                      saveTrainingData
-                                    )
-                                  "
-                                >
-                                </verticalai-text-field>
-                              </div>
-                            </ng-container>
-                          </ng-container>
-                        </ng-container>
-                      </ng-container>
-
-                      <ng-template #notTrainable>
-                        <div class="w-100 px-2 text-secondary text-center">
-                          This model is not trainable
-                        </div>
-                      </ng-template>
-                    </div>
-                  </ion-accordion>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-
             <ion-accordion value="advanced" class="bg-transparent">
               <ion-item slot="header" class="text-light" [color]="theme">
                 <ion-label>Advanced</ion-label>
@@ -457,31 +369,7 @@
                 >
                 </verticalai-textbox>
               </div> -->
-                <div class="w-100 mb-3">
-                  <verticalai-text-field
-                    [title]="'Replace Input'"
-                    [value]="editor.step.properties['overrideInput'] ?? ''"
-                    [type]="'text'"
-                    [disabled]="true"
-                    [btn]="true"
-                    [btnIcon]="'code_blocks'"
-                    [bgColor]="'#1F1F1F'"
-                    [defaultValue]="''"
-                    [placeholder]="'Replace Input'"
-                    [clickable]="true"
-                    (btnClicked)="
-                      openCodeEditor(
-                        editor.step.properties['overrideInput'] ?? '',
-                        editor.step,
-                        editor.context,
-                        'plaintext',
-                        'input-' + 'plaintext',
-                        saveReplacedInput
-                      )
-                    "
-                  >
-                  </verticalai-text-field>
-                </div>
+         
               </div>
             </ion-accordion>
           </ng-container>

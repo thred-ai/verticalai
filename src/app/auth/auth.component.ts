@@ -247,7 +247,7 @@ export class AuthComponent implements OnInit, OnDestroy {
           "line_linked": {
             "enable": true,
             "distance": 150,
-            "color": "#FE6F42",
+            "color": "#1F6EF6",
             "opacity": 1,
             "width": 1
           },

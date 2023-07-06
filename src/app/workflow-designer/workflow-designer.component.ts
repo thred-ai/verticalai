@@ -89,13 +89,13 @@ export class WorkflowDesignerComponent
 
   get flowGroup(): ToolboxGroupConfiguration {
     return {
-      name: 'Flow',
+      name: 'Execution',
       steps: [
         {
           componentType: 'switch',
-          name: 'Branch Agent',
+          name: 'Branch',
           properties: {
-            defaultName: 'Branch Agent',
+            defaultName: 'Branch',
             order: {
               'Option 1': 0,
               'Option 2': 1,
@@ -110,9 +110,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'container',
-          name: 'Loop Agent',
+          name: 'Repeat',
           properties: {
-            defaultName: 'Loop Agent',
+            defaultName: 'Repeat',
             frequency: 1,
           },
           type: 'container',
@@ -609,7 +609,7 @@ export class WorkflowDesignerComponent
 
       this.toolboxConfiguration.groups = modelGroups.concat([
         this.flowGroup,
-        this.taskGroup,
+        // this.taskGroup,
       ]);
 
       var elementResizeDetectorMaker = require('element-resize-detector');
