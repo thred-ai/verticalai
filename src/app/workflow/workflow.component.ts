@@ -228,7 +228,7 @@ export class WorkflowComponent implements OnInit {
             if (w) {
               this.items.next([
                 new TaskTree(
-                  this.jsFormattedName(w.name, 0),
+                  w.name,
                   'app',
                   'category',
                   this.analyzeTasks(w.layout.sequence),
