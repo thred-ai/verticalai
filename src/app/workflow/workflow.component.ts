@@ -118,7 +118,7 @@ export class WorkflowComponent implements OnInit {
     if (!workflow.layout.properties['trigger']) {
       workflow.layout.properties['trigger'] = 'api';
     }
-
+//
     if (workflow.layout.sequence[0]?.type == 'trigger') {
       workflow.layout.sequence.splice(0, 1);
     }
