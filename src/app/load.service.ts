@@ -28,6 +28,7 @@ import { Plan } from './models/workflow/plan.model';
 import { Executable } from './models/workflow/executable.model';
 import axios from 'axios';
 import { Agent } from './models/workflow/agent.model';
+import { RequestService } from './requests.service';
 
 export interface Dict<T> {
   [key: string]: T;
@@ -60,7 +61,8 @@ export class LoadService {
     private storage: AngularFireStorage,
     private http: HttpClient,
     private metaService: Meta,
-    private titleService: Title
+    private titleService: Title,
+    private requestService: RequestService
   ) {
     this.activeTheme = 'dark'
   }
@@ -804,27 +806,15 @@ export class LoadService {
   }
 
   async getExecutable(
-    uid: string,
-    id: string,
-    callback: (sources: Dict<Agent>) => any
+    url: string,
   ) {
-    this.db
-      .collection(`Users/${uid}/workflows/${id}/source`)
-      .valueChanges()
-      .subscribe((docs2) => {
-        let data = docs2 as Agent[];
-
-        var returnData: Dict<Agent> = {};
-
-        data.forEach((d) => {
-          returnData[d.id] = d;
-        });
-
-        callback(returnData);
-      });
+    let file = await this.requestService.get(url, {}, {});
+    return file
   }
 
   async uploadExecutable(id: string, file: Executable) {
+
+    this.loading.next(true)
     const jsonString = JSON.stringify(JSON.parse(JSON.stringify(file)));
 
     const blob = new Blob([jsonString], { type: 'application/json' });
@@ -843,11 +833,12 @@ export class LoadService {
       }
     }
 
+    this.loading.next(false)
+
     return undefined;
   }
 
   async saveCode(
-    uid: string,
     id: string,
     data: { id: string; source: string | null }
   ) {

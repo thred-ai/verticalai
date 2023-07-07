@@ -58,10 +58,8 @@ export class WorkflowComponent implements OnInit {
   newAPIRequest?: APIRequest;
 
   workflow = new BehaviorSubject<Workflow | undefined>(undefined);
-  theme: 'light' | 'dark' = 'light'
-  mode = 'sidebar'
-
- 
+  theme: 'light' | 'dark' = 'light';
+  mode = 'sidebar';
 
   onKeyDown($event: any): void {
     // Detect platform
@@ -79,7 +77,6 @@ export class WorkflowComponent implements OnInit {
     if ($event.metaKey && charCode === 's') {
       $event.preventDefault();
       // Action on Cmd + S
-      await this.save(5);
       await this.save();
     }
   }
@@ -89,13 +86,11 @@ export class WorkflowComponent implements OnInit {
     if ($event.ctrlKey && charCode === 's') {
       $event.preventDefault();
       // Action on Ctrl + S
-      await this.save(5);
       await this.save();
     }
   }
 
   set activeWorkflow(app: Workflow | undefined) {
-
     var workflow!: Workflow;
 
     if (app) {
@@ -117,7 +112,7 @@ export class WorkflowComponent implements OnInit {
     if (!workflow.layout.properties['trigger']) {
       workflow.layout.properties['trigger'] = 'api';
     }
-//
+    //
     if (workflow.layout.sequence[0]?.type == 'trigger') {
       workflow.layout.sequence.splice(0, 1);
     }
@@ -136,7 +131,6 @@ export class WorkflowComponent implements OnInit {
           workflow.creatorId = user.uid;
           this.workflow.next(workflow);
           loadData();
-          this.checkSave();
         }
       });
     } else {
@@ -223,57 +217,60 @@ export class WorkflowComponent implements OnInit {
           });
 
           this.workflow.subscribe(async (w) => {
-            if (w) {
-              this.items.next([
-                new TaskTree(
-                  w.name,
-                  'app',
-                  'category',
-                  this.analyzeTasks(w.layout.sequence),
-                  new TaskTree(
-                    'MainController',
-                    'main',
-                    'model',
-                    [],
-                    undefined,
-                    {
-                      type: 'model',
-                      metaType: 'main',
-                    }
-                  ),
-                  { type: 'folder' }
-                ),
-              ]);
-            }
-            if (w) {
-
-              try {
-                this.loadService.getExecutable(w.creatorId, w.id, (sources) => {
-                  
-                  if (sources) {
-                    console.log("UPDATE EXEC")
-                    console.log(sources)
-                    let exec = new Executable(w?.name ?? '', w?.id ?? '', sources);
-                    this.executable = exec
-                    this.cdr.detectChanges();
-                  }
-                  else{
-                    console.log("INIT EXEC")
-                    let exec = new Executable(w?.name ?? '', w?.id ?? '', {
-                      main: new Agent('main', 'main', null, null),
-                    });
-                    this.executable = this.fillExecutable(
-                      exec,
-                      this.items.value ?? []
-                    );
-                  }
-                });
-              } catch (error) {}
-            }
+            this.initExecutable(w)
           });
         }
       }
     });
+  }
+
+  async initExecutable(w?: Workflow){
+    if (w) {
+      this.items.next([
+        new TaskTree(
+          w.name,
+          'app',
+          'category',
+          this.analyzeTasks(w.layout.sequence),
+          new TaskTree(
+            'MainController',
+            'main',
+            'model',
+            [],
+            undefined,
+            {
+              type: 'model',
+              metaType: 'main',
+            }
+          ),
+          { type: 'folder' }
+        ),
+      ]);
+    }
+    if (w && w.id && w.creatorId && w.creatorId != '') {
+
+
+      try {
+        if (w.executableUrl){
+          let exec = await this.loadService.getExecutable(
+            w.executableUrl
+          ) as Executable;
+          this.executable = exec
+        }
+        else{
+          let exec = new Executable(w?.name ?? '', w?.id ?? '', {
+            main: new Agent('main', 'main', null, null),
+          });
+          exec = this.fillExecutable(exec, this.items.value ?? []);
+        
+          this.executable = exec
+          this.checkSave()
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   checkSave() {
@@ -310,6 +307,9 @@ export class WorkflowComponent implements OnInit {
 
   async save(mode = 1) {
     let workflow = this.workflow.value;
+    console.log(mode);
+    console.log(this.executable);
+    console.log(this.openFileId);
 
     if (workflow && this.isValid) {
       try {
@@ -323,16 +323,6 @@ export class WorkflowComponent implements OnInit {
           this.workflowIcon = undefined;
 
           this.updateWorkflows(workflow);
-        } else if (mode == 2 && this.newTrainingData) {
-          await this.loadService.saveTrainingData(
-            workflow.id,
-            workflow.creatorId,
-            this.newTrainingData
-          );
-          this.edited = false;
-          this.newTrainingData = undefined;
-
-          this.updateWorkflows(workflow);
         } else if (mode == 3 && this.newAPIKey) {
           await this.loadService.saveAPIKeys(
             workflow.id,
@@ -343,32 +333,24 @@ export class WorkflowComponent implements OnInit {
           this.newAPIKey = undefined;
 
           this.updateWorkflows(workflow);
-        } else if (mode == 4 && this.newAPIRequest) {
-          await this.loadService.saveAPI(
-            workflow.id,
-            workflow.creatorId,
-            this.newAPIRequest
-          );
-          this.edited = false;
-          this.newAPIRequest = undefined;
-
-          this.updateWorkflows(workflow);
-        } else if (mode == 5 && this.executable && this.openFileId) {
+        } else if (mode == 1 && this.executable && this.openFileId && this.items.value) {
+          console.log('saving');
           this.executable = this.fillExecutable(
             this.executable,
             this.items.value ?? []
           );
-          await this.loadService.saveCode(
-            workflow.creatorId,
-            workflow.id,
-            this.executable.agents[this.openFileId]
-          );
-          return;
-        } else {
+         
+          workflow.executableUrl = await this.loadService.uploadExecutable(workflow.id, this.executable);
+        
+          console.log("SAVING WORKFLOW")
           await this.loadService.saveSmartUtil(workflow, (result) => {
             this.edited = false;
+            console.log(workflow)
+            console.log("SAVED!")
             this.updateWorkflows(workflow);
           });
+
+          return;
         }
       } catch (error) {}
     } else {
@@ -385,7 +367,7 @@ export class WorkflowComponent implements OnInit {
     items
       .filter((i) => i.type == 'model')
       .forEach((i) => {
-        if (!exec.agents[i.id]) {
+        if (!exec.agents[i.id] || !exec.agents[i.id]?.source) {
           exec.agents[i.id] = new Agent(
             i.id,
             i.metadata['metaType'],
@@ -445,11 +427,11 @@ export class WorkflowComponent implements OnInit {
 
       let exec = this.fillExecutable(this.executable, this.items.value ?? []);
 
-      console.log("OLD EXEC")
-      console.log(this.executable)
+      console.log('OLD EXEC');
+      console.log(this.executable);
 
-      console.log("NEW EXEC")
-      console.log(exec)
+      console.log('NEW EXEC');
+      console.log(exec);
 
       if (this.items.value) {
         // let flat = this.flattenTree(this.items.value);
@@ -475,7 +457,6 @@ export class WorkflowComponent implements OnInit {
         // );
 
         w.executableUrl = await this.loadService.uploadExecutable(w.id, exec);
-
 
         this.loadService.publishSmartUtil(w, (result) => {
           this.loading = false;
@@ -692,9 +673,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   defaultCode(type: string) {
-
     let list = verticalkit.default.classList;
-
 
     switch (type) {
       case 'switch':

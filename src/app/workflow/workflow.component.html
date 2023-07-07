@@ -119,7 +119,7 @@
                           compiled: null,
                           type: executable.agents[openFileId].type
                         });
-                    save(5)
+                    save()
                   "
                 ></app-workflow-code>
               </div>
@@ -136,13 +136,7 @@
               [theme]="theme"
               (detailsChanged)="edited = true; workflow.next($event); save()"
               (iconChanged)="edited = true; workflowIcon = $event; save(0)"
-              (trainingDataChanged)="
-                edited = true; newTrainingData = $event; save(2)
-              "
               (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
-              (apiRequestChanged)="
-                edited = true; newAPIRequest = $event; save(4)
-              "
             >
             </verticalai-workflow-designer>
           </as-split-area>
