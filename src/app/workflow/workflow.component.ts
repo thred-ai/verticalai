@@ -510,14 +510,14 @@ export class WorkflowComponent implements OnInit {
     ) as Developer;
 
     if (dev && dev.utils && workflow) {
-      this.activeWorkflow = workflow;
-      let index = dev.utils.findIndex((w) => w.id == workflow.id);
-      if (index > -1) {
-        dev.utils[index] = workflow;
-      } else {
-        dev.utils.push(workflow);
-      }
-      this.loadService.loadedUser.next(dev);
+      // this.activeWorkflow = workflow;
+      // let index = dev.utils.findIndex((w) => w.id == workflow.id);
+      // if (index > -1) {
+      //   dev.utils[index] = workflow;
+      // } else {
+      //   dev.utils.push(workflow);
+      // }
+      // this.loadService.loadedUser.next(dev);
       this.cdr.detectChanges();
     }
   }
