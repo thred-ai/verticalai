@@ -10,7 +10,7 @@ import { WorkflowComponent } from '../workflow/workflow.component';
   styleUrls: ['./icon-sidebar.component.scss'],
 })
 export class IconSidebarComponent implements OnInit {
-  constructor(private loadService: LoadService, private workflowComponent: WorkflowComponent) {}
+  constructor(private loadService: LoadService, private workflowComponent: WorkflowComponent, public root: AppComponent) {}
 
   loadedUser?: Developer;
 

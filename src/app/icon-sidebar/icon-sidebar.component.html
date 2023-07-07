@@ -11,6 +11,11 @@
       height: fit-content;
     "
     *ngIf="loadedUser"
+    [mdbPopover]="template"
+              placement="right"
+              [trigger]="'click'"
+              id="profile-toggle"
+              #profileToggle
   >
     <img
       *ngIf="loadedUser.url"
@@ -18,7 +23,96 @@
       style="object-fit: contain; aspect-ratio: 1"
       [src]="loadedUser.url"
     />
+
+
+    <ng-template #template>
+      <div
+        class="popover-body-padding bg-theme border-table text-center px-3"
+        id="profile-menu"
+        style="min-width: 250px"
+      >
+        <div class="big-design-header" style="height: 40px">
+          <mat-icon
+            class="fw-bold text-light"
+            role="button"
+            (click)="profileToggle.click()"
+          >
+            close
+          </mat-icon>
+        </div>
+        <div
+          class="rounded-circle icons bg-pink mx-auto mb-4"
+          style="
+            border-style: solid;
+            border-width: 0.2rem;
+            border-color: rgb(255, 232, 248);
+            width: fit-content;
+            height: 80px;
+          "
+        >
+          <img
+            *ngIf="
+              loadedUser.url != null &&
+              loadedUser.url != undefined
+            "
+            class="h-100 p-0 m-auto rounded-circle"
+            style="object-fit: contain; aspect-ratio: 1"
+            [src]="loadedUser.url"
+          />
+        </div>
+        <span
+          class="fw-bolder text-light px-2 d-none d-md-block"
+          style="font-size: medium"
+        >
+          {{
+            loadedUser.name
+              ? loadedUser.name
+              : ""
+          }}
+        </span>
+        <b
+          class="fw-bold mb-4 text-light text-center"
+          style="font-size: small"
+          >{{
+            loadedUser.email != null
+              ? loadedUser.email
+              : "Not Signed In"
+          }}</b
+        >
+        <br />
+        <div class="w-100 text-start mt-3">
+          <a
+            role="button"
+            class="w-100 btn text-light bg-secondary px-1 py-2 fw-bold rounded"
+            style="font-size: small"
+            (click)="root.editProfile()"
+            *ngIf="loadedUser.email != null"
+          >
+            Edit Profile
+          </a>
+          <!-- <a
+            role="button"
+            class="w-100 btn text-light bg-secondary px-1 py-2 mt-2 fw-bold rounded"
+            style="font-size: small"
+            (click)="editBilling()"
+          >
+            View Billing
+          </a> -->
+          <a
+            role="button"
+            class="w-100 btn bg-black text-white px-1 py-2 mt-2 fw-bold rounded"
+            style="font-size: small"
+            (click)="root.signOut()"
+            *ngIf="loadedUser.email"
+          >
+            Sign Out
+          </a>
+        </div>
+      </div>
+    </ng-template>
   </div>
+
+  
 
   <div
     class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
