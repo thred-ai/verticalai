@@ -77,7 +77,7 @@ export class WorkflowComponent implements OnInit {
     if ($event.metaKey && charCode === 's') {
       $event.preventDefault();
       // Action on Cmd + S
-      await this.save();
+      await this.save(1, true);
     }
   }
 
@@ -86,7 +86,7 @@ export class WorkflowComponent implements OnInit {
     if ($event.ctrlKey && charCode === 's') {
       $event.preventDefault();
       // Action on Ctrl + S
-      await this.save();
+      await this.save(1, true);
     }
   }
 
@@ -263,7 +263,7 @@ export class WorkflowComponent implements OnInit {
 
   checkSave() {
     if (this.workflow && this.workflow.value?.creatorId != '') {
-      this.save();
+      this.save(1, true);
     }
   }
 
@@ -293,7 +293,7 @@ export class WorkflowComponent implements OnInit {
     return false;
   }
 
-  async save(mode = 1) {
+  async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
     console.log(mode);
     console.log(this.executable);
@@ -343,7 +343,9 @@ export class WorkflowComponent implements OnInit {
             this.edited = false;
             console.log(workflow);
             console.log('SAVED!');
-            this.updateWorkflows(workflow);
+            if (update){
+              this.updateWorkflows(workflow);
+            }
           });
 
           return;
@@ -634,7 +636,7 @@ export class WorkflowComponent implements OnInit {
   setFieldName(name: string, id: string) {
     //fileName
 
-    this.save();
+    this.save(1, true);
   }
 
   selectFile(fileId: string, workflow = this.workflow.value) {

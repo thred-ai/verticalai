@@ -134,7 +134,7 @@
               [apiRequests]="apiRequests"
               [workflow]="workflow.value"
               [theme]="theme"
-              (detailsChanged)="edited = true; workflow.next($event); save()"
+              (detailsChanged)="edited = true; workflow.next($event); save(1, true)"
               (iconChanged)="edited = true; workflowIcon = $event; save(0)"
               (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
             >
