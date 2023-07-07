@@ -89,21 +89,22 @@
   position: relative;
   border-radius: 5px;
   box-sizing: border-box;
-  width: 100%;
+  aspect-ratio: 1;
   cursor: grab;
   display: flex;
   justify-content: start;
   align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 5px;
   font-size: 13px;
+  height: 40px;
 }
+
 
 .sqd-toolbox-item-icon {
   width: 30px;
   height: 30px;
-  margin-right: 10px;
 }
 .sqd-toolbox-item-icon.sqd-no-icon {
   border-radius: 4px;
@@ -137,7 +138,7 @@ rect.sqd-input {
 }
 .sqd-toolbox-item-text {
   position: relative;
-  display: block;
+  display: none;
 
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -231,7 +232,7 @@ rect.sqd-input {
   width: 300px;
 }
 .sqd-layout-desktop .sqd-smart-editor-toggle {
-  right: 300px;
+  right:300px;
 }
 .sqd-layout-desktop .sqd-smart-editor-toggle.sqd-collapsed {
   right: 0;
@@ -255,12 +256,14 @@ rect.sqd-input {
 
 .sqd-step-task-rect {
   stroke-width: 1;
+  width: 42px !important;
 }
 .sqd-step-task-rect.sqd-selected {
   stroke-width: 2;
 }
 .sqd-step-task-text {
   text-anchor: left;
+  display: none;
   dominant-baseline: central;
 }
 

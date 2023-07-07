@@ -67,8 +67,8 @@ export class LoadService {
 
   themes = {
     'dark':{
-      primaryColor: "#1F6EF6",
-      primaryHoverColor: "#1F6EF6",
+      primaryColor: "#fe6f42",
+      primaryHoverColor: "#f5601d",
       gridColor: "#242424",
       backgroundPrimaryColor: "#",
       backgroundSecondaryColor: "#F4F5F8"
