@@ -1,9 +1,19 @@
 <div
-  class="bg-theme-2 h-100 border-table-right d-flex flex-column justify-content-start align-items-center py-3"
+  class="bg-theme-2 h-100 border-table-right d-flex flex-column justify-content-start align-items-center pb-3"
   style="width: 70px !important; min-width: 70px !important"
 >
+  <div class="w-100 border-table-bottom" style="aspect-ratio: 1">
+    <div class="rounded-circle icons w-10o p-1" style="aspect-ratio: inherit;">
+      <img
+        class="w-100 h-100"
+        style="aspect-ratio: contain;"
+        [src]="'assets/verticalai_short.png'"
+      />
+    </div>
+  </div>
+
   <div
-    class="rounded-circle mx-3 icons bg-pink"
+    class="rounded-circle mx-3 mt-3 icons bg-pink"
     style="
       border-style: solid;
       border-width: 0.2rem;
@@ -12,10 +22,10 @@
     "
     *ngIf="loadedUser"
     [mdbPopover]="template"
-              placement="right"
-              [trigger]="'click'"
-              id="profile-toggle"
-              #profileToggle
+    placement="right"
+    [trigger]="'click'"
+    id="profile-toggle"
+    #profileToggle
   >
     <img
       *ngIf="loadedUser.url"
@@ -23,7 +33,6 @@
       style="object-fit: contain; aspect-ratio: 1"
       [src]="loadedUser.url"
     />
-
 
     <ng-template #template>
       <div
@@ -51,10 +60,7 @@
           "
         >
           <img
-            *ngIf="
-              loadedUser.url != null &&
-              loadedUser.url != undefined
-            "
+            *ngIf="loadedUser.url != null && loadedUser.url != undefined"
             class="h-100 p-0 m-auto rounded-circle"
             style="object-fit: contain; aspect-ratio: 1"
             [src]="loadedUser.url"
@@ -64,19 +70,13 @@
           class="fw-bolder text-light px-2 d-none d-md-block"
           style="font-size: medium"
         >
-          {{
-            loadedUser.name
-              ? loadedUser.name
-              : ""
-          }}
+          {{ loadedUser.name ? loadedUser.name : "" }}
         </span>
         <b
           class="fw-bold mb-4 text-light text-center"
           style="font-size: small"
           >{{
-            loadedUser.email != null
-              ? loadedUser.email
-              : "Not Signed In"
+            loadedUser.email != null ? loadedUser.email : "Not Signed In"
           }}</b
         >
         <br />
@@ -111,8 +111,6 @@
       </div>
     </ng-template>
   </div>
-
-  
 
   <div
     class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
