@@ -67,7 +67,6 @@ export class FileSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.workflowComponent.workflow.subscribe((w) => {
-      console.log(w);
       if (w) {
         this.workflow = w;
       }

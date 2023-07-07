@@ -95,7 +95,6 @@ export class WorkflowComponent implements OnInit {
   }
 
   set activeWorkflow(app: Workflow | undefined) {
-    console.log(app);
 
     var workflow!: Workflow;
 
@@ -216,7 +215,6 @@ export class WorkflowComponent implements OnInit {
           });
 
           this.loadService.loadedRequests.subscribe((data) => {
-            console.log(data);
             this.apiRequests = data;
           });
 
@@ -248,22 +246,26 @@ export class WorkflowComponent implements OnInit {
               ]);
             }
             if (w) {
-              this.executable = new Executable(w?.name ?? '', w?.id ?? '', {
-                main: new Agent('main', 'main', null, null),
-              });
 
               try {
                 this.loadService.getExecutable(w.creatorId, w.id, (sources) => {
-                  console.log(sources);
-                  if (this.executable) {
-                    this.executable.agents = sources;
+                  
+                  if (sources) {
+                    console.log("UPDATE EXEC")
+                    console.log(sources)
+                    let exec = new Executable(w?.name ?? '', w?.id ?? '', sources);
+                    this.executable = exec
+                    this.cdr.detectChanges();
+                  }
+                  else{
+                    console.log("INIT EXEC")
+                    let exec = new Executable(w?.name ?? '', w?.id ?? '', {
+                      main: new Agent('main', 'main', null, null),
+                    });
                     this.executable = this.fillExecutable(
-                      this.executable,
+                      exec,
                       this.items.value ?? []
                     );
-
-                    this.cdr.detectChanges();
-                    console.log(this.executable);
                   }
                 });
               } catch (error) {}
@@ -294,8 +296,6 @@ export class WorkflowComponent implements OnInit {
             this.workflow.value![field]?.trim() == ''
         ).length == 0;
 
-      console.log(validText);
-
       // let validArray =
       //   arrayFields.filter(
       //     (field) =>
@@ -312,10 +312,8 @@ export class WorkflowComponent implements OnInit {
     let workflow = this.workflow.value;
 
     if (workflow && this.isValid) {
-      console.log('oy');
       try {
         if (mode == 0 && this.workflowIcon) {
-          console.log('OYMAN');
           await this.loadService.uploadImg(
             this.workflowIcon,
             workflow.id,
@@ -326,7 +324,6 @@ export class WorkflowComponent implements OnInit {
 
           this.updateWorkflows(workflow);
         } else if (mode == 2 && this.newTrainingData) {
-          console.log('OYMAN');
           await this.loadService.saveTrainingData(
             workflow.id,
             workflow.creatorId,
@@ -337,7 +334,6 @@ export class WorkflowComponent implements OnInit {
 
           this.updateWorkflows(workflow);
         } else if (mode == 3 && this.newAPIKey) {
-          console.log('OYMAN');
           await this.loadService.saveAPIKeys(
             workflow.id,
             workflow.creatorId,
@@ -348,7 +344,6 @@ export class WorkflowComponent implements OnInit {
 
           this.updateWorkflows(workflow);
         } else if (mode == 4 && this.newAPIRequest) {
-          console.log('OYMAN');
           await this.loadService.saveAPI(
             workflow.id,
             workflow.creatorId,
@@ -359,12 +354,10 @@ export class WorkflowComponent implements OnInit {
 
           this.updateWorkflows(workflow);
         } else if (mode == 5 && this.executable && this.openFileId) {
-          console.log('OYMAN');
           this.executable = this.fillExecutable(
             this.executable,
             this.items.value ?? []
           );
-          console.log(this.executable);
           await this.loadService.saveCode(
             workflow.creatorId,
             workflow.id,
@@ -373,7 +366,6 @@ export class WorkflowComponent implements OnInit {
           return;
         } else {
           await this.loadService.saveSmartUtil(workflow, (result) => {
-            console.log(result);
             this.edited = false;
             this.updateWorkflows(workflow);
           });
@@ -390,7 +382,6 @@ export class WorkflowComponent implements OnInit {
     items: TaskTree[] = this.flattenTree(data)
   ) {
     var exec = executable;
-    console.log(items);
     items
       .filter((i) => i.type == 'model')
       .forEach((i) => {
@@ -404,7 +395,6 @@ export class WorkflowComponent implements OnInit {
         }
       });
 
-    console.log(exec);
     return exec;
   }
 
@@ -455,37 +445,39 @@ export class WorkflowComponent implements OnInit {
 
       let exec = this.fillExecutable(this.executable, this.items.value ?? []);
 
+      console.log("OLD EXEC")
+      console.log(this.executable)
+
+      console.log("NEW EXEC")
+      console.log(exec)
+
       if (this.items.value) {
-        let flat = this.flattenTree(this.items.value);
+        // let flat = this.flattenTree(this.items.value);
 
-        console.log(" -- ")
-        console.log(flat)
-
-        await Promise.all(
-          Object.keys(exec.agents).map(async (e) => {
-            if (flat.find(f => f.id == e)){
-              await this.loadService.saveCode(
-                w!.creatorId,
-                w!.id,
-                exec.agents[e]
-              );
-            }
-            else{
-              await this.loadService.deleteCode(
-                w!.creatorId,
-                w!.id,
-                exec.agents[e]
-              );
-              delete exec.agents[e]
-            }
-          })
-        );
+        // await Promise.all(
+        //   Object.keys(exec.agents).map(async (e) => {
+        //     if (flat.find(f => f.id == e)){
+        //       await this.loadService.saveCode(
+        //         w!.creatorId,
+        //         w!.id,
+        //         exec.agents[e]
+        //       );
+        //     }
+        //     else{
+        //       await this.loadService.deleteCode(
+        //         w!.creatorId,
+        //         w!.id,
+        //         exec.agents[e]
+        //       );
+        //       delete exec.agents[e]
+        //     }
+        //   })
+        // );
 
         w.executableUrl = await this.loadService.uploadExecutable(w.id, exec);
 
 
         this.loadService.publishSmartUtil(w, (result) => {
-          console.log(result);
           this.loading = false;
           if (callback) {
             callback(result);
@@ -517,7 +509,6 @@ export class WorkflowComponent implements OnInit {
         }
         if (this.workflow.value) {
           this.workflow.value.layout = data.layout;
-          console.log('SAVED');
 
           this.updateWorkflows();
 
@@ -538,10 +529,8 @@ export class WorkflowComponent implements OnInit {
     let dev = JSON.parse(
       JSON.stringify(this.loadService.loadedUser.value)
     ) as Developer;
-    console.log('oyz');
 
     if (dev && dev.utils && workflow) {
-      console.log('oy');
       this.activeWorkflow = workflow;
       let index = dev.utils.findIndex((w) => w.id == workflow.id);
       if (index > -1) {
@@ -662,7 +651,6 @@ export class WorkflowComponent implements OnInit {
       }
     });
 
-    console.log(sameNames);
     return objects;
   }
 
@@ -704,11 +692,9 @@ export class WorkflowComponent implements OnInit {
   }
 
   defaultCode(type: string) {
-    console.log(type);
 
     let list = verticalkit.default.classList;
 
-    console.log(list);
 
     switch (type) {
       case 'switch':

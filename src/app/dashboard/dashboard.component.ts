@@ -183,7 +183,6 @@ export class DashboardComponent implements OnInit {
       this.dateRange.controls['end'].value,
       (views: any) => {
         this.views = views ?? [];
-        console.log(views);
         this.cdr.detectChanges();
       }
     );

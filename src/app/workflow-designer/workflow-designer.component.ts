@@ -243,7 +243,6 @@ export class WorkflowDesignerComponent
     });
 
     editor.afterClosed().subscribe((api) => {
-      console.log(api);
       if (api != undefined) {
         let value = api as string;
         c({
@@ -275,7 +274,6 @@ export class WorkflowDesignerComponent
   // encodeURIComponent(JSON.stringify(<INPUT>))
 
   saveTrainingData(data: Dict<any>) {
-    console.log('oi');
     let step = data['step'] as Step;
     let value = data['value'] as any;
     let type = data['type'] as string;
@@ -292,7 +290,6 @@ export class WorkflowDesignerComponent
   }
 
   saveReplacedInput(data: Dict<any>) {
-    console.log('oi');
     let step = data['step'] as Step;
     let value = data['value'] as any;
     let context = data['context'] as StepEditorContext;
@@ -361,7 +358,6 @@ export class WorkflowDesignerComponent
         (document.getElementsByClassName('sqd-scrollbox')[0] as HTMLDivElement);
       var parent = document.getElementById('g-comp') as HTMLDivElement;
 
-      console.log(content);
 
       if (content && parent && parent.firstChild != content) {
         // let newElem = content.cloneNode(true)
@@ -525,7 +521,6 @@ export class WorkflowDesignerComponent
             default:
               let id2 = type.split('-')[1];
               if (id2) {
-                console.log(type);
                 let same = this.models[id2].models[type];
                 if (same) {
                   return same.imgUrl;
@@ -593,7 +588,6 @@ export class WorkflowDesignerComponent
         };
       });
 
-      console.log(this.triggers);
 
       this.dataTriggers = Object.values(this.triggers);
 
@@ -605,7 +599,6 @@ export class WorkflowDesignerComponent
         });
       }
 
-      console.log(this.models);
 
       this.toolboxConfiguration.groups = modelGroups.concat([
         this.flowGroup,
@@ -625,7 +618,6 @@ export class WorkflowDesignerComponent
       erd.listenTo(document.getElementById('test'), (element: HTMLElement) => {
         var width = element.offsetWidth;
         var height = element.offsetHeight;
-        console.log('Size: ' + width + 'x' + height);
         window.dispatchEvent(new Event('resize'));
       });
     }
@@ -633,7 +625,6 @@ export class WorkflowDesignerComponent
 
   public onDesignerReady(designer: Designer) {
     this.designer = designer;
-    console.log('designer ready', this.designer);
   }
 
   setOpenLayouts(event: any) {
@@ -672,13 +663,11 @@ export class WorkflowDesignerComponent
 
   private updateDefinitionJSON() {
     this.definitionJSON = JSON.stringify(this.workflow?.layout, null, 2);
-    console.log(this.definitionJSON);
   }
 
   // @ViewChild('imgIcon') imgIcon?: ElementRef<HTMLImageElement>;
 
   async fileChangeEvent(event: any, type = 1): Promise<void> {
-    console.log(event);
 
     let file = event.target.files[0];
 

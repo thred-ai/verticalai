@@ -65,7 +65,6 @@ export class CollectionTableComponent
 
   ngOnInit(): void {
     this.loadService.loadedPlans.subscribe((plan) => {
-      console.log(plan)
       this.plans = plan ?? {};
     });
   }

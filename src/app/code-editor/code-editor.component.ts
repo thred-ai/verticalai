@@ -17,10 +17,8 @@ export class CodeEditorComponent implements OnInit {
     private loadService: LoadService,
     public dialogRef: MatDialogRef<CodeEditorComponent>
   ) {
-    console.log(data.script)
     this.code = data.script;
     this.type = data.type
-    console.log(data.type)
     this.changedCode = data.script
 
     

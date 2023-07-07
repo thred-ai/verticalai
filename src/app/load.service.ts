@@ -240,7 +240,7 @@ export class LoadService {
         console.log(error);
       }
     } catch (error) {
-      console.log('app');
+      console.log(error);
     }
     this.loading.next(false);
   }
@@ -347,7 +347,6 @@ export class LoadService {
   filteredSearch: BehaviorSubject<any> = new BehaviorSubject([]);
 
   search(term: string) {
-    console.log(term);
     let sub2 = this.db
       .collectionGroup(`workflows`, (ref) =>
         ref
@@ -397,19 +396,17 @@ export class LoadService {
     callback: (result?: Workflow) => any,
     getProfiles = false
   ) {
-    console.log(id);
     let sub2 = this.db
       .collectionGroup(`workflows`, (ref) => ref.where('id', '==', id))
       .valueChanges()
       .subscribe((docs2) => {
-        sub2.unsubscribe();
 
+        
         let docs_2 = docs2 as any[];
 
         let d = docs_2[0];
 
         if (d) {
-          console.log(d);
           let util = this.syncWorkflow(d);
 
           if (getProfiles) {
@@ -429,7 +426,6 @@ export class LoadService {
   }
 
   getWorkflows(ids: string[], callback: (result?: Workflow[]) => any) {
-    console.log(ids);
     let sub2 = this.db
       .collectionGroup(`workflows`, (ref) => ref.where('id', 'in', ids))
       .get()
@@ -438,7 +434,6 @@ export class LoadService {
         if (docs3) {
           let docs = docs3.docs.map((d) => d.data());
 
-          console.log('HELLO');
           let result: Workflow[] = [];
 
           // docs.forEach((d) => {
@@ -653,7 +648,6 @@ export class LoadService {
             });
 
             developer.utils = docs_2;
-            console.log(developer.utils);
             this.checkLoadedUser(developer);
 
             callback(developer);
@@ -679,7 +673,7 @@ export class LoadService {
         let displayUrl = await ref.getDownloadURL().toPromise();
         return displayUrl as string;
       } catch (error) {
-        console.log('app');
+        console.log(error);
         return undefined;
       }
     } else {
@@ -801,7 +795,7 @@ export class LoadService {
 
         return displayUrl as string;
       } catch (error) {
-        console.log('app');
+        console.log(error);
       }
     }
     this.loading.next(false);
@@ -826,8 +820,6 @@ export class LoadService {
           returnData[d.id] = d;
         });
 
-        console.log(returnData);
-
         callback(returnData);
       });
   }
@@ -847,7 +839,7 @@ export class LoadService {
 
         return displayUrl as string;
       } catch (error) {
-        console.log('app');
+        console.log(error);
       }
     }
 
@@ -863,14 +855,12 @@ export class LoadService {
 
     var uploadData = JSON.parse(JSON.stringify(data));
 
-    console.log(uploadData)
     await new Promise((resolve, reject) => {
       this.functions
       .httpsCallable('saveCodes')({id, uploadData})
       .pipe(first())
       .subscribe(
         async (resp) => {
-          console.log(resp);
           resolve(resp);
         },
         (err) => {
@@ -906,7 +896,6 @@ export class LoadService {
       .pipe(first())
       .subscribe(
         async (resp) => {
-          console.log(resp);
           callback(resp);
         },
         (err) => {
@@ -922,7 +911,6 @@ export class LoadService {
       .pipe(first())
       .subscribe(
         async (resp) => {
-          console.log(resp);
           callback(resp);
         },
         (err) => {
@@ -1074,9 +1062,6 @@ export class LoadService {
     step = 1,
     callback: (layout: any) => any
   ) {
-    console.log('LAYOUT -- ' + layout.id);
-    console.log('workflow -- ' + workflow.id);
-    console.log('TYPE -- ' + layout.type);
 
     try {
       if (workflow && layout) {
@@ -1093,7 +1078,6 @@ export class LoadService {
             .pipe(first())
             .subscribe(
               async (newLayout) => {
-                console.log(newLayout);
                 callback(newLayout ?? layout);
               },
               (err) => {
@@ -1102,7 +1086,6 @@ export class LoadService {
               }
             );
         } else {
-          console.log('none');
           callback(layout);
         }
       }
@@ -1117,15 +1100,12 @@ export class LoadService {
     workflow: Workflow,
     callback: (layout: any) => any
   ) {
-    console.log('man');
     try {
       if (workflow && layout) {
         var data = {
           layout: JSON.parse(JSON.stringify(layout)),
           workflowId: workflow.id,
         };
-
-        console.log(data.layout.authPage);
 
         if (data) {
           this.functions
@@ -1141,7 +1121,6 @@ export class LoadService {
               }
             );
         } else {
-          console.log('none');
           callback(layout);
         }
       }
@@ -1169,7 +1148,6 @@ export class LoadService {
       .pipe(first())
       .subscribe(
         async (result) => {
-          console.log(result);
           callback(result.data, result.needsBilling);
         },
         (err) => {
@@ -1185,7 +1163,6 @@ export class LoadService {
       .pipe(first())
       .subscribe(
         async (result) => {
-          console.log(result);
           callback(result);
         },
         (err) => {
@@ -1254,8 +1231,6 @@ export class LoadService {
     }
 
     analyzeTasks(def.sequence);
-
-    console.log(def);
 
     return def;
   }
