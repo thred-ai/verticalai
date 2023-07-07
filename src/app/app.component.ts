@@ -186,7 +186,6 @@ export class AppComponent {
   }
 
   updateBar(event: boolean) {
-    console.log(event);
     this.expandedSearch = event;
     this.cdr.detectChanges();
   }
