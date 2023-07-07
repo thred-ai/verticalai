@@ -217,14 +217,14 @@ export class WorkflowComponent implements OnInit {
           });
 
           this.workflow.subscribe(async (w) => {
-            this.initExecutable(w)
+            this.initExecutable(w);
           });
         }
       }
     });
   }
 
-  async initExecutable(w?: Workflow){
+  async initExecutable(w?: Workflow) {
     if (w) {
       this.items.next([
         new TaskTree(
@@ -232,43 +232,31 @@ export class WorkflowComponent implements OnInit {
           'app',
           'category',
           this.analyzeTasks(w.layout.sequence),
-          new TaskTree(
-            'MainController',
-            'main',
-            'model',
-            [],
-            undefined,
-            {
-              type: 'model',
-              metaType: 'main',
-            }
-          ),
+          new TaskTree('MainController', 'main', 'model', [], undefined, {
+            type: 'model',
+            metaType: 'main',
+          }),
           { type: 'folder' }
         ),
       ]);
     }
     if (w && w.id && w.creatorId && w.creatorId != '') {
-
-
       try {
-        if (w.executableUrl){
-          let exec = await this.loadService.getExecutable(
-            w.executableUrl
-          ) as Executable;
-          this.executable = exec
-        }
-        else{
+        if (w.executableUrl) {
+          let exec = (await this.loadService.getExecutable(w.id)) as Executable;
+          console.log(exec)
+          this.executable = exec;
+        } else {
           let exec = new Executable(w?.name ?? '', w?.id ?? '', {
             main: new Agent('main', 'main', null, null),
           });
           exec = this.fillExecutable(exec, this.items.value ?? []);
-        
-          this.executable = exec
-          this.checkSave()
-        }
 
+          this.executable = exec;
+          this.checkSave();
+        }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   }
@@ -333,20 +321,28 @@ export class WorkflowComponent implements OnInit {
           this.newAPIKey = undefined;
 
           this.updateWorkflows(workflow);
-        } else if (mode == 1 && this.executable && this.openFileId && this.items.value) {
+        } else if (
+          mode == 1 &&
+          this.executable &&
+          this.openFileId &&
+          this.items.value
+        ) {
           console.log('saving');
           this.executable = this.fillExecutable(
             this.executable,
             this.items.value ?? []
           );
-         
-          workflow.executableUrl = await this.loadService.uploadExecutable(workflow.id, this.executable);
-        
-          console.log("SAVING WORKFLOW")
+
+          workflow.executableUrl = await this.loadService.uploadExecutable(
+            workflow.id,
+            this.executable
+          );
+
+          console.log('SAVING WORKFLOW');
           await this.loadService.saveSmartUtil(workflow, (result) => {
             this.edited = false;
-            console.log(workflow)
-            console.log("SAVED!")
+            console.log(workflow);
+            console.log('SAVED!');
             this.updateWorkflows(workflow);
           });
 

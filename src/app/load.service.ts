@@ -64,35 +64,47 @@ export class LoadService {
     private titleService: Title,
     private requestService: RequestService
   ) {
-    this.activeTheme = 'dark'
+    this.activeTheme = 'dark';
   }
 
   themes = {
-    'dark':{
-      primaryColor: "#fe6f42",
-      primaryHoverColor: "#f5601d",
-      gridColor: "#242424",
-      backgroundPrimaryColor: "#",
-      backgroundSecondaryColor: "#F4F5F8"
+    dark: {
+      primaryColor: '#fe6f42',
+      primaryHoverColor: '#f5601d',
+      gridColor: '#242424',
+      backgroundPrimaryColor: '#',
+      backgroundSecondaryColor: '#F4F5F8',
     },
-    'light':{
-      primaryColor: "#1F6EF6",
-      primaryHoverColor: "#1F6EF6",
-      gridColor: "#dadada",
-      backgroundPrimaryColor: "#fffff",
-      backgroundSecondaryColor: "#F4F5F8"
-    }
-  }
- 
-  set activeTheme(value: 'light' | 'dark'){
-    document.documentElement.style.setProperty('--primaryColor', `${this.themes[value].primaryColor}`);
-    document.documentElement.style.setProperty('--primaryHoverColor', `${this.themes[value].primaryHoverColor}`);
+    light: {
+      primaryColor: '#1F6EF6',
+      primaryHoverColor: '#1F6EF6',
+      gridColor: '#dadada',
+      backgroundPrimaryColor: '#fffff',
+      backgroundSecondaryColor: '#F4F5F8',
+    },
+  };
 
-    if (document.documentElement.style.getPropertyValue('--gridColor') != 'transparent'){
-      document.documentElement.style.setProperty('--gridColor', `${this.themes[value].gridColor}`);
+  set activeTheme(value: 'light' | 'dark') {
+    document.documentElement.style.setProperty(
+      '--primaryColor',
+      `${this.themes[value].primaryColor}`
+    );
+    document.documentElement.style.setProperty(
+      '--primaryHoverColor',
+      `${this.themes[value].primaryHoverColor}`
+    );
+
+    if (
+      document.documentElement.style.getPropertyValue('--gridColor') !=
+      'transparent'
+    ) {
+      document.documentElement.style.setProperty(
+        '--gridColor',
+        `${this.themes[value].gridColor}`
+      );
     }
-//fix
-    this.theme.next(value)
+    //fix
+    this.theme.next(value);
   }
 
   finishSignUp(
@@ -402,8 +414,6 @@ export class LoadService {
       .collectionGroup(`workflows`, (ref) => ref.where('id', '==', id))
       .valueChanges()
       .subscribe((docs2) => {
-
-        
         let docs_2 = docs2 as any[];
 
         let d = docs_2[0];
@@ -805,80 +815,47 @@ export class LoadService {
     return undefined;
   }
 
-  async getExecutable(
-    url: string,
-  ) {
-    let file = await this.requestService.get(url, {}, {});
-    return file
+  async getExecutable(id: string) {
+    let url = await new Promise<Executable | undefined>((resolve, reject) => {
+      this.functions
+        .httpsCallable('getExecutable')({ id })
+        .pipe(first())
+        .subscribe(
+          async (resp) => {
+            resolve(resp);
+          },
+          (err) => {
+            console.error({ err });
+            resolve(undefined);
+          }
+        );
+    });
+    return url;
   }
 
   async uploadExecutable(id: string, file: Executable) {
-
-    this.loading.next(true)
-    const jsonString = JSON.stringify(JSON.parse(JSON.stringify(file)));
-
-    const blob = new Blob([jsonString], { type: 'application/json' });
-
-    if (file && blob) {
-      try {
-        let ref = this.storage.ref(`workflows/${id}/${id}.vai`);
-
-        await ref.put(blob, { cacheControl: 'no-cache' });
-
-        let displayUrl = await ref.getDownloadURL().toPromise();
-
-        return displayUrl as string;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    this.loading.next(false)
-
-    return undefined;
-  }
-
-  async saveCode(
-    id: string,
-    data: { id: string; source: string | null }
-  ) {
     this.loading.next(true);
 
-    var uploadData = JSON.parse(JSON.stringify(data));
+    var uploadData = JSON.parse(JSON.stringify(file));
 
-    await new Promise((resolve, reject) => {
+    let url = await new Promise<string | undefined>((resolve, reject) => {
       this.functions
-      .httpsCallable('saveCodes')({id, uploadData})
-      .pipe(first())
-      .subscribe(
-        async (resp) => {
-          resolve(resp);
-        },
-        (err) => {
-          console.error({ err });
-          reject();
-        }
-      );
-    })
-    
+        .httpsCallable('uploadExecutable')({ id, uploadData })
+        .pipe(first())
+        .subscribe(
+          async (resp) => {
+            resolve(resp);
+          },
+          (err) => {
+            console.error({ err });
+            resolve(undefined);
+          }
+        );
+    });
 
     this.loading.next(false);
-  }
 
-  async deleteCode(
-    uid: string,
-    id: string,
-    data: { id: string; source: string | null }
-  ) {
-    this.loading.next(true);
-
-
-    await this.db
-      .collection(`Users/${uid}/workflows/${id}/source`)
-      .doc(data.id)
-      .delete();
-
-    this.loading.next(false);
+    return url;
   }
 
   getIcons(callback: (data: any) => any) {
@@ -898,7 +875,7 @@ export class LoadService {
 
   testAPI(modelId: string, input: any, callback: (data: any) => any) {
     this.functions
-      .httpsCallable('apiTest')({ modelId, input, v2: true })
+      .httpsCallable('apiTest')({ modelId, input })
       .pipe(first())
       .subscribe(
         async (resp) => {
@@ -1053,7 +1030,6 @@ export class LoadService {
     step = 1,
     callback: (layout: any) => any
   ) {
-
     try {
       if (workflow && layout) {
         var data = {
