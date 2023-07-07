@@ -481,11 +481,9 @@ export class LoadService {
                   d.name,
                   d.id,
                   d.developer,
-                  d.api,
                   d.imgUrl,
                   d.type,
                   d.status,
-                  d.trainable,
                   d.description
                 );
               });
