@@ -63,7 +63,6 @@
     "code-mirror-themes": "^1.0.0",
     "codemirror": "^5.65.13",
     "core-js": "^3.16.1",
-    "countrycitystatejson": "^21.3.2702",
     "cross-fetch": "^3.1.4",
     "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.0",

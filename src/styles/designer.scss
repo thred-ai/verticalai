@@ -89,7 +89,7 @@
   position: relative;
   border-radius: 5px;
   box-sizing: border-box;
-  aspect-ratio: 1;
+  // aspect-ratio: 1;
   cursor: grab;
   display: flex;
   justify-content: start;
@@ -98,7 +98,8 @@
   margin-bottom: 10px;
   padding: 5px;
   font-size: 13px;
-  height: 40px;
+  // height: 40px;
+  width: 100%; //
 }
 
 
@@ -138,7 +139,7 @@ rect.sqd-input {
 }
 .sqd-toolbox-item-text {
   position: relative;
-  display: none;
+  display: block; //
 
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -256,14 +257,14 @@ rect.sqd-input {
 
 .sqd-step-task-rect {
   stroke-width: 1;
-  width: 42px !important;
+  // width: 42px !important;
 }
 .sqd-step-task-rect.sqd-selected {
   stroke-width: 2;
 }
 .sqd-step-task-text {
   text-anchor: left;
-  display: none;
+  // display: none;
   dominant-baseline: central;
 }
 

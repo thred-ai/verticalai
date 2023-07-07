@@ -13,7 +13,7 @@ import {
 } from '@stripe/stripe-js';
 import { StripeCardComponent, StripeService } from 'ngx-stripe';
 import { LoadService } from '../load.service';
-const yourhandle = require('countrycitystatejson');
+// const yourhandle = require('countrycitystatejson');
 
 @Component({
   selector: 'app-billing',
@@ -97,7 +97,7 @@ export class BillingComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
 
-  addresses = yourhandle;
+  // addresses = yourhandle;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -108,57 +108,57 @@ export class BillingComponent implements OnInit {
   ngAfterViewInit(): void {}
 
   ngOnInit(): void {
-    this.countries = yourhandle.getCountries();
+    // this.countries = yourhandle.getCountries();
 
-    this.loadService.getBilling((result) => {
-      if (result) {
-        if (result.billing_details?.address?.country) {
-          this.billingForm.controls['country'].setValue(
-            result.billing_details?.address?.country ?? ''
-          );
-          this.states = yourhandle.getCountryByShort(
-            result.billing_details?.address?.country
-          ).states;
-        }
+    // this.loadService.getBilling((result) => {
+    //   if (result) {
+    //     if (result.billing_details?.address?.country) {
+    //       this.billingForm.controls['country'].setValue(
+    //         result.billing_details?.address?.country ?? ''
+    //       );
+    //       this.states = yourhandle.getCountryByShort(
+    //         result.billing_details?.address?.country
+    //       ).states;
+    //     }
 
-        if (result.billing_details?.name) {
-          this.billingForm.controls['cardholder'].setValue(
-            result.billing_details?.name ?? ''
-          );
-        }
+    //     if (result.billing_details?.name) {
+    //       this.billingForm.controls['cardholder'].setValue(
+    //         result.billing_details?.name ?? ''
+    //       );
+    //     }
 
-        if (result.billing_details?.address?.line1) {
-          this.billingForm.controls['address'].setValue(
-            result.billing_details?.address?.line1 ?? ''
-          );
-        }
+    //     if (result.billing_details?.address?.line1) {
+    //       this.billingForm.controls['address'].setValue(
+    //         result.billing_details?.address?.line1 ?? ''
+    //       );
+    //     }
 
-        if (result.billing_details?.address?.city) {
-          this.billingForm.controls['city'].setValue(
-            result.billing_details?.address?.city ?? ''
-          );
-        }
+    //     if (result.billing_details?.address?.city) {
+    //       this.billingForm.controls['city'].setValue(
+    //         result.billing_details?.address?.city ?? ''
+    //       );
+    //     }
 
-        if (result.billing_details?.address?.state) {
-          this.billingForm.controls['state'].setValue(
-            result.billing_details?.address?.state ?? ''
-          );
-        }
+    //     if (result.billing_details?.address?.state) {
+    //       this.billingForm.controls['state'].setValue(
+    //         result.billing_details?.address?.state ?? ''
+    //       );
+    //     }
 
-        if (result.billing_details?.address?.postal_code) {
-          this.billingForm.controls['postalCode'].setValue(
-            result.billing_details?.address?.postal_code ?? ''
-          );
-        }
+    //     if (result.billing_details?.address?.postal_code) {
+    //       this.billingForm.controls['postalCode'].setValue(
+    //         result.billing_details?.address?.postal_code ?? ''
+    //       );
+    //     }
 
-        if (result.billing_details?.address?.line2) {
-          this.billingForm.controls['address2'].setValue(
-            result.billing_details?.address?.line2 ?? ''
-          );
-          this.hasUnitNumber = true;
-        }
-      }
-    });
+    //     if (result.billing_details?.address?.line2) {
+    //       this.billingForm.controls['address2'].setValue(
+    //         result.billing_details?.address?.line2 ?? ''
+    //       );
+    //       this.hasUnitNumber = true;
+    //     }
+    //   }
+    // });
   }
 
   loading = false;
