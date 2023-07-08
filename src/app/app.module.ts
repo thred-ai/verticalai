@@ -135,6 +135,7 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { FilenameFormatPipe } from './filename-format.pipe';
 import { StorageComponent } from './storage/storage.component';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
+import { TooltipComponent } from './tooltip/tooltip.component';
 
 @NgModule({
   declarations: [
@@ -191,6 +192,7 @@ import { NgClickOutsideDirective } from 'ng-click-outside2';
     IconSidebarComponent,
     FilenameFormatPipe,
     StorageComponent,
+    TooltipComponent,
   ],
   imports: [
     CommonModule,
