@@ -1,10 +1,9 @@
-
 <div
-  class="layout-container-full bg-dark my-0"
+  class="layout-container-full bg-dark my-0 d-flex justify-content-between align-content-center flex-column"
   (keydown)="onKeyDown($event)"
 >
+ 
 
-  
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
     style="overflow-y: hidden"
@@ -71,7 +70,9 @@
               [apiRequests]="apiRequests"
               [workflow]="workflow.value"
               [theme]="theme"
-              (detailsChanged)="edited = true; workflow.next($event); save(1, true)"
+              (detailsChanged)="
+                edited = true; workflow.next($event); save(1, true)
+              "
               (iconChanged)="edited = true; workflowIcon = $event; save(0)"
               (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
             >

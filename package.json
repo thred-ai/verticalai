@@ -86,6 +86,7 @@
     "mdb-angular-ui-kit": "^2.3.0",
     "monaco-editor": "^0.24.0",
     "ng-apexcharts": "^1.6.0",
+    "ng-click-outside2": "^11.2.0",
     "ng-in-viewport": "^6.1.5",
     "ng-lazyload-image": "^9.1.2",
     "ng-payment-card": "^0.0.8",

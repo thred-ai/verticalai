@@ -86,7 +86,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { SliderValuePipe } from './slider-value.pipe';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxDefaultImageModule } from 'ngx-default-image';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ProfileComponent } from './profile/profile.component';
 // import {BUTTONS, NgxWigModule} from 'ngx-wig';
@@ -109,7 +109,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { TextboxComponent } from './textbox/textbox.component';
 import { SplitPipe } from './split.pipe';
 import { PrettifyJsonPipe } from './prettify-json.pipe';
-import {ClipboardModule} from '@angular/cdk/clipboard';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ApiUrlPipe } from './api-url.pipe';
 import { ApiEditorComponent } from './api-editor/api-editor.component';
 import { CodeEditorModule } from '@ngstack/code-editor';
@@ -130,11 +130,11 @@ import { TerminalComponent } from './terminal/terminal.component';
 import { FileSidebarComponent } from './file-sidebar/file-sidebar.component';
 import { CodePaneComponent } from './code-pane/code-pane.component';
 import { IconSidebarComponent } from './icon-sidebar/icon-sidebar.component';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { FilenameFormatPipe } from './filename-format.pipe';
 import { StorageComponent } from './storage/storage.component';
-
+import { NgClickOutsideDirective } from 'ng-click-outside2';
 
 @NgModule({
   declarations: [
@@ -260,7 +260,8 @@ import { StorageComponent } from './storage/storage.component';
     CodemirrorModule,
     NgxStripeModule.forRoot('pk_live_m7nEWhyTHoxGspcxtJAci6pu002LUiOnJK'),
     CodeEditorModule.forRoot(),
-    IonicModule.forRoot()
+    IonicModule.forRoot(),
+    NgClickOutsideDirective,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
