@@ -16,6 +16,8 @@ export class IconSidebarComponent implements OnInit {
 
   selectedWorkflow?: string
 
+  selectedIcon: string = 'settings'
+
   expandedProjects = true
   @Output() openProj = new EventEmitter<string | undefined>();
 

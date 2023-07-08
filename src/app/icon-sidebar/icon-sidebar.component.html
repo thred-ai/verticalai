@@ -13,76 +13,85 @@
   </div>
 
   <div
-    class="rounded-circle mx-3 mt-4 icons bg-pink"
-    style="
-      border-style: solid;
-      border-width: 0.2rem;
-      border-color: rgb(255, 232, 248);
-      height: fit-content;
-    "
-    *ngIf="loadedUser"
-    [mdbPopover]="template"
+    class="w-100 proj mt-0 d-flex justify-content-center align-items-center"
+    style="aspect-ratio: 1"
+    [mdbPopover]="profile"
     placement="right"
-    [trigger]="'click'"
-    id="profile-toggle"
-    #profileToggle
+    [trigger]="'hover'"
+    role="button"
+    *ngIf="loadedUser"
+    (click)="profileToggle.click()"
   >
-    <img
-      *ngIf="loadedUser.url"
-      class="w-100 p-0 m-auto rounded-circle"
-      style="object-fit: contain; aspect-ratio: 1"
-      [src]="loadedUser.url"
-    />
+    <div
+      class="rounded-circle mx-3 icons bg-pink"
+      style="
+        border-style: solid;
+        border-width: 0.2rem;
+        border-color: rgb(255, 232, 248);
+        height: fit-content;
+      "
+      [mdbPopover]="template"
+      placement="right"
+      [trigger]="'click'"
+      id="profile-toggle"
+      #profileToggle
+    >
+      <img
+        *ngIf="loadedUser.url"
+        class="w-100 p-0 m-auto rounded-circle"
+        style="object-fit: contain; aspect-ratio: 1"
+        [src]="loadedUser.url"
+      />
 
-    <ng-template #template>
-      <div
-        class="popover-body-padding bg-theme border-table text-center px-3"
-        id="profile-menu"
-        style="min-width: 250px"
-        (clickOutside)="profileToggle.click()"
-      >
+      <ng-template #template>
         <div
-          class="rounded-circle icons bg-pink mx-auto mb-4"
-          style="
-            border-style: solid;
-            border-width: 0.2rem;
-            border-color: rgb(255, 232, 248);
-            width: fit-content;
-            height: 80px;
-          "
+          class="popover-body-padding bg-theme border-table rounded text-center px-3"
+          id="profile-menu"
+          style="min-width: 250px; overflow: hidden"
+          (clickOutside)="profileToggle.click()"
         >
-          <img
-            *ngIf="loadedUser.url != null && loadedUser.url != undefined"
-            class="h-100 p-0 m-auto rounded-circle"
-            style="object-fit: contain; aspect-ratio: 1"
-            [src]="loadedUser.url"
-          />
-        </div>
-        <span
-          class="fw-bolder text-light px-2 d-none d-md-block"
-          style="font-size: medium"
-        >
-          {{ loadedUser.name ? loadedUser.name : "" }}
-        </span>
-        <b
-          class="fw-bold mb-4 text-light text-center"
-          style="font-size: small"
-          >{{
-            loadedUser.email != null ? loadedUser.email : "Not Signed In"
-          }}</b
-        >
-        <br />
-        <div class="w-100 text-start mt-3">
-          <a
-            role="button"
-            class="w-100 btn text-light bg-secondary px-1 py-2 fw-bold rounded"
-            style="font-size: small"
-            (click)="root.editProfile()"
-            *ngIf="loadedUser.email != null"
+          <div
+            class="rounded-circle icons bg-pink mx-auto mb-4"
+            style="
+              border-style: solid;
+              border-width: 0.2rem;
+              border-color: rgb(255, 232, 248);
+              width: fit-content;
+              height: 80px;
+            "
           >
-            Edit Profile
-          </a>
-          <!-- <a
+            <img
+              *ngIf="loadedUser.url != null && loadedUser.url != undefined"
+              class="h-100 p-0 m-auto rounded-circle"
+              style="object-fit: contain; aspect-ratio: 1"
+              [src]="loadedUser.url"
+            />
+          </div>
+          <span
+            class="fw-bolder text-light px-2 d-none d-md-block"
+            style="font-size: medium"
+          >
+            {{ loadedUser.name ? loadedUser.name : "" }}
+          </span>
+          <b
+            class="fw-bold mb-4 text-light text-center"
+            style="font-size: small"
+            >{{
+              loadedUser.email != null ? loadedUser.email : "Not Signed In"
+            }}</b
+          >
+          <br />
+          <div class="w-100 text-start mt-3">
+            <a
+              role="button"
+              class="w-100 btn text-light bg-secondary px-1 py-2 fw-bold rounded"
+              style="font-size: small"
+              (click)="root.editProfile()"
+              *ngIf="loadedUser.email != null"
+            >
+              Edit Profile
+            </a>
+            <!-- <a
             role="button"
             class="w-100 btn text-light bg-secondary px-1 py-2 mt-2 fw-bold rounded"
             style="font-size: small"
@@ -90,133 +99,192 @@
           >
             View Billing
           </a> -->
-          <a
-            role="button"
-            class="w-100 btn bg-black text-white px-1 py-2 mt-2 fw-bold rounded"
-            style="font-size: small"
-            (click)="root.signOut()"
-            *ngIf="loadedUser.email"
-          >
-            Sign Out
-          </a>
-        </div>
-      </div>
-    </ng-template>
-  </div>
-
-  <div
-    class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
-    style="aspect-ratio: 1"
-    role="button"
-    [mdbPopover]="template2"
-    placement="right"
-    [trigger]="'click'"
-    #folderToggle
-  >
-    <mat-icon class="fw-bold">folder</mat-icon>
-
-    <ng-template #template2>
-      <ng-container *ngIf="loadedUser && loadedUser.utils">
-        <div
-          class="bg-theme border-table text-start pt-3"
-          id="profile-menu"
-          style="min-width: 250px; max-height: 250px; overflow-y: scroll"
-          (clickOutside)="folderToggle.click()"
-        >
-          <b class="fw-bold text-light px-3">Projects</b>
-
-          <div class="w-100 py-2" *ngIf="loadedUser.utils.length > 0">
-            <div
-              *ngFor="let n of loadedUser.utils ?? []"
-              class="d-flex justify-content-between align-items-center p-3 proj{{
-                selectedWorkflow && selectedWorkflow == n.id ? '-select' : ''
-              }}"
-              (click)="openProj.emit(n.id)"
+            <a
               role="button"
+              class="w-100 btn bg-black text-white px-1 py-2 mt-2 fw-bold rounded"
+              style="font-size: small"
+              (click)="root.signOut()"
+              *ngIf="loadedUser.email"
             >
-              <div class="d-flex justify-content-between align-items-center">
-                <div
-                  class="bg-white rounded-circle shadow d-flex justify-content-center align-items-center"
-                  style="
-                    object-fit: contain;
-                    aspect-ratio: 1;
-                    overflow: hidden;
-                    width: 45px;
-                  "
-                >
-                  <img
-                    class="m-auto rounded-circle"
-                    style="object-fit: contain; height: 85%; width: 85%"
-                    [src]="n.displayUrl"
-                  />
-                </div>
-                <div class="text-start w-100 ms-2">
-                  <div class="w-100 ps-2 text-light text-start fw-normal">
-                    {{ n.name }}
-                  </div>
-                  <div
-                    class="w-100 ps-2 text-light text-start fw-normal"
-                    style="font-size: 10px"
-                  >
-                    {{ n.created | date }}
-                  </div>
-                </div>
-              </div>
-              <mat-icon class="text-secondary"> read_more </mat-icon>
-            </div>
+              Sign Out
+            </a>
           </div>
         </div>
-      </ng-container>
+      </ng-template>
+    </div>
+    <ng-template #profile>
+      <verticalai-tooltip [text]="'Profile'"></verticalai-tooltip>
     </ng-template>
   </div>
-
   <div
-    class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
+    class="w-100 proj mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
+    [mdbPopover]="projects"
+    placement="right"
+    [trigger]="'hover'"
     role="button"
+    (click)="folderToggle.click()"
   >
-    <mat-icon class="fw-bold">file_upload</mat-icon>
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+      [mdbPopover]="template2"
+      placement="right"
+      [trigger]="'click'"
+      #folderToggle
+    >
+      <div class="w-100 h-100">
+        <mat-icon class="fw-bold">folder</mat-icon>
+        <ng-template #projects>
+          <verticalai-tooltip [text]="'Browse Projects'"></verticalai-tooltip>
+        </ng-template>
+      </div>
+
+      <ng-template #template2>
+        <ng-container *ngIf="loadedUser && loadedUser.utils">
+          <div
+            class="bg-theme border-table text-start pt-3 rounded"
+            id="profile-menu"
+            style="min-width: 250px; max-height: 250px; overflow-y: scroll"
+            (clickOutside)="folderToggle.click()"
+          >
+            <b class="fw-bold text-light px-3">Projects</b>
+
+            <div class="w-100 py-2" *ngIf="loadedUser.utils.length > 0">
+              <div
+                *ngFor="let n of loadedUser.utils ?? []"
+                class="d-flex justify-content-between align-items-center p-3 proj{{
+                  selectedWorkflow && selectedWorkflow == n.id ? '-select' : ''
+                }}"
+                (click)="openProj.emit(n.id)"
+                role="button"
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div
+                    class="bg-white rounded-circle shadow d-flex justify-content-center align-items-center"
+                    style="
+                      object-fit: contain;
+                      aspect-ratio: 1;
+                      overflow: hidden;
+                      width: 45px;
+                    "
+                  >
+                    <img
+                      class="m-auto rounded-circle"
+                      style="object-fit: contain; height: 85%; width: 85%"
+                      [src]="n.displayUrl"
+                    />
+                  </div>
+                  <div class="text-start w-100 ms-2">
+                    <div class="w-100 ps-2 text-light text-start fw-normal">
+                      {{ n.name }}
+                    </div>
+                    <div
+                      class="w-100 ps-2 text-light text-start fw-normal"
+                      style="font-size: 10px"
+                    >
+                      {{ n.created | date }}
+                    </div>
+                  </div>
+                </div>
+                <mat-icon class="text-secondary"> read_more </mat-icon>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-template>
+    </div>
   </div>
 
   <div
-    class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
+    class="w-100 proj{{
+      selectedIcon == 'upload' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    [mdbPopover]="tooltip"
+    (click)="selectedIcon = 'upload'"
+    [mdbPopover]="upload"
     placement="right"
     [trigger]="'hover'"
   >
-    <mat-icon class="fw-bold">settings_applications</mat-icon>
-    <ng-template #settingooltip>
-      <verticalai-tooltip [text]="'Config'"></verticalai-tooltip>
-    </ng-template>
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+    >
+      <div class="w-100 h-100">
+        <mat-icon class="fw-bold">file_upload</mat-icon>
+        <ng-template #upload>
+          <verticalai-tooltip [text]="'Upload Project'"></verticalai-tooltip>
+        </ng-template>
+      </div>
+    </div>
   </div>
 
   <div
-    class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
+    class="w-100 proj{{
+      selectedIcon == 'settings' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    [mdbPopover]="tooltip"
+    (click)="selectedIcon = 'settings'"
+    [mdbPopover]="settings"
     placement="right"
     [trigger]="'hover'"
   >
-    <mat-icon class="fw-bold">code</mat-icon>
-    <ng-template #tooltip>
-      <verticalai-tooltip [text]="'Script'"></verticalai-tooltip>
-    </ng-template>
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+    >
+      <mat-icon class="fw-bold">settings_applications</mat-icon>
+      <ng-template #settings>
+        <verticalai-tooltip [text]="'Config'"></verticalai-tooltip>
+      </ng-template>
+    </div>
   </div>
 
   <div
-    class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-5"
+    class="w-100 proj{{
+      selectedIcon == 'script' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    [mdbPopover]="tooltip"
+    (click)="selectedIcon = 'script'"
+    [mdbPopover]="script"
     placement="right"
     [trigger]="'hover'"
   >
-    <mat-icon class="fw-bold">storage</mat-icon>
-    <ng-template #tooltip>
-      <verticalai-tooltip [text]="'Memory'"></verticalai-tooltip>
-    </ng-template>
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-0"
+      style="aspect-ratio: 1"
+      role="button"
+    >
+      <mat-icon class="fw-bold">code</mat-icon>
+      <ng-template #script>
+        <verticalai-tooltip [text]="'Code'"></verticalai-tooltip>
+      </ng-template>
+    </div>
+  </div>
+
+  <div
+    class="w-100 proj{{
+      selectedIcon == 'memory' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
+    style="aspect-ratio: 1"
+    role="button"
+    (click)="selectedIcon = 'memory'"
+    [mdbPopover]="memory"
+    placement="right"
+    [trigger]="'hover'"
+  >
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+      role="button"
+    >
+      <mat-icon class="fw-bold">storage</mat-icon>
+      <ng-template #memory>
+        <verticalai-tooltip [text]="'Memory'"></verticalai-tooltip>
+      </ng-template>
+    </div>
   </div>
 </div>
