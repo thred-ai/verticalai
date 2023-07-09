@@ -2,8 +2,6 @@
   class="layout-container-full bg-dark my-0 d-flex justify-content-between align-content-center flex-column"
   (keydown)="onKeyDown($event)"
 >
- 
-
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
     style="overflow-y: hidden"
@@ -12,7 +10,11 @@
       else noWorkflow
     "
   >
-    <app-icon-sidebar (openProj)="setWorkflow($event)"></app-icon-sidebar>
+    <app-icon-sidebar
+      (openProj)="setWorkflow($event)"
+      [selectedIcon]="selectedIcon"
+      (selectedIconChanged)="selectedIcon = $event"
+    ></app-icon-sidebar>
     <app-file-sidebar
       [hidden]="mode != 'sidebar'"
       [models]="models"
@@ -33,11 +35,11 @@
     <as-split class="w-100 h-100" class="vertical" direction="vertical">
       <as-split-area class="horizontal" [size]="70">
         <as-split class="w-100 h-100" direction="horizontal">
-          <as-split-area [size]="40">
+          <!-- <as-split-area [size]="40">
             <div
               class="w-100 h-100 d-flex justify-content-between align-items-start"
             >
-              <div class="w-100 h-100" *ngIf="executable.agents[openFileId]">
+              <div class="w-100 h-100" *ngIf="executable.agents[openFileId]" >
                 <app-workflow-code
                   [code]="
                     executable.agents[openFileId] &&
@@ -60,28 +62,65 @@
                 ></app-workflow-code>
               </div>
             </div>
-          </as-split-area>
+          </as-split-area> -->
           <as-split-area [size]="60">
-            <verticalai-workflow-designer
-              [models]="models"
-              [triggers]="triggers"
-              [trainingData]="trainingData"
-              [apiKeys]="apiKeys"
-              [apiRequests]="apiRequests"
-              [workflow]="workflow.value"
-              [theme]="theme"
-              (detailsChanged)="
-                edited = true; workflow.next($event); save(1, true)
-              "
-              (iconChanged)="edited = true; workflowIcon = $event; save(0)"
-              (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
-            >
-            </verticalai-workflow-designer>
+            <ng-container *ngIf="selectedIcon == 'schema'">
+              <verticalai-workflow-designer
+                [models]="models"
+                [triggers]="triggers"
+                [trainingData]="trainingData"
+                [apiKeys]="apiKeys"
+                [apiRequests]="apiRequests"
+                [workflow]="workflow.value"
+                [theme]="theme"
+                (detailsChanged)="
+                  edited = true; workflow.next($event); save(1, true)
+                "
+                (iconChanged)="edited = true; workflowIcon = $event; save(0)"
+                (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
+              >
+              </verticalai-workflow-designer>
+            </ng-container>
+
+            <ng-container *ngIf="selectedIcon == 'upload'"> </ng-container>
+
+            <ng-container *ngIf="selectedIcon == 'script'">
+              <div class="w-100 h-100" *ngIf="executable.agents[openFileId]">
+                <app-workflow-code
+                  [code]="
+                    executable.agents[openFileId] &&
+                    executable.agents[openFileId].source
+                      ? executable.agents[openFileId].source!
+                      : defaultCode(executable.agents[openFileId].type)
+                  "
+                  (codeChanged)="
+                    edited = true;
+                    executable.agents[openFileId]
+                      ? (executable.agents[openFileId].source = $event)
+                      : (executable.agents[openFileId] = {
+                          id: openFileId,
+                          source: $event,
+                          compiled: null,
+                          type: executable.agents[openFileId].type
+                        });
+                    save()
+                  "
+                ></app-workflow-code>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="selectedIcon == 'memory'"> </ng-container>
+
+            <ng-container *ngIf="selectedIcon == 'settings'"> 
+
+              
+
+            </ng-container>
           </as-split-area>
         </as-split>
       </as-split-area>
 
-      <as-split-area [size]="30">
+      <!-- <as-split-area [size]="30">
         <div
           class="h-100 d-flex justify-content-between align-items-end flex-column w-100"
         >
@@ -89,7 +128,7 @@
             <app-terminal [model]="workflow.value"></app-terminal>
           </div>
         </div>
-      </as-split-area>
+      </as-split-area> -->
     </as-split>
   </div>
 
