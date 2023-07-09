@@ -310,9 +310,6 @@ export class WorkflowComponent implements OnInit {
 
           this.updateWorkflows(workflow);
         } else if (mode == 1 && this.openStep && this.items.value) {
-          console.log('saving');
-
-          console.log('SAVING WORKFLOW');
 
           let exec = await this.fillExecutable(workflow);
 
@@ -327,7 +324,6 @@ export class WorkflowComponent implements OnInit {
               this.updateWorkflows(result);
             }
           }
-
           return;
         }
       } catch (error) {}
