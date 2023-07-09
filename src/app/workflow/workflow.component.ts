@@ -13,7 +13,6 @@ import {
 } from '@angular/material/dialog';
 import { Dict, LoadService } from '../load.service';
 import { Developer } from '../models/user/developer.model';
-import { Workflow } from '../models/workflow/workflow.model';
 import { AIModel } from '../models/workflow/ai-model.model';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { Trigger } from '../models/workflow/trigger.model';
@@ -28,6 +27,7 @@ import {
   Sequence,
   BranchedStep,
   SequentialStep,
+  Step,
 } from 'sequential-workflow-designer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Agent } from '../models/workflow/agent.model';
@@ -44,7 +44,7 @@ export class WorkflowComponent implements OnInit {
   edited = false;
   newWorkflow = true;
 
-  @Input() workflows?: Workflow[];
+  @Input() workflows?: Executable[];
 
   models: Dict<AIModelType> = {};
   triggers: Dict<Trigger> = {};
@@ -57,12 +57,12 @@ export class WorkflowComponent implements OnInit {
   newAPIKey?: Key;
   newAPIRequest?: APIRequest;
 
-  workflow = new BehaviorSubject<Workflow | undefined>(undefined);
+  workflow = new BehaviorSubject<Executable | undefined>(undefined);
   theme: 'light' | 'dark' = 'light';
 
   mode = 'sidebar';
 
-  selectedIcon: string = 'schema'
+  selectedIcon: string = 'schema';
 
   onKeyDown($event: any): void {
     // Detect platform
@@ -93,8 +93,8 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
-  set activeWorkflow(app: Workflow | undefined) {
-    var workflow!: Workflow;
+  set activeWorkflow(app: Executable | undefined) {
+    var workflow!: Executable;
 
     if (app) {
       this.newWorkflow = false;
@@ -102,7 +102,7 @@ export class WorkflowComponent implements OnInit {
       workflow.layout = this.loadService.sortBranches(workflow.layout);
     } else {
       this.newWorkflow = true;
-      workflow = new Workflow(
+      workflow = new Executable(
         this.loadService.newUtilID,
         '',
         new Date().getTime(),
@@ -151,13 +151,13 @@ export class WorkflowComponent implements OnInit {
         let same = this.workflows?.find((w) => w.id == id);
 
         if (same) {
+          console.log('same');
           this.activeWorkflow = same;
+          this.selectFile(same.layout.sequence[0].id);
         }
       } else {
         this.activeWorkflow = undefined;
       }
-
-      this.selectFile('main');
     }, 100);
 
     // if (val){
@@ -167,9 +167,7 @@ export class WorkflowComponent implements OnInit {
 
   items = new BehaviorSubject<TaskTree[] | undefined>(undefined);
 
-  executable?: Executable;
-
-  openFileId?: string;
+  openStep?: Step;
 
   constructor(
     private loadService: LoadService,
@@ -185,11 +183,11 @@ export class WorkflowComponent implements OnInit {
       let file = params['file'];
 
       if (this.workflows) {
-        if (!this.openFileId && this.workflow) {
+        if (!this.openStep && this.workflow) {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          this.selectFile(file ?? 'main', this.activeWorkflow);
+          this.selectFile(file, this.activeWorkflow);
 
           this.loadService.loadedModels.subscribe((models) => {
             this.models = models;
@@ -227,7 +225,7 @@ export class WorkflowComponent implements OnInit {
     });
   }
 
-  async initExecutable(w?: Workflow, fetchExecutable = true) {
+  async initExecutable(w?: Executable, fetchExecutable = true) {
     if (w) {
       this.items.next([
         new TaskTree(
@@ -235,32 +233,10 @@ export class WorkflowComponent implements OnInit {
           'app',
           'category',
           this.analyzeTasks(w.layout.sequence),
-          new TaskTree('MainController', 'main', 'model', [], undefined, {
-            type: 'model',
-            metaType: 'main',
-          }),
+          undefined,
           { type: 'folder' }
         ),
       ]);
-    }
-    if (w && w.id && w.creatorId && w.creatorId != '' && fetchExecutable) {
-      try {
-        if (w.executableUrl) {
-          let exec = (await this.loadService.getExecutable(w.id)) as Executable;
-          console.log(exec)
-          this.executable = exec;
-        } else {
-          let exec = new Executable(w?.name ?? '', w?.id ?? '', {
-            main: new Agent('main', 'main', null, null),
-          });
-          exec = this.fillExecutable(exec, this.items.value ?? []);
-
-          this.executable = exec;
-          this.checkSave();
-        }
-      } catch (error) {
-        console.log(error);
-      }
     }
   }
 
@@ -299,8 +275,6 @@ export class WorkflowComponent implements OnInit {
   async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
     console.log(mode);
-    console.log(this.executable);
-    console.log(this.openFileId);
 
     if (workflow && this.isValid) {
       try {
@@ -324,41 +298,40 @@ export class WorkflowComponent implements OnInit {
           this.newAPIKey = undefined;
 
           this.updateWorkflows(workflow);
-        } else if (
-          mode == 1 &&
-          this.executable &&
-          this.openFileId &&
-          this.items.value
-        ) {
+        } else if (mode == 1 && this.openStep && this.items.value) {
           console.log('saving');
 
-          await this.initExecutable(workflow, false)
-          
-          let exec = this.fillExecutable(
-            this.executable,
-            this.items.value ?? []
-          );
+          // await this.initExecutable(workflow, false)
 
+          // let exec = this.fillExecutable(
+          //   this.executable,
+          //   this.items.value ?? []
+          // );
 
-          workflow.executableUrl = await this.loadService.uploadExecutable(
-            workflow.id,
-            exec
-          );
+          // workflow.executableUrl = await this.loadService.uploadExecutable(
+          //   workflow.id,
+          //   exec
+          // );
 
           console.log('SAVING WORKFLOW');
+          // await this.loadService.saveCode(
+          //   workflow.id,
+          //   workflow.creatorId,
+          //   this.openStep,
+          //   workflow
+          // );
           await this.loadService.saveSmartUtil(workflow, async (result) => {
-            if (result){
-              this.executable = await this.loadService.getExecutable(result.id)
+            if (result) {
+              
+              // this.executable = await this.loadService.getExecutable(result.id)
               console.log(result);
               console.log('SAVED!');
               this.edited = false;
-              if (update){
-                console.log(result)
-                console.log(this.executable)
+              if (update) {
+                console.log(result);
                 this.updateWorkflows(result);
               }
             }
-            
           });
 
           return;
@@ -376,25 +349,23 @@ export class WorkflowComponent implements OnInit {
   ) {
     var exec = executable;
 
-    Object.keys(exec.agents).forEach(key => {
-      if (!items.find(i => i.id == key)){
-        delete exec.agents[key]
-      }
-    });
-    items
-      .filter((i) => i.type == 'model')
-      .forEach((i) => {
-        if (!exec.agents[i.id] || !exec.agents[i.id]?.source) {
-          exec.agents[i.id] = new Agent(
-            i.id,
-            i.metadata['metaType'],
-            this.defaultCode(i.metadata['metaType']) ?? null,
-            ''
-          );
-        }
-
-        
-      });
+    // Object.keys(exec.agents).forEach((key) => {
+    //   if (!items.find((i) => i.id == key)) {
+    //     delete exec.agents[key];
+    //   }
+    // });
+    // items
+    //   .filter((i) => i.type == 'model')
+    //   .forEach((i) => {
+    //     if (!exec.agents[i.id] || !exec.agents[i.id]?.source) {
+    //       exec.agents[i.id] = new Agent(
+    //         i.id,
+    //         i.metadata['metaType'],
+    //         this.defaultCode(i.metadata['metaType']) ?? null,
+    //         ''
+    //       );
+    //     }
+    //   });
 
     return exec;
   }
@@ -438,16 +409,15 @@ export class WorkflowComponent implements OnInit {
   async publish(
     workflow = this.workflow.value,
     close = false,
-    callback?: (result?: Workflow) => any
+    callback?: (result?: Executable) => any
   ) {
     var w = workflow;
-    if (w && this.executable) {
+    if (w) {
       this.loading = true;
 
-      let exec = this.fillExecutable(this.executable, this.items.value ?? []);
+      let exec = this.fillExecutable(w, this.items.value ?? []);
 
       console.log('OLD EXEC');
-      console.log(this.executable);
 
       console.log('NEW EXEC');
       console.log(exec);
@@ -660,9 +630,13 @@ export class WorkflowComponent implements OnInit {
     this.save(1, true);
   }
 
-  selectFile(fileId: string, workflow = this.workflow.value) {
+  selectFile(
+    fileId: string | undefined = this.workflow.value?.layout.sequence[0].id,
+    workflow = this.workflow.value
+  ) {
     if (workflow && fileId) {
-      this.openFileId = fileId;
+      this.openStep = this.findStep(fileId, workflow.layout.sequence);
+      console.log(this.openStep);
       this.router.navigate([], {
         relativeTo: this.route,
         queryParams: {
@@ -675,6 +649,30 @@ export class WorkflowComponent implements OnInit {
         // do not trigger navigation
       });
     }
+  }
+
+  findStep(id: string, tasks: Sequence) {
+    var stepToReturn: Step | undefined;
+
+    tasks.forEach((task) => {
+      if (task.id == id) {
+        stepToReturn = task;
+      } else {
+        if (task.componentType == 'switch') {
+          let branchTask = task as BranchedStep;
+
+          Object.keys(branchTask.branches).forEach((b) => {
+            stepToReturn = this.findStep(id, branchTask.branches[b]);
+          });
+        } else if (task.componentType == 'container') {
+          let loopTask = task as SequentialStep;
+
+          stepToReturn = this.findStep(id, loopTask.sequence);
+        }
+      }
+    });
+
+    return stepToReturn;
   }
 
   jsFormattedName(name: string, same: number) {
