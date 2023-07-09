@@ -187,8 +187,7 @@ export class WorkflowComponent implements OnInit {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-            this.selectFile(file, this.activeWorkflow);
-          
+          this.selectFile(file, this.activeWorkflow);
 
           this.loadService.loadedModels.subscribe((models) => {
             this.models = models;
@@ -617,8 +616,8 @@ export class WorkflowComponent implements OnInit {
     workflow = this.workflow.value
   ) {
     if (workflow && fileId) {
-      console.log(fileId)
-      console.log(workflow.layout.sequence)
+      console.log(fileId);
+      console.log(workflow.layout.sequence);
       this.openStep = this.findStep(fileId, workflow.layout.sequence);
       console.log(this.openStep);
       this.router.navigate([], {
@@ -645,16 +644,19 @@ export class WorkflowComponent implements OnInit {
         if (task.componentType == 'switch') {
           let branchTask = task as BranchedStep;
 
-          Object.keys(branchTask.branches).forEach((b) => {
-            let path = this.findStep(id, branchTask.branches[b]);
-            if (path){
-              stepToReturn = this.findStep(id, branchTask.branches[b]);
+          Object.values(branchTask.branches).forEach((b) => {
+            let path = this.findStep(id, b);
+            if (path) {
+              stepToReturn = path;
             }
           });
         } else if (task.componentType == 'container') {
           let loopTask = task as SequentialStep;
+          let path = this.findStep(id, loopTask.sequence);
 
-          stepToReturn = this.findStep(id, loopTask.sequence);
+          if (path) {
+            stepToReturn = path;
+          }
         }
       }
     });
