@@ -919,9 +919,9 @@ export class LoadService {
       );
   }
 
-  testAPI(modelId: string, input: any, callback: (data: any) => any) {
+  testAPI(executableUrl: string, input: any, callback: (data: any) => any) {
     this.functions
-      .httpsCallable('apiTest')({ modelId, input })
+      .httpsCallable('apiTest')({ executableUrl, input })
       .pipe(first())
       .subscribe(
         async (resp) => {

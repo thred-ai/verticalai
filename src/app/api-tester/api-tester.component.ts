@@ -35,13 +35,16 @@ export class ApiTesterComponent implements OnInit {
     if (this.request && this.request.trim() != '' && this.model) {
       this.chats.push({ type: 'user', msg: this.request });
 
-      setTimeout(() => {
+      setTimeout(async () => {
         this.loading = true;
 
-        this.loadService.testAPI(
+        let url = await this.loadService.uploadExecutable(
           this.model!.id,
-          this.request,
-          async (result) => {
+          this.model!
+        );
+
+        if (url) {
+          this.loadService.testAPI(url, this.request, async (result) => {
             if (this.loading) {
               console.log(result);
               this.image = undefined;
@@ -77,8 +80,9 @@ export class ApiTesterComponent implements OnInit {
               this.chats.push({ type: 'system', msg: this.prettyResponse });
               this.loading = false;
             }
-          }
-        );
+          });
+        }
+
         this.request = '';
       }, 500);
     }

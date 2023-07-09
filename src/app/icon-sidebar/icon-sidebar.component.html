@@ -232,6 +232,30 @@
 
   <div
     class="w-100 proj{{
+      selectedIcon == 'test' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
+    style="aspect-ratio: 1"
+    role="button"
+    (click)="selectedIconChanged.emit('test')"
+    [mdbPopover]="test"
+    placement="right"
+    [trigger]="'hover'"
+  >
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+    >
+      <div class="w-100 h-100">
+        <mat-icon class="fw-bold">terminal</mat-icon>
+        <ng-template #test>
+          <verticalai-tooltip [text]="'Testing'"></verticalai-tooltip>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="w-100 proj{{
       selectedIcon == 'schema' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"

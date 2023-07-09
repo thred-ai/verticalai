@@ -69,6 +69,12 @@
               </verticalai-workflow-designer>
             </ng-container>
 
+            <ng-container *ngIf="selectedIcon == 'test'">
+              <div class="w-100 h-100 bg-black">
+                <app-terminal [model]="workflow.value"></app-terminal>
+              </div>
+            </ng-container>
+
             <ng-container *ngIf="selectedIcon == 'upload'"> </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'script'">
