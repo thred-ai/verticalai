@@ -134,6 +134,7 @@ import { FilenameFormatPipe } from './filename-format.pipe';
 import { StorageComponent } from './storage/storage.component';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { TooltipComponent } from './tooltip/tooltip.component';
+import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 
 @NgModule({
   declarations: [
@@ -189,6 +190,7 @@ import { TooltipComponent } from './tooltip/tooltip.component';
     FilenameFormatPipe,
     StorageComponent,
     TooltipComponent,
+    ComingSoonComponent,
   ],
   imports: [
     CommonModule,

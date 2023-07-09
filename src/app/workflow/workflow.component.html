@@ -75,7 +75,11 @@
               </div>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'upload'"> </ng-container>
+            <ng-container *ngIf="selectedIcon == 'upload'"> 
+              <app-coming-soon [title]="'Upload Project'">
+
+              </app-coming-soon>
+            </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'script'">
               <app-workflow-code
@@ -96,9 +100,17 @@
               ></app-workflow-code>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'memory'"> </ng-container>
+            <ng-container *ngIf="selectedIcon == 'memory'"> 
+              <app-coming-soon [title]="'Controller Memory'">
 
-            <ng-container *ngIf="selectedIcon == 'settings'"> </ng-container>
+              </app-coming-soon>
+            </ng-container>
+
+            <ng-container *ngIf="selectedIcon == 'settings'"> 
+              <app-coming-soon [title]="'Controller Settings'">
+
+              </app-coming-soon>
+            </ng-container>
           </as-split-area>
         </as-split>
       </as-split-area>
