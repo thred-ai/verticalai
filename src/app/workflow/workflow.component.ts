@@ -62,7 +62,7 @@ export class WorkflowComponent implements OnInit {
 
   mode = 'sidebar';
 
-  selectedIcon: string = 'schema';
+  selectedIcon: string = 'schema'
 
   onKeyDown($event: any): void {
     // Detect platform
@@ -247,7 +247,7 @@ export class WorkflowComponent implements OnInit {
       try {
         if (w.executableUrl) {
           let exec = (await this.loadService.getExecutable(w.id)) as Executable;
-          console.log(exec);
+          console.log(exec)
           this.executable = exec;
         } else {
           let exec = new Executable(w?.name ?? '', w?.id ?? '', {
@@ -332,12 +332,13 @@ export class WorkflowComponent implements OnInit {
         ) {
           console.log('saving');
 
-          await this.initExecutable(workflow, false);
-
+          await this.initExecutable(workflow, false)
+          
           let exec = this.fillExecutable(
             this.executable,
             this.items.value ?? []
           );
+
 
           workflow.executableUrl = await this.loadService.uploadExecutable(
             workflow.id,
@@ -346,17 +347,18 @@ export class WorkflowComponent implements OnInit {
 
           console.log('SAVING WORKFLOW');
           await this.loadService.saveSmartUtil(workflow, async (result) => {
-            if (result) {
-              this.executable = exec
+            if (result){
+              this.executable = await this.loadService.getExecutable(result.id)
               console.log(result);
               console.log('SAVED!');
               this.edited = false;
-              if (update) {
-                console.log(result);
-                console.log(this.executable);
+              if (update){
+                console.log(result)
+                console.log(this.executable)
                 this.updateWorkflows(result);
               }
             }
+            
           });
 
           return;
@@ -374,9 +376,9 @@ export class WorkflowComponent implements OnInit {
   ) {
     var exec = executable;
 
-    Object.keys(exec.agents).forEach((key) => {
-      if (!items.find((i) => i.id == key)) {
-        delete exec.agents[key];
+    Object.keys(exec.agents).forEach(key => {
+      if (!items.find(i => i.id == key)){
+        delete exec.agents[key]
       }
     });
     items
@@ -390,6 +392,8 @@ export class WorkflowComponent implements OnInit {
             ''
           );
         }
+
+        
       });
 
     return exec;
