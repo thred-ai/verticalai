@@ -73,13 +73,19 @@
 
             <ng-container *ngIf="selectedIcon == 'script'">
               <app-workflow-code
-                [code]="
-                  openStep.properties['source']
-                    ? openStep.properties['source']!
-                    : defaultCode(openStep.type)
+                *ngIf="
+                  (openStep.id == 'main' && activeWorkflow
+                    ? activeWorkflow.layout.properties['mainSource']
+                    : openStep.properties['source']) ??
+                  defaultCode(openStep.type) as source
                 "
+                [code]="source"
                 (codeChanged)="
-                  edited = true; openStep.properties['source'] = $event; save()
+                  edited = true;
+                  openStep.id == 'main' && activeWorkflow
+                    ? (activeWorkflow.layout.properties['mainSource'] = $event)
+                    : (openStep.properties['source'] = $event);
+                  save()
                 "
               ></app-workflow-code>
             </ng-container>

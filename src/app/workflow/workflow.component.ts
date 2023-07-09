@@ -133,6 +133,7 @@ export class WorkflowComponent implements OnInit {
         if (user?.uid && this.workflow) {
           workflow.creatorId = user.uid;
           this.workflow.next(workflow);
+          this.checkSave()
           loadData();
         }
       });
@@ -153,7 +154,8 @@ export class WorkflowComponent implements OnInit {
         if (same) {
           console.log('same');
           this.activeWorkflow = same;
-          this.selectFile(same.layout.sequence[0].id);
+          // same.layout.properties
+          this.selectFile('main');
         }
       } else {
         this.activeWorkflow = undefined;
@@ -187,7 +189,7 @@ export class WorkflowComponent implements OnInit {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          this.selectFile(file, this.activeWorkflow);
+          this.selectFile(file ?? 'main', this.activeWorkflow);
 
           this.loadService.loadedModels.subscribe((models) => {
             this.models = models;
@@ -233,7 +235,10 @@ export class WorkflowComponent implements OnInit {
           'app',
           'category',
           this.analyzeTasks(w.layout.sequence),
-          undefined,
+          new TaskTree('MainController', 'main', 'model', [], undefined, {
+            type: 'model',
+            metaType: 'main',
+          }),
           { type: 'folder' }
         ),
       ]);
@@ -611,10 +616,7 @@ export class WorkflowComponent implements OnInit {
     this.save(1, true);
   }
 
-  selectFile(
-    fileId: string | undefined = this.workflow.value?.layout.sequence[0].id,
-    workflow = this.workflow.value
-  ) {
+  selectFile(fileId: string | undefined, workflow = this.workflow.value) {
     if (workflow && fileId) {
       console.log(fileId);
       console.log(workflow.layout.sequence);
@@ -636,6 +638,18 @@ export class WorkflowComponent implements OnInit {
 
   findStep(id: string, tasks: Sequence) {
     var stepToReturn: Step | undefined;
+
+    if (id == 'main') {
+      stepToReturn = {
+        id: 'main',
+        componentType: 'task',
+        type: 'main',
+        name: 'Main',
+        properties: {},
+      };
+
+      return stepToReturn;
+    }
 
     tasks.forEach((task) => {
       if (task.id == id) {
