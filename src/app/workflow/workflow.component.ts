@@ -187,7 +187,8 @@ export class WorkflowComponent implements OnInit {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          this.selectFile(file, this.activeWorkflow);
+            this.selectFile(file, this.activeWorkflow);
+          
 
           this.loadService.loadedModels.subscribe((models) => {
             this.models = models;
@@ -301,29 +302,10 @@ export class WorkflowComponent implements OnInit {
         } else if (mode == 1 && this.openStep && this.items.value) {
           console.log('saving');
 
-          // await this.initExecutable(workflow, false)
-
-          // let exec = this.fillExecutable(
-          //   this.executable,
-          //   this.items.value ?? []
-          // );
-
-          // workflow.executableUrl = await this.loadService.uploadExecutable(
-          //   workflow.id,
-          //   exec
-          // );
-
           console.log('SAVING WORKFLOW');
-          // await this.loadService.saveCode(
-          //   workflow.id,
-          //   workflow.creatorId,
-          //   this.openStep,
-          //   workflow
-          // );
+
           await this.loadService.saveSmartUtil(workflow, async (result) => {
             if (result) {
-              
-              // this.executable = await this.loadService.getExecutable(result.id)
               console.log(result);
               console.log('SAVED!');
               this.edited = false;
@@ -635,6 +617,8 @@ export class WorkflowComponent implements OnInit {
     workflow = this.workflow.value
   ) {
     if (workflow && fileId) {
+      console.log(fileId)
+      console.log(workflow.layout.sequence)
       this.openStep = this.findStep(fileId, workflow.layout.sequence);
       console.log(this.openStep);
       this.router.navigate([], {
@@ -662,7 +646,10 @@ export class WorkflowComponent implements OnInit {
           let branchTask = task as BranchedStep;
 
           Object.keys(branchTask.branches).forEach((b) => {
-            stepToReturn = this.findStep(id, branchTask.branches[b]);
+            let path = this.findStep(id, branchTask.branches[b]);
+            if (path){
+              stepToReturn = this.findStep(id, branchTask.branches[b]);
+            }
           });
         } else if (task.componentType == 'container') {
           let loopTask = task as SequentialStep;
