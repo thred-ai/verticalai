@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { MatMenuTrigger } from '@angular/material/menu';
 import { LoadService } from '../load.service';
 import { TaskTree } from '../models/workflow/task-tree.model';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 
 @Component({
@@ -12,9 +12,9 @@ import { WorkflowComponent } from '../workflow/workflow.component';
 })
 export class StorageComponent implements OnInit {
 
-  workflow?: Workflow;
+  workflow?: Executable;
 
-  @Output() detailsChanged = new EventEmitter<Workflow>();
+  @Output() detailsChanged = new EventEmitter<Executable>();
 
   loading: Boolean = false;
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 
 @Component({
   selector: 'app-data-table',
@@ -25,7 +25,7 @@ export class DataTableComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  @Input() utils?: Workflow[] = undefined
+  @Input() utils?: Executable[] = undefined
 
   setDataSource(){
     if (this.filter.id == 0){

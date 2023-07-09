@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { isPlatformBrowser } from 'ng-in-viewport';
 import { Dict, LoadService } from '../load.service';
 import { Developer } from '../models/user/developer.model';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { WorkflowInfoComponent } from '../workflow-info/workflow-info.component';
 import { PlanSelectComponent } from '../plan-select/plan-select.component';
@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  openUtil(workflow?: Workflow, mode = 0) {
+  openUtil(workflow?: Executable, mode = 0) {
     if (mode == 0) {
       this.dialog.open(WorkflowComponent, {
         maxHeight: 'calc(var(--vh, 1vh) * 100)',

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 import { Dict, LoadService } from '../load.service';
 import { Plan } from '../models/workflow/plan.model';
 
@@ -23,12 +23,12 @@ import { Plan } from '../models/workflow/plan.model';
 export class CollectionTableComponent
   implements OnInit, AfterViewInit, OnChanges
 {
-  @Output() clicked = new EventEmitter<{ app: Workflow; mode: number }>();
+  @Output() clicked = new EventEmitter<{ app: Executable; mode: number }>();
   @Output() planClicked = new EventEmitter<{plan: string, index: number}>();
 
-  @Input() set utils(utils: Workflow[]) {
+  @Input() set utils(utils: Executable[]) {
     setTimeout(() => {
-      this.dataSource = new MatTableDataSource<Workflow>(utils);
+      this.dataSource = new MatTableDataSource<Executable>(utils);
       this.dataSource!.paginator = this.paginator1!;
       this.cdr.detectChanges();
     }, 200);
@@ -36,11 +36,11 @@ export class CollectionTableComponent
 
   @Input() count: number = 0;
 
-  open(app: Workflow, mode = 0) {
+  open(app: Executable, mode = 0) {
     this.clicked.emit({ app, mode });
   }
 
-  dataSource?: MatTableDataSource<Workflow>;
+  dataSource?: MatTableDataSource<Executable>;
 
   displayedColumns2: string[] = [
     'image',

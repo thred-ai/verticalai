@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoadService } from '../load.service';
-import { Workflow } from '../models/workflow/workflow.model';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Executable } from '../models/workflow/executable.model';
 
 @Component({
   selector: 'app-workflow-info',
@@ -11,7 +11,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class WorkflowInfoComponent implements OnInit {
 
-  workflow!: Workflow
+  workflow!: Executable
 
   showKey = false
 

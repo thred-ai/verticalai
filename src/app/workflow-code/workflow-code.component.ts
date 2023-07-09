@@ -18,7 +18,7 @@ import { Executable } from '../models/workflow/executable.model';
 export class WorkflowCodeComponent implements OnInit {
   constructor(private ngZone: NgZone) {}
 
-  @Input() code!: string;
+  @Input() code!: any;
   @Output() codeChanged = new EventEmitter<string>();
 
   ngOnInit(): void {

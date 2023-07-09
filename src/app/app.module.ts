@@ -62,7 +62,6 @@ import {
   MAT_DATE_RANGE_SELECTION_STRATEGY,
 } from '@angular/material/datepicker';
 import { DataTableComponent } from './data-table/data-table.component';
-import { LocationPipe } from './location.pipe';
 import { ViewsPipe } from './views.pipe';
 import { LiveEarthViewPipePipe } from './live-earth-view-pipe.pipe';
 import { safeHtmlPipe } from './safeHtml.pipe';
@@ -71,7 +70,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { NotificationComponent } from './notification/notification.component';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { SafeUrlPipe } from './safe-url.pipe';
-import { ViewCoordComponent } from './view-coord/view-coord.component';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -148,13 +146,11 @@ import { TooltipComponent } from './tooltip/tooltip.component';
     NotificationComponent,
     IsRoutePipe,
     ViewsPipe,
-    LocationPipe,
     LiveEarthViewPipePipe,
     safeHtmlPipe,
     SafeUrlPipe,
     SafeTextRowsPipe,
     ProfileComponent,
-    ViewCoordComponent,
     SharedDialogComponent,
     SliderValuePipe,
     CastPipe,

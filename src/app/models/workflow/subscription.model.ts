@@ -1,4 +1,3 @@
-import { Workflow } from './workflow.model';
 
 export class Subscription {
   id!: string;

@@ -1,21 +1,72 @@
-import { Dict } from 'src/app/load.service';
-import { Agent } from './agent.model';
 import { Definition } from 'sequential-workflow-designer';
+import * as uuid from 'uuid';
+import { Plan } from './plan.model';
+import { Subscription } from './subscription.model';
 
 export class Executable {
   name!: string;
   id!: string;
-  agents!: Dict<Agent>;
-  schema!: Definition;
-  img!: string
+  creatorId!: string;
+  creatorName?: string;
+  rating!: number;
+  downloads!: number;
+  created!: number;
+  modified!: number;
+  status!: number;
+  installWebhook!: string;
+  whitelist?: string[];
+  layout!: Definition;
+  tracking!: boolean;
+  displayUrl!: string;
+  url!: string;
+  apiKey!: string;
+  plan?: Subscription;
+  executableUrl?: string;
+
+  resetUrl() {
+    return `https://storage.cloud.google.com/verticalai.appspot.com/workflows/${this.id}/icon-${this.id}.png`;
+  }
 
   constructor(
-    name: string,
     id: string,
-    agents: Dict<Agent> = {}
+    creatorId: string,
+    created: number,
+    modified?: number,
+    creatorName?: string,
+    displayUrl?: string,
+    name?: string,
+    rating?: number,
+    downloads?: number,
+    status?: number,
+    installWebhook?: string,
+    whitelist?: string[],
+    layout?: Definition,
+    tracking?: boolean,
+    url?: string,
+    apiKey?: string,
+    plan?: Subscription,
+    executableUrl?: string
   ) {
-    this.name = name ?? 'New App';
     this.id = id;
-    this.agents = agents;
+    this.displayUrl = displayUrl ?? this.resetUrl();
+    this.creatorId = creatorId;
+    this.created = created;
+    this.modified = modified ?? created;
+    this.creatorName = creatorName ?? 'Unknown Developer';
+    this.name = name ?? 'My Project'; //
+    this.rating = rating ?? 0;
+    this.downloads = downloads ?? 0;
+    this.status = status ?? 0;
+    this.installWebhook = installWebhook ?? '';
+    this.whitelist = whitelist ?? [];
+    this.tracking = tracking ?? false;
+    this.layout = layout ?? {
+      properties: {},
+      sequence: [],
+    };
+    this.url = url ?? id;
+    this.apiKey = apiKey ?? `V-${uuid.v4()}`;
+    this.plan = plan ?? new Subscription('', '', '', 0, 0);
+    this.executableUrl = executableUrl;
   }
 }

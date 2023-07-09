@@ -2,7 +2,7 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoadService, Dict } from '../load.service';
 import { APIRequest } from '../models/workflow/api-request.model';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 import { Developer } from '../models/user/developer.model';
 
 @Component({
@@ -19,7 +19,7 @@ export class ApiTesterComponent implements OnInit {
 
   chats: { type: string; msg: string }[] = [];
 
-  @Input() model?: Workflow;
+  @Input() model?: Executable;
   user?: Developer;
   constructor(private loadService: LoadService) {}
 

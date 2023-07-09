@@ -18,7 +18,6 @@ import { Key } from '../models/workflow/key.model';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import { TrainingData } from '../models/workflow/training-data.model';
 import { Trigger } from '../models/workflow/trigger.model';
-import { Workflow } from '../models/workflow/workflow.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Executable } from '../models/workflow/executable.model';
@@ -29,7 +28,7 @@ import { Executable } from '../models/workflow/executable.model';
   styleUrls: ['./file-sidebar.component.scss'],
 })
 export class FileSidebarComponent implements OnInit {
-  workflow?: Workflow;
+  workflow?: Executable;
 
   editingTask?: TaskTree;
 
@@ -43,7 +42,7 @@ export class FileSidebarComponent implements OnInit {
   @Input() apiRequests: Dict<APIRequest> = {};
   @Input() executable?: Executable;
 
-  @Output() detailsChanged = new EventEmitter<Workflow>();
+  @Output() detailsChanged = new EventEmitter<Executable>();
   @Output() selectedFileChanged = new EventEmitter<string>();
 
   @Input() items: TaskTree[] = [];

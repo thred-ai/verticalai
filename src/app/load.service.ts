@@ -11,7 +11,6 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Meta, Title } from '@angular/platform-browser';
 import { Developer } from './models/user/developer.model';
-import { Workflow } from './models/workflow/workflow.model';
 import { AIModel } from './models/workflow/ai-model.model';
 import { AIModelType } from './models/workflow/ai-model-type.model';
 import { Trigger } from './models/workflow/trigger.model';
@@ -215,7 +214,7 @@ export class LoadService {
       );
   }
 
-  async publishSmartUtil(data: Workflow, callback: (result?: Workflow) => any) {
+  async publishSmartUtil(data: Executable, callback: (result?: Executable) => any) {
     this.loading.next(true);
 
     try {
@@ -259,7 +258,7 @@ export class LoadService {
     this.loading.next(false);
   }
 
-  async saveSmartUtil(data: Workflow, callback: (result?: Workflow) => any) {
+  async saveSmartUtil(data: Executable, callback: (result?: Executable) => any) {
     let id = data.id;
 
     let uid = (await this.currentUser)?.uid;
@@ -373,7 +372,7 @@ export class LoadService {
         sub2.unsubscribe();
         let returnVal: any[] = [];
 
-        (docs2 as Workflow[])?.forEach((d: Workflow) => {
+        (docs2 as Executable[])?.forEach((d: Executable) => {
           returnVal.push({
             name: d.name,
             type: 1,
@@ -407,7 +406,7 @@ export class LoadService {
 
   getWorkflow(
     id: string,
-    callback: (result?: Workflow) => any,
+    callback: (result?: Executable) => any,
     getProfiles = false
   ) {
     let sub2 = this.db
@@ -437,7 +436,7 @@ export class LoadService {
       });
   }
 
-  getWorkflows(ids: string[], callback: (result?: Workflow[]) => any) {
+  getWorkflows(ids: string[], callback: (result?: Executable[]) => any) {
     let sub2 = this.db
       .collectionGroup(`workflows`, (ref) => ref.where('id', 'in', ids))
       .get()
@@ -446,7 +445,7 @@ export class LoadService {
         if (docs3) {
           let docs = docs3.docs.map((d) => d.data());
 
-          let result: Workflow[] = [];
+          let result: Executable[] = [];
 
           // docs.forEach((d) => {
           //   let util = this.syncWorkflow(d);
@@ -562,7 +561,7 @@ export class LoadService {
     }
   }
 
-  getNewWorkflows(callback: (result: Workflow[]) => any) {
+  getNewWorkflows(callback: (result: Executable[]) => any) {
     this.db
       .collectionGroup('Workflows', (ref) =>
         ref.where('status', '==', 0).orderBy('created', 'desc')
@@ -574,7 +573,7 @@ export class LoadService {
       });
   }
 
-  getPopularWorkflows(callback: (result: Workflow[]) => any) {
+  getPopularWorkflows(callback: (result: Executable[]) => any) {
     this.db
       .collectionGroup('Workflows', (ref) =>
         ref.where('status', '==', 0).orderBy('views', 'desc')
@@ -590,7 +589,7 @@ export class LoadService {
     return this.db.createId();
   }
 
-  getFeaturedWorkflow(callback: (result?: Workflow) => any) {
+  getFeaturedWorkflow(callback: (result?: Executable) => any) {
     let sub2 = this.db
       .collectionGroup(`Engage`)
       .valueChanges()
@@ -654,7 +653,7 @@ export class LoadService {
             );
           }
           let sub2 = q.valueChanges().subscribe((docs2) => {
-            let docs_2 = (docs2 as Workflow[]).map((workflow) => {
+            let docs_2 = (docs2 as Executable[]).map((workflow) => {
               // workflow.layout = this.sampleFlow
               return this.syncWorkflow(workflow);
             });
@@ -831,6 +830,44 @@ export class LoadService {
         );
     });
     return url;
+  }
+
+  async saveCode(id: string, uid: string, codeId: string, file: Executable) {
+    this.loading.next(true);
+
+    // await this.db
+    //   .collection(`Users/${uid}/workflows/${id}/source`)
+    //   .doc(codeId)
+    //   .set(file.agents[codeId]);
+
+    console.log("save!")
+
+    this.loading.next(false);
+  }
+
+  async getCode(
+    app: Executable,
+    uid: string,
+    callback: (file: Executable) => any
+  ) {
+    this.loading.next(true);
+
+    // this.db
+    //   .collection(`Users/${uid}/workflows/${app.id}/source`)
+    //   .valueChanges()
+    //   .subscribe((docs) => {
+    //     var exec = new Executable(app.name, app.id);
+
+    //     docs.forEach((d) => {
+    //       const docData = d as Agent;
+    //       exec.agents[docData.id] = docData
+    //     });
+
+    //     console.log(exec)
+    //     callback(exec)
+    //   });
+
+    this.loading.next(false);
   }
 
   async uploadExecutable(id: string, file: Executable) {
@@ -1026,7 +1063,7 @@ export class LoadService {
 
   async changeLayout(
     layout: any,
-    workflow: Workflow,
+    workflow: Executable,
     step = 1,
     callback: (layout: any) => any
   ) {
@@ -1064,7 +1101,7 @@ export class LoadService {
 
   async addLayout(
     layout: any,
-    workflow: Workflow,
+    workflow: Executable,
     callback: (layout: any) => any
   ) {
     try {
@@ -1149,7 +1186,7 @@ export class LoadService {
   }
 
   syncWorkflow(workflow: any) {
-    return new Workflow(
+    return new Executable(
       workflow.id,
       workflow.creatorId,
       workflow.created,

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 
 @Component({
   selector: 'app-terminal',
@@ -10,7 +10,7 @@ export class TerminalComponent implements OnInit {
 
   constructor() { }
 
-  @Input() model?: Workflow
+  @Input() model?: Executable
 
   ngOnInit(): void {
   }

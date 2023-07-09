@@ -6,7 +6,7 @@ import {
 } from 'sequential-workflow-designer';
 import { LoadService } from './load.service';
 import { AIModel } from './models/workflow/ai-model.model';
-import { Workflow } from './models/workflow/workflow.model';
+import { Executable } from './models/workflow/executable.model';
 
 @Pipe({
   name: 'workflowModels',
@@ -14,7 +14,7 @@ import { Workflow } from './models/workflow/workflow.model';
 export class WorkflowModelsPipe implements PipeTransform {
   constructor(private loadService: LoadService) {}
 
-  transform(value: Workflow): { model: AIModel; count: number }[] {
+  transform(value: Executable): { model: AIModel; count: number }[] {
     var def = value.layout;
     let loadedModels = this.loadService.loadedModels.value;
 

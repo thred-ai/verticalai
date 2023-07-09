@@ -27,7 +27,7 @@ import {
 } from 'sequential-workflow-designer';
 import { DesignerComponent } from 'sequential-workflow-designer-angular';
 import { Dict, LoadService } from '../load.service';
-import { Workflow } from '../models/workflow/workflow.model';
+import { Executable } from '../models/workflow/executable.model';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { Trigger } from '../models/workflow/trigger.model';
 import { TrainingData } from '../models/workflow/training-data.model';
@@ -37,7 +37,6 @@ import { APIRequest } from '../models/workflow/api-request.model';
 import { ApiEditorComponent } from '../api-editor/api-editor.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CodeEditorComponent } from '../code-editor/code-editor.component';
-import { WorkflowCodeComponent } from '../workflow-code/workflow-code.component';
 import { WorkflowComponent } from '../workflow/workflow.component';
 
 @Component({
@@ -52,7 +51,7 @@ export class WorkflowDesignerComponent
 
   public definitionJSON?: string;
 
-  @Input() workflow?: Workflow;
+  @Input() workflow?: Executable;
   openLayouts = ['g-comp', 'general', 'config'];
 
   @ViewChild('gridModeSwitch', { read: ElementRef }) element:
@@ -175,7 +174,7 @@ export class WorkflowDesignerComponent
     };
   }
 
-  @Output() detailsChanged = new EventEmitter<Workflow>();
+  @Output() detailsChanged = new EventEmitter<Executable>();
   @Output() iconChanged = new EventEmitter<File>();
   @Output() trainingDataChanged = new EventEmitter<TrainingData>();
   @Output() apiKeyChanged = new EventEmitter<Key>();
@@ -187,7 +186,6 @@ export class WorkflowDesignerComponent
     private dialog: MatDialog,
     private renderer: Renderer2,
     private loadService: LoadService,
-    private workflowComponent: WorkflowComponent
   ) {}
 
   @ViewChildren('geditor') divs?: QueryList<ElementRef>;

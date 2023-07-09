@@ -5,10 +5,7 @@
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
     style="overflow-y: hidden"
-    *ngIf="
-      workflow.value && executable && openFileId && items.value;
-      else noWorkflow
-    "
+    *ngIf="workflow.value && openStep && items.value; else noWorkflow"
   >
     <app-icon-sidebar
       (openProj)="setWorkflow($event)"
@@ -23,10 +20,10 @@
       [apiKeys]="apiKeys"
       [apiRequests]="apiRequests"
       [workflow]="workflow.value"
-      [executable]="executable"
+      [executable]="workflow.value"
       [items]="items.value"
       (detailsChanged)="publish()"
-      [selectedFile]="openFileId"
+      [selectedFile]="openStep.id"
       (selectedFileChanged)="selectFile($event)"
     >
     </app-file-sidebar>
@@ -39,28 +36,18 @@
             <div
               class="w-100 h-100 d-flex justify-content-between align-items-start"
             >
-              <div class="w-100 h-100" *ngIf="executable.agents[openFileId]" >
                 <app-workflow-code
                   [code]="
-                    executable.agents[openFileId] &&
-                    executable.agents[openFileId].source
-                      ? executable.agents[openFileId].source!
-                      : defaultCode(executable.agents[openFileId].type)
+                    openStep.properties['source']
+                      ? openStep.properties['source']!
+                      : defaultCode(openStep.type)
                   "
                   (codeChanged)="
                     edited = true;
-                    executable.agents[openFileId]
-                      ? (executable.agents[openFileId].source = $event)
-                      : (executable.agents[openFileId] = {
-                          id: openFileId,
-                          source: $event,
-                          compiled: null,
-                          type: executable.agents[openFileId].type
-                        });
+                    (openStep.properties['source'] = $event);
                     save()
                   "
                 ></app-workflow-code>
-              </div>
             </div>
           </as-split-area> -->
           <as-split-area [size]="60">
@@ -85,37 +72,21 @@
             <ng-container *ngIf="selectedIcon == 'upload'"> </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'script'">
-              <div class="w-100 h-100" *ngIf="executable.agents[openFileId]">
-                <app-workflow-code
-                  [code]="
-                    executable.agents[openFileId] &&
-                    executable.agents[openFileId].source
-                      ? executable.agents[openFileId].source!
-                      : defaultCode(executable.agents[openFileId].type)
-                  "
-                  (codeChanged)="
-                    edited = true;
-                    executable.agents[openFileId]
-                      ? (executable.agents[openFileId].source = $event)
-                      : (executable.agents[openFileId] = {
-                          id: openFileId,
-                          source: $event,
-                          compiled: null,
-                          type: executable.agents[openFileId].type
-                        });
-                    save()
-                  "
-                ></app-workflow-code>
-              </div>
+              <app-workflow-code
+                [code]="
+                  openStep.properties['source']
+                    ? openStep.properties['source']!
+                    : defaultCode(openStep.type)
+                "
+                (codeChanged)="
+                  edited = true; openStep.properties['source'] = $event; save()
+                "
+              ></app-workflow-code>
             </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'memory'"> </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'settings'"> 
-
-              
-
-            </ng-container>
+            <ng-container *ngIf="selectedIcon == 'settings'"> </ng-container>
           </as-split-area>
         </as-split>
       </as-split-area>
