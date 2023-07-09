@@ -214,7 +214,10 @@ export class LoadService {
       );
   }
 
-  async publishSmartUtil(data: Executable, callback: (result?: Executable) => any) {
+  async publishSmartUtil(
+    data: Executable,
+    callback: (result?: Executable) => any
+  ) {
     this.loading.next(true);
 
     try {
@@ -258,7 +261,7 @@ export class LoadService {
     this.loading.next(false);
   }
 
-  async saveSmartUtil(data: Executable, callback: (result?: Executable) => any) {
+  async saveSmartUtil(data: Executable) {
     let id = data.id;
 
     let uid = (await this.currentUser)?.uid;
@@ -277,15 +280,21 @@ export class LoadService {
           .collection(`Users/${uid}/workflows`)
           .doc(id)
           .set(uploadData, { merge: true });
-        callback(data);
+
+        this.loading.next(false);
+
+        return uploadData;
       } catch (error) {
         console.log(error);
-        callback(undefined);
+        this.loading.next(false);
+
+        return undefined;
       }
     } else {
-      callback(undefined);
+      this.loading.next(false);
+
+      return undefined;
     }
-    this.loading.next(false);
   }
 
   async saveUserInfo(
@@ -840,7 +849,7 @@ export class LoadService {
     //   .doc(codeId)
     //   .set(file.agents[codeId]);
 
-    console.log("save!")
+    console.log('save!');
 
     this.loading.next(false);
   }

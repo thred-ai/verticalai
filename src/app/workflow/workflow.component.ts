@@ -115,6 +115,12 @@ export class WorkflowComponent implements OnInit {
     if (!workflow.layout.properties['trigger']) {
       workflow.layout.properties['trigger'] = 'api';
     }
+
+    if (!workflow.layout.properties['mainSource']) {
+      console.log('none');
+      workflow.layout.properties['mainSource'] = this.defaultCode('main');
+    }
+
     //
     if (workflow.layout.sequence[0]?.type == 'trigger') {
       workflow.layout.sequence.splice(0, 1);
@@ -133,7 +139,7 @@ export class WorkflowComponent implements OnInit {
         if (user?.uid && this.workflow) {
           workflow.creatorId = user.uid;
           this.workflow.next(workflow);
-          this.checkSave()
+          this.checkSave();
           loadData();
         }
       });
@@ -308,17 +314,19 @@ export class WorkflowComponent implements OnInit {
 
           console.log('SAVING WORKFLOW');
 
-          await this.loadService.saveSmartUtil(workflow, async (result) => {
-            if (result) {
+          let exec = await this.fillExecutable(workflow);
+
+          let result = await this.loadService.saveSmartUtil(exec);
+
+          if (result) {
+            console.log(result);
+            console.log('SAVED!');
+            this.edited = false;
+            if (update) {
               console.log(result);
-              console.log('SAVED!');
-              this.edited = false;
-              if (update) {
-                console.log(result);
-                this.updateWorkflows(result);
-              }
+              this.updateWorkflows(result);
             }
-          });
+          }
 
           return;
         }
@@ -328,30 +336,20 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
-  fillExecutable(
-    executable: Executable,
-    data: TaskTree[],
-    items: TaskTree[] = this.flattenTree(data)
-  ) {
+  async fillExecutable(executable: Executable) {
     var exec = executable;
 
-    // Object.keys(exec.agents).forEach((key) => {
-    //   if (!items.find((i) => i.id == key)) {
-    //     delete exec.agents[key];
-    //   }
-    // });
-    // items
-    //   .filter((i) => i.type == 'model')
-    //   .forEach((i) => {
-    //     if (!exec.agents[i.id] || !exec.agents[i.id]?.source) {
-    //       exec.agents[i.id] = new Agent(
-    //         i.id,
-    //         i.metadata['metaType'],
-    //         this.defaultCode(i.metadata['metaType']) ?? null,
-    //         ''
-    //       );
-    //     }
-    //   });
+    await Promise.all(
+      exec.layout.sequence.map(async (step) => {
+        let s = this.findStep(step.id, exec.layout.sequence);
+        if (s) {
+          let source = s.properties['source'] as string;
+          if (source == 'None' || source == null || source == undefined) {
+            s.properties['source'] = this.defaultCode(s.componentType);
+          }
+        }
+      })
+    );
 
     return exec;
   }
@@ -365,31 +363,6 @@ export class WorkflowComponent implements OnInit {
     // }
   }
 
-  flattenTree(items: TaskTree[]) {
-    function getMembers(members: TaskTree[]): TaskTree[] {
-      let sequence: TaskTree[] = [];
-      const flattenMembers = members.map((m) => {
-        if (m.sequence && m.sequence.length) {
-          sequence = [...sequence, ...m.sequence];
-        }
-        if (
-          m.metadata['type'] == 'switch' ||
-          (m.metadata['type'] == 'folder' && m.categoryTask)
-        ) {
-          let categoryTask = [m.categoryTask] as TaskTree[];
-          sequence = [...sequence, ...categoryTask];
-        }
-        return m;
-      });
-
-      return flattenMembers.concat(
-        sequence.length ? getMembers(sequence) : sequence
-      );
-    }
-
-    return getMembers(items);
-  }
-
   openTestEditor() {}
 
   async publish(
@@ -401,48 +374,18 @@ export class WorkflowComponent implements OnInit {
     if (w) {
       this.loading = true;
 
-      let exec = this.fillExecutable(w, this.items.value ?? []);
+      await this.save(1, false);
+      w.executableUrl = await this.loadService.uploadExecutable(w.id, w);
 
-      console.log('OLD EXEC');
-
-      console.log('NEW EXEC');
-      console.log(exec);
-
-      if (this.items.value) {
-        // let flat = this.flattenTree(this.items.value);
-
-        // await Promise.all(
-        //   Object.keys(exec.agents).map(async (e) => {
-        //     if (flat.find(f => f.id == e)){
-        //       await this.loadService.saveCode(
-        //         w!.creatorId,
-        //         w!.id,
-        //         exec.agents[e]
-        //       );
-        //     }
-        //     else{
-        //       await this.loadService.deleteCode(
-        //         w!.creatorId,
-        //         w!.id,
-        //         exec.agents[e]
-        //       );
-        //       delete exec.agents[e]
-        //     }
-        //   })
-        // );
-
-        w.executableUrl = await this.loadService.uploadExecutable(w.id, exec);
-
-        this.loadService.publishSmartUtil(w, (result) => {
-          this.loading = false;
-          if (callback) {
-            callback(result);
-            if (close && result) {
-              this.close();
-            }
+      this.loadService.publishSmartUtil(w, (result) => {
+        this.loading = false;
+        if (callback) {
+          callback(result);
+          if (close && result) {
+            this.close();
           }
-        });
-      }
+        }
+      });
     } else {
       if (callback) {
         callback();
