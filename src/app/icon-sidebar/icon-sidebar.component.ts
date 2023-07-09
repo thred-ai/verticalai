@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Developer } from '../models/user/developer.model';
 import { LoadService } from '../load.service';
 import { AppComponent } from '../app.component';
@@ -16,7 +16,8 @@ export class IconSidebarComponent implements OnInit {
 
   selectedWorkflow?: string
 
-  selectedIcon: string = 'settings'
+  @Input() selectedIcon: string = 'settings'
+  @Output() selectedIconChanged = new EventEmitter<string>();
 
   expandedProjects = true
   @Output() openProj = new EventEmitter<string | undefined>();

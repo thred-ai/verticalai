@@ -59,7 +59,10 @@ export class WorkflowComponent implements OnInit {
 
   workflow = new BehaviorSubject<Workflow | undefined>(undefined);
   theme: 'light' | 'dark' = 'light';
+
   mode = 'sidebar';
+
+  selectedIcon: string = 'schema';
 
   onKeyDown($event: any): void {
     // Detect platform
@@ -224,7 +227,7 @@ export class WorkflowComponent implements OnInit {
     });
   }
 
-  async initExecutable(w?: Workflow) {
+  async initExecutable(w?: Workflow, fetchExecutable = true) {
     if (w) {
       this.items.next([
         new TaskTree(
@@ -240,11 +243,11 @@ export class WorkflowComponent implements OnInit {
         ),
       ]);
     }
-    if (w && w.id && w.creatorId && w.creatorId != '') {
+    if (w && w.id && w.creatorId && w.creatorId != '' && fetchExecutable) {
       try {
         if (w.executableUrl) {
           let exec = (await this.loadService.getExecutable(w.id)) as Executable;
-          console.log(exec)
+          console.log(exec);
           this.executable = exec;
         } else {
           let exec = new Executable(w?.name ?? '', w?.id ?? '', {
@@ -328,23 +331,31 @@ export class WorkflowComponent implements OnInit {
           this.items.value
         ) {
           console.log('saving');
-          this.executable = this.fillExecutable(
+
+          await this.initExecutable(workflow, false);
+
+          let exec = this.fillExecutable(
             this.executable,
             this.items.value ?? []
           );
 
           workflow.executableUrl = await this.loadService.uploadExecutable(
             workflow.id,
-            this.executable
+            exec
           );
 
           console.log('SAVING WORKFLOW');
-          await this.loadService.saveSmartUtil(workflow, (result) => {
-            this.edited = false;
-            console.log(workflow);
-            console.log('SAVED!');
-            if (update){
-              this.updateWorkflows(workflow);
+          await this.loadService.saveSmartUtil(workflow, async (result) => {
+            if (result) {
+              this.executable = exec
+              console.log(result);
+              console.log('SAVED!');
+              this.edited = false;
+              if (update) {
+                console.log(result);
+                console.log(this.executable);
+                this.updateWorkflows(result);
+              }
             }
           });
 
@@ -362,6 +373,12 @@ export class WorkflowComponent implements OnInit {
     items: TaskTree[] = this.flattenTree(data)
   ) {
     var exec = executable;
+
+    Object.keys(exec.agents).forEach((key) => {
+      if (!items.find((i) => i.id == key)) {
+        delete exec.agents[key];
+      }
+    });
     items
       .filter((i) => i.type == 'model')
       .forEach((i) => {

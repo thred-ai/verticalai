@@ -202,7 +202,7 @@
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIcon = 'upload'"
+    (click)="selectedIconChanged.emit('upload')"
     [mdbPopover]="upload"
     placement="right"
     [trigger]="'hover'"
@@ -222,22 +222,23 @@
 
   <div
     class="w-100 proj{{
-      selectedIcon == 'settings' ? '-select' : ''
+      selectedIcon == 'schema' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIcon = 'settings'"
-    [mdbPopover]="settings"
+    (click)="selectedIconChanged.emit('schema')"
+    [mdbPopover]="editor"
     placement="right"
     [trigger]="'hover'"
   >
     <div
-      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-0"
       style="aspect-ratio: 1"
+      role="button"
     >
-      <mat-icon class="fw-bold">settings_applications</mat-icon>
-      <ng-template #settings>
-        <verticalai-tooltip [text]="'Config'"></verticalai-tooltip>
+      <mat-icon class="fw-bold">schema</mat-icon>
+      <ng-template #editor>
+        <verticalai-tooltip [text]="'Controller Schema'"></verticalai-tooltip>
       </ng-template>
     </div>
   </div>
@@ -248,7 +249,7 @@
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIcon = 'script'"
+    (click)="selectedIconChanged.emit('script')"
     [mdbPopover]="script"
     placement="right"
     [trigger]="'hover'"
@@ -260,7 +261,7 @@
     >
       <mat-icon class="fw-bold">code</mat-icon>
       <ng-template #script>
-        <verticalai-tooltip [text]="'Code'"></verticalai-tooltip>
+        <verticalai-tooltip [text]="'Controller Code'"></verticalai-tooltip>
       </ng-template>
     </div>
   </div>
@@ -271,7 +272,7 @@
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIcon = 'memory'"
+    (click)="selectedIconChanged.emit('memory')"
     [mdbPopover]="memory"
     placement="right"
     [trigger]="'hover'"
@@ -283,7 +284,29 @@
     >
       <mat-icon class="fw-bold">storage</mat-icon>
       <ng-template #memory>
-        <verticalai-tooltip [text]="'Memory'"></verticalai-tooltip>
+        <verticalai-tooltip [text]="'Controller Memory'"></verticalai-tooltip>
+      </ng-template>
+    </div>
+  </div>
+
+  <div
+    class="w-100 proj{{
+      selectedIcon == 'settings' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
+    style="aspect-ratio: 1"
+    role="button"
+    (click)="selectedIconChanged.emit('settings')"
+    [mdbPopover]="settings"
+    placement="right"
+    [trigger]="'hover'"
+  >
+    <div
+      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+    >
+      <mat-icon class="fw-bold">settings_applications</mat-icon>
+      <ng-template #settings>
+        <verticalai-tooltip [text]="'Controller Settings'"></verticalai-tooltip>
       </ng-template>
     </div>
   </div>
