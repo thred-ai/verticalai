@@ -192,12 +192,14 @@ export class WorkflowComponent implements OnInit {
 
       if (this.workflows) {
         if (!this.openStep && this.workflow) {
-          // this.activeWorkflow =
-          //   this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
+          this.activeWorkflow =
+            this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          // this.selectFile(file ?? 'main', this.activeWorkflow);
+          this.selectFile(file ?? 'main', this.activeWorkflow, false);
 
-          this.setWorkflow(proj)
+          if (!this.openStep){
+            this.selectFile('main', this.activeWorkflow, true);
+          }
 
           this.loadService.loadedModels.subscribe((models) => {
             this.models = models;
@@ -312,7 +314,6 @@ export class WorkflowComponent implements OnInit {
 
           this.updateWorkflows(workflow);
         } else if (mode == 1 && this.openStep && this.items.value) {
-
           let exec = await this.fillExecutable(workflow);
 
           let result = await this.loadService.saveSmartUtil(exec);
@@ -557,23 +558,29 @@ export class WorkflowComponent implements OnInit {
     this.save(1, true);
   }
 
-  selectFile(fileId: string | undefined, workflow = this.workflow.value) {
+  selectFile(
+    fileId: string | undefined,
+    workflow = this.workflow.value,
+    update = true
+  ) {
     if (workflow && fileId) {
       console.log(fileId);
       console.log(workflow.layout.sequence);
       this.openStep = this.findStep(fileId, workflow.layout.sequence);
-      console.log(this.openStep);
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: {
-          project: workflow.id,
-          file: fileId,
-        },
-        queryParamsHandling: 'merge',
-        // preserve the existing query params in the route
-        skipLocationChange: false,
-        // do not trigger navigation
-      });
+      
+      if (update) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            project: workflow.id,
+            file: fileId,
+          },
+          queryParamsHandling: 'merge',
+          // preserve the existing query params in the route
+          skipLocationChange: false,
+          // do not trigger navigation
+        });
+      }
     }
   }
 
