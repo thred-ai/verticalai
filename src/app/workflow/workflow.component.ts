@@ -192,10 +192,12 @@ export class WorkflowComponent implements OnInit {
 
       if (this.workflows) {
         if (!this.openStep && this.workflow) {
-          this.activeWorkflow =
-            this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
+          // this.activeWorkflow =
+          //   this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          this.selectFile(file ?? 'main', this.activeWorkflow);
+          // this.selectFile(file ?? 'main', this.activeWorkflow);
+
+          this.setWorkflow(proj)
 
           this.loadService.loadedModels.subscribe((models) => {
             this.models = models;
