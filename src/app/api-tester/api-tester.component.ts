@@ -11,11 +11,11 @@ import { Developer } from '../models/user/developer.model';
   styleUrls: ['./api-tester.component.scss'],
 })
 export class ApiTesterComponent implements OnInit {
-  loading = false;
+  loadingMode = 0;
   response = '';
   prettyResponse = '';
   image?: string;
-  request = 'Hello!';
+  request = '';
 
   chats: { type: string; msg: string }[] = [];
 
@@ -31,21 +31,24 @@ export class ApiTesterComponent implements OnInit {
     });
   }
 
-  run() {
+  async run() {
     if (this.request && this.request.trim() != '' && this.model) {
+      this.loadingMode = 1;
+
+      let url = await this.loadService.uploadExecutable(
+        this.model!.id,
+        this.model!
+      );
+
+      this.chats = [];
       this.chats.push({ type: 'user', msg: this.request });
 
       setTimeout(async () => {
-        this.loading = true;
-
-        let url = await this.loadService.uploadExecutable(
-          this.model!.id,
-          this.model!
-        );
+        this.loadingMode = 2;
 
         if (url) {
           this.loadService.testAPI(url, this.request, async (result) => {
-            if (this.loading) {
+            if (this.loadingMode == 2) {
               console.log(result);
               this.image = undefined;
 
@@ -70,7 +73,7 @@ export class ApiTesterComponent implements OnInit {
                       this.image = result.data as string;
                     }
 
-                    this.loading = false;
+                    this.loadingMode = 0;
                   }
                 }
               }
@@ -78,13 +81,17 @@ export class ApiTesterComponent implements OnInit {
               this.response = JSON.stringify(result ?? '');
               this.prettyResponse = result.data ?? '';
               this.chats.push({ type: 'system', msg: this.prettyResponse });
-              this.loading = false;
+              this.loadingMode = 0;
             }
           });
+        } else {
+          this.loadingMode = 0;
         }
 
         this.request = '';
       }, 500);
+
+      this.loadingMode = 0;
     }
   }
 

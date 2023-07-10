@@ -29,20 +29,20 @@
   width: calc(100vw - 320px);
 }
 
-:host ::ng-deep .horizontal {
-  .as-split-gutter-icon {
-    color: #1f1f1f !important;
-    background-color: #0A0F14 !important;
-    border-right: 1px solid #7F7F7F !important;
-    border-top: 0px !important
-  }
-}
+// :host ::ng-deep .horizontal {
+//   .as-split-gutter-icon {
+//     color: #1f1f1f !important;
+//     background-color: #0A0F14 !important;
+//     border-right: 1px solid #7F7F7F !important;
+//     border-top: 0px !important
+//   }
+// }
 
-:host ::ng-deep .vertical {
-  .as-split-gutter-icon {
-    color: #151515;
-    background-color: #000000;
-    border-top: 1px solid #7F7F7F;
-    border-right: 0px
-  }
-}
+// :host ::ng-deep .vertical {
+//   .as-split-gutter-icon {
+//     color: #151515;
+//     background-color: #000000;
+//     border-top: 1px solid #7F7F7F;
+//     border-right: 0px
+//   }
+// }
