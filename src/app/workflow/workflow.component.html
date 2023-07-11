@@ -70,45 +70,40 @@
             </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'test'">
-              <div class="w-100 h-100" style="background-color: #131313;">
+              <div class="w-100 h-100" style="background-color: #131313">
                 <app-terminal [model]="workflow.value"></app-terminal>
               </div>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'upload'"> 
-              <app-coming-soon [title]="'Upload Project'">
-
-              </app-coming-soon>
+            <ng-container *ngIf="selectedIcon == 'upload'">
+              <app-coming-soon [title]="'Upload Project'"> </app-coming-soon>
             </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'script'">
               <app-workflow-code
                 *ngIf="
-                  (openStep.id == 'main' && activeWorkflow
-                    ? activeWorkflow.layout.properties['mainSource']
+                  (openStep.id == 'main' && workflow.value
+                    ? workflow.value.layout.properties['mainSource']
                     : openStep.properties['source']) ??
                   defaultCode(openStep.type) as source
                 "
                 [code]="source"
                 (codeChanged)="
                   edited = true;
-                  openStep.id == 'main' && activeWorkflow
-                    ? (activeWorkflow.layout.properties['mainSource'] = $event)
+                  openStep.id == 'main' && workflow.value
+                    ? (workflow.value.layout.properties['mainSource'] = $event)
                     : (openStep.properties['source'] = $event);
                   save()
                 "
               ></app-workflow-code>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'memory'"> 
-              <app-coming-soon [title]="'Controller Memory'">
-
-              </app-coming-soon>
+            <ng-container *ngIf="selectedIcon == 'memory'">
+              <app-coming-soon [title]="'Controller Memory'"> </app-coming-soon>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'settings'"> 
+            <ng-container *ngIf="selectedIcon == 'settings'">
               <app-coming-soon [title]="'Controller Settings'">
-
               </app-coming-soon>
             </ng-container>
           </as-split-area>
