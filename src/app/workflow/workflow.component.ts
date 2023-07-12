@@ -370,7 +370,7 @@ export class WorkflowComponent implements OnInit {
         if (s) {
           let source = s.properties['source'] as string;
           if (source == 'None' || source == null || source == undefined) {
-            s.properties['source'] = this.defaultCode(s.componentType);
+            s.properties['source'] = this.defaultCode(s.type);
           }
         }
       })
