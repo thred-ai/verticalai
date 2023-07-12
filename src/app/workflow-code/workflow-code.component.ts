@@ -9,6 +9,9 @@ import {
 } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Executable } from '../models/workflow/executable.model';
+import * as CodeMirror from 'codemirror';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import {javascriptLanguage} from "@codemirror/lang-javascript"
 
 @Component({
   selector: 'app-workflow-code',
@@ -20,8 +23,15 @@ export class WorkflowCodeComponent implements OnInit {
 
   @Input() code!: any;
   @Output() codeChanged = new EventEmitter<string>();
+  @ViewChild(CodemirrorComponent) private codeEditor?: CodemirrorComponent;
 
   ngOnInit(): void {
+
+    setTimeout(() => {
+      const editor = this.codeEditor?.codeMirror;
+      console.log(this.codeEditor)
+      const doc = editor?.getDoc();
+    }, 2000);
 
   }
 

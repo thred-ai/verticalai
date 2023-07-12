@@ -3,13 +3,14 @@
     <!-- selectedFile.metadata['type'] == 'switch' ? test : '//' + selectedFile.name -->
 
     <ngx-codemirror
+      #codeeditor
       [className]="'vh-100'"
       [ngModel]="code"
       (ngModelChange)="changed($event)"
       [options]="{
         lineNumbers: true,
         theme: 'ayu-dark',
-        mode: 'javascript',
+        mode: { name: 'javascript', globalVars: true },
         typescript: true,
         extraKeys: { 'Ctrl-Space': 'autocomplete' }
       }"
