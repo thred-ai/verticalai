@@ -680,7 +680,7 @@ export class WorkflowComponent implements OnInit {
         return this.classes['sd'].text;
 
       case 'main':
-        return this.classes['default'].text;
+        return this.classes['main'].text;
 
       default:
         return this.classes['default'].text;
