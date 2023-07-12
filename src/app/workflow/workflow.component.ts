@@ -33,6 +33,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Agent } from '../models/workflow/agent.model';
 
 import * as verticalkit from 'verticalkit/compiled';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-workflow',
@@ -177,15 +178,40 @@ export class WorkflowComponent implements OnInit {
 
   openStep?: Step;
 
+  classes: Dict<any> = {};
+
   constructor(
     private loadService: LoadService,
     @Inject(PLATFORM_ID) private platformID: Object,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private httpClient: HttpClient
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await Promise.all(
+      verticalkit.controllers.map(async (controller) => {
+        let path = controller.path;
+        let name = controller.name;
+        let id = controller.id;
+
+        let text = await new Promise((resolve, reject) => {
+          try {
+            this.httpClient
+              .get(`src/assets/verticalkit/src/${path}.ts`, {
+                responseType: 'text',
+              })
+              .subscribe((data) => resolve(data));
+          } catch (error) {
+            reject(error);
+          }
+        });
+
+        this.classes[id] = { name, path, id, text };
+      })
+    );
+
     this.route.queryParams.subscribe((params) => {
       let proj = params['project'];
       let file = params['file'];
@@ -197,7 +223,7 @@ export class WorkflowComponent implements OnInit {
 
           this.selectFile(file ?? 'main', this.activeWorkflow, false);
 
-          if (!this.openStep){
+          if (!this.openStep) {
             this.selectFile('main', this.activeWorkflow, true);
           }
 
@@ -567,7 +593,7 @@ export class WorkflowComponent implements OnInit {
       console.log(fileId);
       console.log(workflow.layout.sequence);
       this.openStep = this.findStep(fileId, workflow.layout.sequence);
-      
+
       if (update) {
         this.router.navigate([], {
           relativeTo: this.route,
@@ -641,17 +667,23 @@ export class WorkflowComponent implements OnInit {
   }
 
   defaultCode(type: string) {
-    let list = verticalkit.default.classList;
-
     switch (type) {
       case 'switch':
-        return list.find((l) => l.name == 'switch')?.base ?? '';
+        return this.classes['branch'].text;
       case 'container':
-        return list.find((l) => l.name == 'container')?.base ?? '';
+        return this.classes['repeat'].text;
+
+      case 'gpt-LLM':
+        return this.classes['gpt'].text;
+
+      case 'sd-TIM':
+        return this.classes['sd'].text;
+
       case 'main':
-        return (list.find((l) => l.name == 'generic')?.base ?? '').trim();
+        return this.classes['default'].text;
+
       default:
-        return list.find((l) => l.name == 'generic')?.base ?? '';
+        return this.classes['default'].text;
     }
   }
 }
