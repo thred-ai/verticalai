@@ -16,7 +16,6 @@ export class SharedDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<SharedDialogComponent>,
   ) {
     this.mode = data.mode
-    console.log(data.payload)
   }
 
   mode = -1

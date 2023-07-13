@@ -290,7 +290,6 @@ export class WorkflowDesignerComponent
         (document.getElementsByClassName('sqd-scrollbox')[0] as HTMLDivElement);
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
 
-      console.log(content);
 
       if (content && parent && parent.firstChild != content) {
         // let newElem = content.cloneNode(true)

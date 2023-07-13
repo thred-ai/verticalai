@@ -790,6 +790,8 @@ export class LoadService {
   async saveAPIKeys(workflowId: string, uid: string, data: Key) {
     this.loading.next(true);
 
+    console.log(data)
+
     var uploadData = JSON.parse(JSON.stringify(data));
     if (uploadData.key == 'None') {
       uploadData.key = '';

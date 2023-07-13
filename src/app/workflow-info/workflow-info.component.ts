@@ -21,7 +21,6 @@ export class WorkflowInfoComponent implements OnInit {
     public dialogRef: MatDialogRef<WorkflowInfoComponent>,
     public clipboard: Clipboard,
   ) {
-    console.log(data.script)
     this.workflow = data.workflow;
   }
 

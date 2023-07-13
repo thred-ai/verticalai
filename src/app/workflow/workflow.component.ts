@@ -121,7 +121,6 @@ export class WorkflowComponent implements OnInit {
     }
 
     if (!workflow.layout.properties['mainSource']) {
-      console.log('none');
       workflow.layout.properties['mainSource'] = this.defaultCode('main');
     }
 
@@ -162,7 +161,6 @@ export class WorkflowComponent implements OnInit {
         let same = this.workflows?.find((w) => w.id == id);
 
         if (same) {
-          console.log('same');
           this.activeWorkflow = same;
           // same.layout.properties
           this.selectFile(fileId);
@@ -319,7 +317,6 @@ export class WorkflowComponent implements OnInit {
 
   async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
-    console.log(mode);
 
     if (workflow && this.isValid) {
       try {
@@ -339,11 +336,8 @@ export class WorkflowComponent implements OnInit {
           let result = await this.loadService.saveSmartUtil(exec);
 
           if (result) {
-            console.log(result);
-            console.log('SAVED!');
             this.edited = false;
             if (update) {
-              console.log(result);
               this.updateWorkflows(result);
             }
           }
@@ -375,10 +369,6 @@ export class WorkflowComponent implements OnInit {
 
   openControllerSettings(controllerId: string = 'main') {
     if (controllerId != 'main') {
-      console.log(controllerId);
-      console.log(
-        this.findStep(controllerId, this.workflow.value?.layout.sequence ?? [])
-      );
       let ref = this.dialog.open(SettingsComponent, {
         width: 'calc(var(--vh, 1vh) * 70)',
         maxWidth: '650px',
@@ -391,6 +381,7 @@ export class WorkflowComponent implements OnInit {
             controllerId,
             this.workflow.value?.layout.sequence ?? []
           ),
+          workflow: this.workflow.value
         },
       });
 
@@ -621,8 +612,6 @@ export class WorkflowComponent implements OnInit {
     update = true
   ) {
     if (workflow && fileId) {
-      console.log(fileId);
-      console.log(workflow.layout.sequence);
       this.openStep.next(this.findStep(fileId, workflow.layout.sequence));
 
       if (update) {

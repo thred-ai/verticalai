@@ -27,7 +27,6 @@ export class TextboxComponent implements OnInit {
   onInput(ev: any) {
     var value = ev.target!.value;
 
-    console.log(value);
     if (value == '') {
       value = this.defaultValue;
     }

@@ -18,7 +18,6 @@ export class RequestService {
       headers,
       params,
     });
-    console.log(response)
     return response.data;
   }
 

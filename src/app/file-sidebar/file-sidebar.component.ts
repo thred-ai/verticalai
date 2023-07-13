@@ -74,7 +74,6 @@ export class FileSidebarComponent implements OnInit {
     });
     this.workflowComponent.openStep.subscribe((step) => {
       if (step) {
-        console.log(step)
         this.selectedFile = step.id;
         this.cdr.detectChanges()
       }
@@ -113,7 +112,6 @@ export class FileSidebarComponent implements OnInit {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.preventDefault();
 
-    console.log(task)
 
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';

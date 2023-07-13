@@ -32,7 +32,6 @@ export class TextFieldComponent implements OnInit {
   onInput(ev: any) {
     var value = ev.target!.value;
 
-    console.log(value);
     if (value == '') {
       value = this.defaultValue;
     }
@@ -42,11 +41,9 @@ export class TextFieldComponent implements OnInit {
       let val = Number(value) ?? 0;
       if (val > this.range.max) {
         val = this.range.max;
-        console.log('max');
         refresh = true;
       } else if (val < this.range.min) {
         val = this.range.min;
-        console.log('min');
         refresh = true;
       }
 
