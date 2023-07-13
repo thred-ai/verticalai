@@ -20,7 +20,6 @@
     [trigger]="'hover'"
     role="button"
     *ngIf="loadedUser"
-    (click)="profileToggle.click()"
   >
     <div
       class="rounded-circle mx-3 icons bg-pink"
@@ -48,6 +47,7 @@
           class="popover-body-padding bg-theme border-table rounded text-center px-3"
           id="profile-menu"
           style="min-width: 250px; overflow: hidden"
+          (clickOutside)="profileToggle.click()"
         >
           <div
             class="rounded-circle icons bg-pink mx-auto mb-4"
@@ -122,7 +122,6 @@
     placement="right"
     [trigger]="'hover'"
     role="button"
-    (click)="folderToggle.click()"
   >
     <div
       class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
