@@ -12,119 +12,121 @@
 
 /* dark > .sqd-toolbox */
 
-.sqd-theme-dark .sqd-toolbox {
+.sqd-toolbox {
   background: #131313d4;
   border: #7f7f7f solid 0.5px;
 }
-.sqd-theme-dark .sqd-toolbox-header-title {
+.sqd-toolbox-header-title {
   color: #fff;
 }
-.sqd-theme-dark .sqd-toolbox-filter {
+.sqd-toolbox-filter {
   border: #7f7f7f solid 0.5px;
   background: #3e3e3e5f;
   color: #fff;
 }
-.sqd-theme-dark .sqd-toolbox-group-title {
+.sqd-toolbox-group-title {
   background: transparent;
   color: #fff;
-  font-weight: bold;
-  padding-left: 10px;
-  padding-right: 10px;
 }
-.sqd-theme-dark .sqd-toolbox-item {
+.sqd-toolbox-item {
   color: #ffffff;
   font-weight: normal;
   background: #3e3e3e5f;
 }
-.sqd-theme-dark .sqd-toolbox-item:hover {
+.sqd-toolbox-item:hover {
   background: #b2b2b25f;
 }
-.sqd-theme-dark .sqd-toolbox-item-icon.sqd-no-icon {
+.sqd-toolbox-item-icon.sqd-no-icon {
   background: #c6c6c6;
 }
-.sqd-theme-dark .sqd-control-bar-button.sqd-delete .sqd-icon-path {
+
+.sqd-toolbox-item-icon {
+  border: #7f7f7f solid 2px;
+}
+
+.sqd-control-bar-button.sqd-delete .sqd-icon-path {
   fill: #ffffff;
 }
 
 /* dark > .sqd-control-bar */
 
-.sqd-theme-dark .sqd-control-bar {
+.sqd-control-bar {
   background: #131313d4;
   border: #7f7f7f solid 0.5px;
 }
-.sqd-theme-dark .sqd-control-bar-button {
+.sqd-control-bar-button {
   background: #3e3e3e5f;
 }
-.sqd-theme-dark .sqd-control-bar-button:hover {
+.sqd-control-bar-button:hover {
   background: #b2b2b25f;
 }
 
 /* dark > .sqd-workspace */
 
-.sqd-theme-dark .sqd-grid-path {
+.sqd-grid-path {
   stroke: var(--gridColor);
 }
-.sqd-theme-dark .sqd-join {
+.sqd-join {
   stroke: var(--primaryColor);
 }
 
 /* dark > .sqd-smart-editor */
 
-.sqd-theme-dark .sqd-smart-editor {
+.sqd-smart-editor {
   background: #151515;
   border-left: #7f7f7f solid 0.5px;
 
 }
-.sqd-theme-dark .sqd-smart-editor-toggle {
+.sqd-smart-editor-toggle {
   background: #1f1f1f;
   fill: #fff;
 }
 
 /* dark > .sqd-step-task */
 
-.sqd-theme-dark .sqd-step-task-rect {
+.sqd-step-task-rect {
   fill: #3e3e3e5f;
 
   filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.15));
 }
-.sqd-theme-dark .sqd-step-task-rect.sqd-selected {
+.sqd-step-task-rect.sqd-selected {
   stroke: #fff;
 }
-.sqd-theme-dark .sqd-step-task-text {
+.sqd-step-task-text {
   fill: #ffffff;
 }
-.sqd-theme-dark .sqd-step-task-empty-icon {
+.sqd-step-task-empty-icon {
   fill: #c6c6c6;
 }
 
 /* dark > .sqd-input + .sqd-output */
 
-.sqd-theme-dark .sqd-input {
+.sqd-input {
   fill: var(--primaryColor);
 }
 
-.sqd-theme-dark .sqd-output {
+.sqd-output {
   fill: var(--primaryColor);
 
 }
 
 /* dark > .sqd-region */
 
-.sqd-theme-dark .sqd-region {
+.sqd-region {
   stroke: #43434363;
 }
-.sqd-theme-dark .sqd-region.sqd-selected {
+.sqd-region.sqd-selected {
   stroke: #fff;
 }
-.sqd-theme-dark .sqd-label-rect {
+.sqd-label-rect {
   fill: var(--primaryColor);
 }
-.sqd-theme-dark .sqd-label-rect.sqd-label-secondary {
+.sqd-label-rect.sqd-label-secondary {
   stroke: #7f7f7f;
   stroke-width: 0.5px;
   fill: #131313d4;
 }
-.sqd-theme-dark .sqd-label-text {
+.sqd-label-text {
   fill: #fff;
   font-weight: bold !important;
   font-size: smaller;
@@ -132,35 +134,35 @@
 
 /* dark > .sqd-root-start-stop */
 
-.sqd-theme-dark .sqd-root-start-stop-circle {
+.sqd-root-start-stop-circle {
   fill: var(--primaryColor);
 }
-.sqd-theme-dark .sqd-root-start-stop-icon {
+.sqd-root-start-stop-icon {
   fill: #fff;
 }
 
 /* dark > .sqd-placeholder */
 
-.sqd-theme-dark .sqd-placeholder .sqd-placeholder-rect {
+.sqd-placeholder .sqd-placeholder-rect {
   fill: #0e0e0e89;
   stroke: #353535;
 }
-.sqd-theme-dark .sqd-placeholder-icon-path {
+.sqd-placeholder-icon-path {
   fill: #fff;
 }
-.sqd-theme-dark .sqd-placeholder.sqd-hover .sqd-placeholder-rect {
+.sqd-placeholder.sqd-hover .sqd-placeholder-rect {
   fill: #0e0e0e;
   stroke: var(--primaryColor);
 }
-.sqd-theme-dark .sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
+.sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
   fill: #fff;
 }
 
 /* dark > .sqd-validation-error */
 
-.sqd-theme-dark .sqd-validation-error {
+.sqd-validation-error {
   fill: #ffa200;
 }
-.sqd-theme-dark .sqd-validation-error-icon-path {
+.sqd-validation-error-icon-path {
   fill: #000;
 }

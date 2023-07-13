@@ -135,6 +135,7 @@ import { StorageComponent } from './storage/storage.component';
 import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -191,6 +192,7 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
     StorageComponent,
     TooltipComponent,
     ComingSoonComponent,
+    SettingsComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -47,13 +48,14 @@ export class FileSidebarComponent implements OnInit {
 
   @Input() items: TaskTree[] = [];
 
-  @Input() selectedFile?: string;
+  selectedFile?: string;
 
   loading: Boolean = false;
 
   constructor(
     private workflowComponent: WorkflowComponent,
-    private loadService: LoadService
+    private loadService: LoadService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   public saveLayout() {
@@ -70,7 +72,13 @@ export class FileSidebarComponent implements OnInit {
         this.workflow = w;
       }
     });
-
+    this.workflowComponent.openStep.subscribe((step) => {
+      if (step) {
+        console.log(step)
+        this.selectedFile = step.id;
+        this.cdr.detectChanges()
+      }
+    });
     // this.workflowComponent.items.subscribe((i) => {
     //   if (this.workflow) {
     //     this.selectedFile =
@@ -105,6 +113,8 @@ export class FileSidebarComponent implements OnInit {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.preventDefault();
 
+    console.log(task)
+
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';
     this.menuTopLeftPosition.y = event.clientY + 'px';
@@ -115,5 +125,9 @@ export class FileSidebarComponent implements OnInit {
 
     // we open the menu
     this.matMenuTrigger!.openMenu();
+  }
+
+  openControllerSettings(id: string){
+    this.workflowComponent.openControllerSettings(id)
   }
 }

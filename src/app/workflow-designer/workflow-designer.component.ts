@@ -38,6 +38,8 @@ import { ApiEditorComponent } from '../api-editor/api-editor.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CodeEditorComponent } from '../code-editor/code-editor.component';
 import { WorkflowComponent } from '../workflow/workflow.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { listeners } from 'process';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -63,12 +65,13 @@ export class WorkflowDesignerComponent
   flowModels: Dict<AIModelType> = {};
 
   @Input() triggers: Dict<Trigger> = {};
-  @Input() trainingData: Dict<TrainingData> = {};
   @Input() apiKeys: Dict<Key> = {};
-  @Input() apiRequests: Dict<APIRequest> = {};
+  // @Input() apiRequests: Dict<APIRequest> = {};
   @Input() theme: 'light' | 'dark' = 'light';
 
   dataTriggers: Trigger[] = [];
+
+  openToolbar = false;
 
   get pluginGroup(): ToolboxGroupConfiguration {
     return {
@@ -92,9 +95,9 @@ export class WorkflowDesignerComponent
       steps: [
         {
           componentType: 'switch',
-          name: 'Branch',
+          name: 'BranchController',
           properties: {
-            defaultName: 'Branch',
+            defaultName: 'BranchController',
             order: {
               'Option 1': 0,
               'Option 2': 1,
@@ -109,9 +112,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'container',
-          name: 'Repeat',
+          name: 'RepeatController',
           properties: {
-            defaultName: 'Repeat',
+            defaultName: 'RepeatController',
             frequency: 1,
           },
           type: 'container',
@@ -120,9 +123,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'task',
-          name: 'Breakpoint',
+          name: 'BreakController',
           properties: {
-            defaultName: 'Breakpoint',
+            defaultName: 'BreakController',
             type: 'break',
           },
           type: 'break',
@@ -178,7 +181,10 @@ export class WorkflowDesignerComponent
   @Output() iconChanged = new EventEmitter<File>();
   @Output() trainingDataChanged = new EventEmitter<TrainingData>();
   @Output() apiKeyChanged = new EventEmitter<Key>();
-  @Output() apiRequestChanged = new EventEmitter<APIRequest>();
+  // @Output() apiRequestChanged = new EventEmitter<APIRequest>();
+  @Output() selectedFileChanged = new EventEmitter<string>();
+
+  @Input() selectedFile!: string;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -186,6 +192,8 @@ export class WorkflowDesignerComponent
     private dialog: MatDialog,
     private renderer: Renderer2,
     private loadService: LoadService,
+    private workflowComponent: WorkflowComponent,
+    private _snackBar: MatSnackBar
   ) {}
 
   @ViewChildren('geditor') divs?: QueryList<ElementRef>;
@@ -197,61 +205,24 @@ export class WorkflowDesignerComponent
   }
 
   openAPIEditor(api: APIRequest, step: Step) {
-    let editor = this.dialog.open(ApiEditorComponent, {
-      height: 'calc(var(--vh, 1vh) * 70)',
-      width: 'calc(var(--vh, 1vh) * 70)',
-      maxWidth: '100vw',
-      panelClass: 'app-full-bleed-dialog',
-
-      data: {
-        api,
-      },
-    });
-
-    editor.afterClosed().subscribe((value) => {
-      if (value && value != '') {
-        let api = value as APIRequest;
-        this.apiRequestChanged.emit(api);
-        setTimeout(() => {
-          this.refreshStepEditor(step);
-        }, 500);
-      }
-    });
-  }
-
-  openCodeEditor(
-    script: string,
-    step: Step,
-    context: StepEditorContext,
-    type: string,
-    name: string,
-    callback: (data: Dict<any>) => any,
-    c = callback.bind(this)
-  ) {
-    let editor = this.dialog.open(CodeEditorComponent, {
-      height: 'calc(var(--vh, 1vh) * 70)',
-      width: 'calc(var(--vh, 1vh) * 70)',
-      maxWidth: '100vw',
-      panelClass: 'app-full-bleed-dialog',
-
-      data: {
-        script,
-        type,
-      },
-    });
-
-    editor.afterClosed().subscribe((api) => {
-      if (api != undefined) {
-        let value = api as string;
-        c({
-          step,
-          context,
-          name,
-          value,
-          type,
-        });
-      }
-    });
+    // let editor = this.dialog.open(ApiEditorComponent, {
+    //   height: 'calc(var(--vh, 1vh) * 70)',
+    //   width: 'calc(var(--vh, 1vh) * 70)',
+    //   maxWidth: '100vw',
+    //   panelClass: 'app-full-bleed-dialog',
+    //   data: {
+    //     api,
+    //   },
+    // });
+    // editor.afterClosed().subscribe((value) => {
+    //   if (value && value != '') {
+    //     let api = value as APIRequest;
+    //     this.apiRequestChanged.emit(api);
+    //     setTimeout(() => {
+    //       this.refreshStepEditor(step);
+    //     }, 500);
+    //   }
+    // });
   }
 
   setStepProperty(data: Dict<any>) {
@@ -269,43 +240,6 @@ export class WorkflowDesignerComponent
     }
   }
 
-  // encodeURIComponent(JSON.stringify(<INPUT>))
-
-  saveTrainingData(data: Dict<any>) {
-    let step = data['step'] as Step;
-    let value = data['value'] as any;
-    let type = data['type'] as string;
-    let id = step.id;
-
-    if (step) {
-      var uploadData = value;
-
-      let trainingData = new TrainingData(id, type, uploadData);
-      this.trainingDataChanged.emit(trainingData);
-
-      this.refreshStepEditor(step);
-    }
-  }
-
-  saveReplacedInput(data: Dict<any>) {
-    let step = data['step'] as Step;
-    let value = data['value'] as any;
-    let context = data['context'] as StepEditorContext;
-
-    if (step) {
-      var uploadData = value;
-
-      this.updateProperty(
-        step.properties,
-        'overrideInput',
-        uploadData,
-        context
-      );
-
-      // this.refreshStepEditor(step);
-    }
-  }
-
   saveAPIKey(id: string, data: string = '') {
     let apiKey = new Key(id, data);
     this.apiKeyChanged.emit(apiKey);
@@ -315,10 +249,10 @@ export class WorkflowDesignerComponent
     let title = document.getElementsByClassName('sqd-toolbox-header-title')[0];
 
     if (title) {
-      title.innerHTML = 'Components';
+      title.innerHTML = 'Controllers';
     }
 
-    this.setAPISVG();
+    // this.setAPISVG();
     this.setIcon();
   }
 
@@ -354,8 +288,9 @@ export class WorkflowDesignerComponent
       var content =
         this.toolBar ??
         (document.getElementsByClassName('sqd-scrollbox')[0] as HTMLDivElement);
-      var parent = document.getElementById('g-comp') as HTMLDivElement;
+      var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
 
+      console.log(content);
 
       if (content && parent && parent.firstChild != content) {
         // let newElem = content.cloneNode(true)
@@ -366,7 +301,7 @@ export class WorkflowDesignerComponent
 
         window.dispatchEvent(new Event('resize'));
       }
-    }, 500);
+    }, 0);
   }
 
   showingGrid = true;
@@ -409,24 +344,11 @@ export class WorkflowDesignerComponent
     context.notifyChildrenChanged();
   }
 
-  changeTriggerType(newType: string, context: GlobalEditorContext) {
-    this.workflow!.layout.properties['trigger'] = newType;
+  // changeTriggerType(newType: string, context: GlobalEditorContext) {
+  //   this.workflow!.layout.properties['trigger'] = newType;
 
-    context.notifyPropertiesChanged();
-  }
-
-  changeTrainingType(type: string, step: Step, context: StepEditorContext) {
-    context.notifyChildrenChanged();
-
-    this.saveTrainingData({ step, type, context, value: '' });
-
-    setTimeout(() => {
-      context.notifyChildrenChanged();
-
-      this.refreshStepEditor(step);
-      context.notifyChildrenChanged();
-    }, 100);
-  }
+  //   context.notifyPropertiesChanged();
+  // }
 
   definitionChanged(definition: Definition) {
     this.workflow!.layout = definition;
@@ -437,6 +359,8 @@ export class WorkflowDesignerComponent
   newBranch(step: BranchedStep, context: StepEditorContext, editor: any) {
     const map1 = new Map();
     const map2 = new Map();
+
+    
 
     Object.keys(step.branches).forEach((key, index) => {
       map1.set(key, step.branches[key]);
@@ -535,7 +459,19 @@ export class WorkflowDesignerComponent
     canInsertStep: (step, targetSequence, targetIndex) => {
       return true;
     },
+    canDeleteStep: (step, parentSequence) => {
+      return confirm('Are you sure you want to delete this controller?');
+    },
     isDeletable: (step, parentSequence) => {
+      // let ref = this._snackBar.open('Delete Controller', 'Delete');
+      // ref.onAction().subscribe(() => {
+      //   return true
+      // });
+
+      // ref.afterDismissed().subscribe(() => {
+      //   return false
+      // });
+
       return true;
     },
     isDraggable: (step, parentSequence) => {
@@ -571,7 +507,7 @@ export class WorkflowDesignerComponent
         this.models
       ).map((modelType) => {
         return {
-          name: `${modelType.name}s`,
+          name: `${modelType.name}`,
           steps: Object.values(modelType.models).map((model) => {
             return {
               componentType: 'task',
@@ -586,7 +522,6 @@ export class WorkflowDesignerComponent
         };
       });
 
-
       this.dataTriggers = Object.values(this.triggers);
 
       let gpt = this.models['LLM'].models['gpt-LLM'];
@@ -596,7 +531,6 @@ export class WorkflowDesignerComponent
           switch: gpt,
         });
       }
-
 
       this.toolboxConfiguration.groups = modelGroups.concat([
         this.flowGroup,
@@ -623,6 +557,34 @@ export class WorkflowDesignerComponent
 
   public onDesignerReady(designer: Designer) {
     this.designer = designer;
+
+    // this.setToolbarLoc()
+
+    this.designer?.onSelectedStepIdChanged.subscribe((id) => {
+      console.log(id);
+      if (id) {
+        this.selectedFileChanged.emit(id);
+        // clearListener(id)
+      } else {
+        this.selectedFileChanged.emit('main');
+      }
+    });
+
+    this.workflowComponent.openStep.subscribe((step) => {
+      if (step && step.id != 'main') {
+        this.designer?.selectStepById(step.id);
+      } else {
+        this.designer?.clearSelectedStep();
+      }
+    });
+
+    async function clearListener(id: string) {
+      let doc = document.getElementsByClassName('sqd-selected')[0];
+
+      if (doc) {
+        doc.outerHTML = doc.outerHTML
+      }
+    }
   }
 
   setOpenLayouts(event: any) {
@@ -666,7 +628,6 @@ export class WorkflowDesignerComponent
   // @ViewChild('imgIcon') imgIcon?: ElementRef<HTMLImageElement>;
 
   async fileChangeEvent(event: any, type = 1): Promise<void> {
-
     let file = event.target.files[0];
 
     let buffer = await file.arrayBuffer();

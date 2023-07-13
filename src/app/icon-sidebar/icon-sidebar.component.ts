@@ -36,4 +36,8 @@ export class IconSidebarComponent implements OnInit {
       }
     })
   }
+
+  openSettings(){
+    
+  }
 }

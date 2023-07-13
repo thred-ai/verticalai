@@ -1,0 +1,130 @@
+<div
+  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column bg-theme-2 p-3 pb-4"
+>
+ 
+
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <div
+      class="bg-theme-2 w-100 h-100 m-auto"
+      style="max-width: 600px"
+      *ngIf="selectedFile"
+    >
+    <div class="w-100">
+        <div matDialogTitle class="text-white">Controller Settings</div>
+      </div>
+      <div class="w-100 mb-3">
+        <verticalai-text-field
+          [title]="'Name'"
+          [value]="selectedFile.name"
+          [bgColor]="'#1F1F1F'"
+          [defaultValue]="selectedFile.properties['defaultName']"
+          [placeholder]="'Controller Name'"
+          (changed)="selectedFile.name = $event"
+        >
+        </verticalai-text-field>
+      </div>
+
+      <ng-container
+        *ngIf="
+          selectedFile.properties['type'] == 'model' ||
+          selectedFile.properties['type'] == 'web'
+        "
+      >
+        <ng-container
+          *ngIf="apiKey ?? { id: selectedFile.id, key: '' } as apiKey"
+        >
+          <div
+            class="w-100 mb-3"
+            *ngIf="
+              selectedFile.properties['type'] == 'model'
+                ? 'Model'
+                : 'SerpApi' as prefix
+            "
+          >
+            <verticalai-text-field
+              [title]="prefix + ' API Key'"
+              [value]="apiKey.key"
+              [bgColor]="'#1F1F1F'"
+              [type]="'text'"
+              [defaultValue]="''"
+              [placeholder]="'API Key'"
+              (changed)="saveAPIKey(selectedFile.id, $event)"
+            >
+            </verticalai-text-field>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="selectedFile.componentType == 'switch'">
+        <ng-container *ngIf="selectedFile | cast : BranchedStep as branchStep"
+          ><div
+            class="w-100 d-flex justify-content-between align-content-center mb-3 mt-4 text-white"
+          >
+            <p class="w-100">Branches</p>
+            <mat-icon
+              class="m-auto text-orange"
+              role="button"
+              (click)="newBranch(branchStep)"
+            >
+              add
+            </mat-icon>
+          </div>
+
+          <div class="w-100" style="max-height: 400px; overflow-y: scroll;">
+            <div
+            *ngFor="
+              let branch of (branchStep.branches | dictToArr) ?? [];
+              index as i
+            "
+          >
+            <div class="w-100 mb-3">
+              <verticalai-text-field
+                [value]="branch.name"
+                [defaultValue]="'Option ' + (i + 1)"
+                [placeholder]="'Branch Name'"
+                [btn]="true"
+                [simplify]="true"
+                [btnIcon]="'close'"
+                [bgColor]="'#1F1F1F'"
+                (btnClicked)="deleteBranch(branchStep, branch.name)"
+                (changed)="
+                  isNameTaken($event, branchStep)
+                    ? null
+                    : changeBranchName($event, branchStep, i)
+                "
+              >
+              </verticalai-text-field>
+            </div></div
+        >
+          </div>
+          
+    
+    </ng-container>
+      </ng-container>
+      <button
+        class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
+        (click)="save()"
+      >
+        <!-- (click)="edited ? save() : publish(workflow)"
+        [disabled]="loading" -->
+        <ng-container *ngIf="loading; else buttonTitles">
+          <span class="mx-auto">
+            {{ "Saving" }}
+            <span
+              class="spinner-border spinner-border-sm ms-2 m-auto"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          </span>
+        </ng-container>
+
+        <ng-template #buttonTitles>
+          <ng-container> {{ "Save" }}</ng-container>
+          <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+            cloud_upload
+          </mat-icon>
+        </ng-template>
+      </button>
+    </div>
+  </div>
+</div>

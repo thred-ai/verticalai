@@ -329,7 +329,7 @@
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIconChanged.emit('settings')"
+    (click)="openSettings()"
     [mdbPopover]="settings"
     placement="right"
     [trigger]="'hover'"
@@ -340,7 +340,7 @@
     >
       <mat-icon class="fw-bold">settings_applications</mat-icon>
       <ng-template #settings>
-        <verticalai-tooltip [text]="'Controller Settings'"></verticalai-tooltip>
+        <verticalai-tooltip [text]="'Project Settings'"></verticalai-tooltip>
       </ng-template>
     </div>
   </div>

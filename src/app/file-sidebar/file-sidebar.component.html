@@ -66,9 +66,14 @@
                 [name]="item | taskIcon"
                 slot="start"
               ></ion-icon>
-              <ion-label class="fw-bold" style="font-size: 14px">{{
-                item.name
-              }}</ion-label>
+              <ion-label
+                class="fw-bold"
+                style="font-size: 14px"
+                (contextmenu)="
+                  item.id == 'app' ? onRightClick($event, item) : null
+                "
+                >{{ item.name }}</ion-label
+              >
             </ion-item>
 
             <div class="ion-padding text-light" slot="content">
@@ -143,9 +148,20 @@
 <!-- standard material menu -->
 <mat-menu #rightMenu="matMenu" class="bg-theme border-table">
   <ng-template matMenuContent let-item="item">
-    <button mat-menu-item class="text-light" (click)="editingTask = item">
-      Rename
-    </button>
-    <button mat-menu-item class="text-light">Delete</button>
+    <ng-container *ngIf="item.id != 'app'; else appSettings">
+      <button mat-menu-item class="text-light" (click)="openControllerSettings(item.id)">
+        Configure
+      </button>
+
+      <button mat-menu-item class="text-light" (click)="editingTask = item">
+        Rename
+      </button>
+      <button mat-menu-item class="text-light">Delete</button>
+    </ng-container>
+    <ng-template #appSettings>
+      <button mat-menu-item class="text-light" (click)="null">
+        Project Settings
+      </button>
+    </ng-template>
   </ng-template>
 </mat-menu>

@@ -5,6 +5,7 @@ import {
   Input,
   OnInit,
   PLATFORM_ID,
+  ViewChild,
 } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -34,6 +35,8 @@ import { Agent } from '../models/workflow/agent.model';
 
 import * as verticalkit from 'verticalkit/compiled';
 import { HttpClient } from '@angular/common/http';
+import { SettingsComponent } from '../settings/settings.component';
+import { WorkflowDesignerComponent } from '../workflow-designer/workflow-designer.component';
 
 @Component({
   selector: 'app-workflow',
@@ -55,10 +58,10 @@ export class WorkflowComponent implements OnInit {
 
   workflowIcon?: File;
   newTrainingData?: TrainingData;
-  newAPIKey?: Key;
   newAPIRequest?: APIRequest;
 
   workflow = new BehaviorSubject<Executable | undefined>(undefined);
+
   theme: 'light' | 'dark' = 'light';
 
   mode = 'sidebar';
@@ -149,7 +152,7 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
-  setWorkflow(id?: string) {
+  setWorkflow(id?: string, fileId = 'main') {
     this.workflow.next(undefined);
 
     this.cdr.detectChanges();
@@ -162,7 +165,7 @@ export class WorkflowComponent implements OnInit {
           console.log('same');
           this.activeWorkflow = same;
           // same.layout.properties
-          this.selectFile('main');
+          this.selectFile(fileId);
         }
       } else {
         this.activeWorkflow = undefined;
@@ -176,7 +179,7 @@ export class WorkflowComponent implements OnInit {
 
   items = new BehaviorSubject<TaskTree[] | undefined>(undefined);
 
-  openStep?: Step;
+  openStep = new BehaviorSubject<Step | undefined>(undefined);
 
   classes: Dict<any> = {};
 
@@ -186,7 +189,8 @@ export class WorkflowComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private dialog: MatDialog
   ) {}
 
   async ngOnInit() {
@@ -217,13 +221,13 @@ export class WorkflowComponent implements OnInit {
       let file = params['file'];
 
       if (this.workflows) {
-        if (!this.openStep && this.workflow) {
+        if (!this.openStep.value && this.workflow) {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
           this.selectFile(file ?? 'main', this.activeWorkflow, false);
 
-          if (!this.openStep) {
+          if (!this.openStep.value) {
             this.selectFile('main', this.activeWorkflow, true);
           }
 
@@ -329,17 +333,7 @@ export class WorkflowComponent implements OnInit {
           this.workflowIcon = undefined;
 
           this.updateWorkflows(workflow);
-        } else if (mode == 3 && this.newAPIKey) {
-          await this.loadService.saveAPIKeys(
-            workflow.id,
-            workflow.creatorId,
-            this.newAPIKey
-          );
-          this.edited = false;
-          this.newAPIKey = undefined;
-
-          this.updateWorkflows(workflow);
-        } else if (mode == 1 && this.openStep && this.items.value) {
+        } else if (mode == 1 && this.openStep.value && this.items.value) {
           let exec = await this.fillExecutable(workflow);
 
           let result = await this.loadService.saveSmartUtil(exec);
@@ -378,6 +372,43 @@ export class WorkflowComponent implements OnInit {
 
     return exec;
   }
+
+  openControllerSettings(controllerId: string = 'main') {
+    if (controllerId != 'main') {
+      console.log(controllerId);
+      console.log(
+        this.findStep(controllerId, this.workflow.value?.layout.sequence ?? [])
+      );
+      let ref = this.dialog.open(SettingsComponent, {
+        width: 'calc(var(--vh, 1vh) * 70)',
+        maxWidth: '650px',
+        maxHeight: 'calc(var(--vh, 1vh) * 100)',
+        panelClass: 'app-full-bleed-dialog',
+
+        data: {
+          apiKey: this.apiKeys[controllerId],
+          step: this.findStep(
+            controllerId,
+            this.workflow.value?.layout.sequence ?? []
+          ),
+        },
+      });
+
+      ref.afterClosed().subscribe(async (val) => {
+        if (val && val != '' && val != '0') {
+          
+          await this.save()
+
+          this.setWorkflow(this.workflow.value!.id, controllerId)
+
+    
+
+        }
+      });
+    }
+  }
+
+  @ViewChild(WorkflowDesignerComponent) designer?: WorkflowDesignerComponent;
 
   removeWorkflow() {
     // let index = this.loadService.loadedUser.value?.utils.findIndex(
@@ -592,7 +623,7 @@ export class WorkflowComponent implements OnInit {
     if (workflow && fileId) {
       console.log(fileId);
       console.log(workflow.layout.sequence);
-      this.openStep = this.findStep(fileId, workflow.layout.sequence);
+      this.openStep.next(this.findStep(fileId, workflow.layout.sequence));
 
       if (update) {
         this.router.navigate([], {
@@ -660,9 +691,7 @@ export class WorkflowComponent implements OnInit {
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join('')
         .split('-')
-        .join('') +
-      'Controller' +
-      (same > 1 ? `(${same})` : '')
+        .join('') + (same > 1 ? `(${same})` : '')
     );
   }
 

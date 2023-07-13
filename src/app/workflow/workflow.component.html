@@ -5,7 +5,7 @@
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
     style="overflow-y: hidden"
-    *ngIf="workflow.value && openStep && items.value; else noWorkflow"
+    *ngIf="workflow.value && openStep.value && items.value; else noWorkflow"
   >
     <app-icon-sidebar
       (openProj)="setWorkflow($event)"
@@ -16,14 +16,12 @@
       [hidden]="mode != 'sidebar'"
       [models]="models"
       [triggers]="triggers"
-      [trainingData]="trainingData"
       [apiKeys]="apiKeys"
       [apiRequests]="apiRequests"
       [workflow]="workflow.value"
       [executable]="workflow.value"
       [items]="items.value"
       (detailsChanged)="publish()"
-      [selectedFile]="openStep.id"
       (selectedFileChanged)="selectFile($event)"
     >
     </app-file-sidebar>
@@ -53,18 +51,17 @@
           <as-split-area [size]="60">
             <ng-container *ngIf="selectedIcon == 'schema'">
               <verticalai-workflow-designer
+              #designer
                 [models]="models"
                 [triggers]="triggers"
-                [trainingData]="trainingData"
                 [apiKeys]="apiKeys"
-                [apiRequests]="apiRequests"
                 [workflow]="workflow.value"
                 [theme]="theme"
                 (detailsChanged)="
                   edited = true; workflow.next($event); save(1, true)
                 "
                 (iconChanged)="edited = true; workflowIcon = $event; save(0)"
-                (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
+                (selectedFileChanged)="selectFile($event)"
               >
               </verticalai-workflow-designer>
             </ng-container>
@@ -82,17 +79,17 @@
             <ng-container *ngIf="selectedIcon == 'script'">
               <app-workflow-code
                 *ngIf="
-                  (openStep.id == 'main' && workflow.value
+                  (openStep.value.id == 'main' && workflow.value
                     ? workflow.value.layout.properties['mainSource']
-                    : openStep.properties['source']) ??
-                  defaultCode(openStep.type) as source
+                    : openStep.value.properties['source']) ??
+                  defaultCode(openStep.value.type) as source
                 "
                 [code]="source"
                 (codeChanged)="
                   edited = true;
-                  openStep.id == 'main' && workflow.value
+                  openStep.value.id == 'main' && workflow.value
                     ? (workflow.value.layout.properties['mainSource'] = $event)
-                    : (openStep.properties['source'] = $event);
+                    : (openStep.value.properties['source'] = $event);
                   save()
                 "
               ></app-workflow-code>
@@ -103,8 +100,20 @@
             </ng-container>
 
             <ng-container *ngIf="selectedIcon == 'settings'">
-              <app-coming-soon [title]="'Controller Settings'">
-              </app-coming-soon>
+              <!-- <app-coming-soon [title]="'Controller Settings'">
+              </app-coming-soon> -->
+              <!-- <app-settings
+                [models]="models"
+                [triggers]="triggers"
+                [apiKeys]="apiKeys"
+                [workflow]="workflow.value"
+                (detailsChanged)="
+                  edited = true; workflow.next($event); save(1, true)
+                "
+                (iconChanged)="edited = true; workflowIcon = $event; save(0)"
+                (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
+              >
+              </app-settings> -->
             </ng-container>
           </as-split-area>
         </as-split>
