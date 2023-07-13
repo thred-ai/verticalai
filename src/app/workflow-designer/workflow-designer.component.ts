@@ -355,75 +355,6 @@ export class WorkflowDesignerComponent
     this.saveLayout();
   }
 
-  newBranch(step: BranchedStep, context: StepEditorContext, editor: any) {
-    const map1 = new Map();
-    const map2 = new Map();
-
-    
-
-    Object.keys(step.branches).forEach((key, index) => {
-      map1.set(key, step.branches[key]);
-      map2.set(key, index);
-    });
-
-    let name = `Option ${(Object.keys(step.branches) as string[]).length + 1}`;
-
-    if (this.isNameTaken(name, step)) {
-      var index = 1;
-      do {
-        index += 1;
-        name = `Option ${
-          (Object.keys(step.branches) as string[]).length + index
-        }`;
-      } while (this.isNameTaken(name, step));
-    }
-    map1.set(name, []);
-    map2.set(name, map1.size - 1);
-
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-
-    context.notifyChildrenChanged();
-
-    this.designer?.clearSelectedStep();
-
-    setTimeout(() => {
-      this.designer?.selectStepById(step.id);
-    }, 5);
-  }
-
-  deleteBranch(
-    step: BranchedStep,
-    context: StepEditorContext,
-    nameToRemove: string
-  ) {
-    const map1 = new Map();
-    const map2 = new Map();
-
-    let branches = Object.keys(step.branches);
-
-    if (branches.length == 2) {
-      return;
-    }
-    branches.forEach((key, index) => {
-      if (key != nameToRemove) {
-        map1.set(key, step.branches[key]);
-      }
-    });
-
-    var index = 0;
-    map1.forEach((m: any, key: string) => {
-      map2.set(key, index);
-      index += 1;
-    });
-
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-
-    context.notifyChildrenChanged();
-
-    this.refreshStepEditor(step);
-  }
 
   refreshStepEditor(step: Step) {
     this.designer?.clearSelectedStep();
@@ -559,31 +490,36 @@ export class WorkflowDesignerComponent
 
     // this.setToolbarLoc()
 
-    this.designer?.onSelectedStepIdChanged.subscribe((id) => {
-      console.log(id);
-      if (id) {
-        this.selectedFileChanged.emit(id);
-        // clearListener(id)
-      } else {
-        this.selectedFileChanged.emit('main');
-      }
-    });
-
-    this.workflowComponent.openStep.subscribe((step) => {
-      if (step && step.id != 'main') {
-        this.designer?.selectStepById(step.id);
-      } else {
-        this.designer?.clearSelectedStep();
-      }
-    });
-
-    async function clearListener(id: string) {
-      let doc = document.getElementsByClassName('sqd-selected')[0];
-
-      if (doc) {
-        doc.outerHTML = doc.outerHTML
-      }
+    try {
+      this.designer?.onSelectedStepIdChanged.subscribe((id) => {
+        console.log(id);
+        if (id) {
+          this.selectedFileChanged.emit(id);
+          // clearListener(id)
+        } else {
+          this.selectedFileChanged.emit('main');
+        }
+      });
+  
+      this.workflowComponent.openStep.subscribe((step) => {
+        if (step && step.id != 'main') {
+          this.designer?.selectStepById(step.id);
+        } else {
+          this.designer?.clearSelectedStep();
+        }
+      });
+    } catch (error) {
+      
     }
+    
+
+    // async function clearListener(id: string) {
+    //   let doc = document.getElementsByClassName('sqd-selected')[0];
+
+    //   if (doc) {
+    //     doc.outerHTML = doc.outerHTML
+    //   }
+    // }
   }
 
   setOpenLayouts(event: any) {
