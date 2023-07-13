@@ -132,9 +132,7 @@ export class WorkflowComponent implements OnInit {
     this.workflow.next(workflow);
 
     const loadData = () => {
-      this.loadService.getTrainingData(workflow.id, workflow.creatorId);
       this.loadService.getAPIKeys(workflow.id, workflow.creatorId);
-      this.loadService.getAPIs(workflow.id, workflow.creatorId);
     };
 
     if (this.newWorkflow) {
@@ -241,16 +239,8 @@ export class WorkflowComponent implements OnInit {
             this.triggers = triggers;
           });
 
-          this.loadService.loadedTrainingData.subscribe((data) => {
-            this.trainingData = data;
-          });
-
           this.loadService.loadedKeys.subscribe((data) => {
             this.apiKeys = data;
-          });
-
-          this.loadService.loadedRequests.subscribe((data) => {
-            this.apiRequests = data;
           });
 
           this.loadService.loading.subscribe((l) => {

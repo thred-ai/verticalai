@@ -249,7 +249,7 @@ export class LoadService {
 
       try {
         await this.db
-          .collection(`Users/${uid}/workflows`)
+          .collection(`Workflows`)
           .doc(id)
           .set({ displayUrl }, { merge: true });
       } catch (error) {
@@ -277,7 +277,7 @@ export class LoadService {
 
       try {
         await this.db
-          .collection(`Users/${uid}/workflows`)
+          .collection(`Workflows`)
           .doc(id)
           .set(uploadData, { merge: true });
 
@@ -419,7 +419,7 @@ export class LoadService {
     getProfiles = false
   ) {
     let sub2 = this.db
-      .collectionGroup(`workflows`, (ref) => ref.where('id', '==', id))
+      .collection(`Workflows`, (ref) => ref.where('id', '==', id))
       .valueChanges()
       .subscribe((docs2) => {
         let docs_2 = docs2 as any[];
@@ -447,7 +447,7 @@ export class LoadService {
 
   getWorkflows(ids: string[], callback: (result?: Executable[]) => any) {
     let sub2 = this.db
-      .collectionGroup(`workflows`, (ref) => ref.where('id', 'in', ids))
+      .collection(`Workflows`, (ref) => ref.where('id', 'in', ids))
       .get()
       .toPromise()
       .then((docs3) => {
@@ -634,6 +634,8 @@ export class LoadService {
       ref.where(firebase.firestore.FieldPath.documentId(), '==', uid)
     );
 
+    console.log("GETTING USER")
+
     let sub = query.valueChanges().subscribe(async (docs) => {
       let doc = docs[0] as DocumentData;
 
@@ -654,13 +656,17 @@ export class LoadService {
         this.checkLoadedUser(developer);
 
         if (fetchworkflows) {
-          let q = this.db.collection(`Users/${uid}/workflows`);
+          let q = this.db.collection(`Workflows`);
 
           if (fetchOnlyAvailableworkflows) {
-            q = this.db.collection(`Users/${uid}/workflows`, (ref) =>
-              ref.where('status', 'in', [0, 1]).orderBy('created', 'asc')
+
+            q = this.db.collection(`Workflows`, (ref) =>
+              ref.where('status', 'in', [0, 1]).where('creatorId', '==', uid).orderBy('created', 'asc')
             );
           }
+
+          console.log("GETTING PRJECT")
+
           let sub2 = q.valueChanges().subscribe((docs2) => {
             let docs_2 = (docs2 as Executable[]).map((workflow) => {
               // workflow.layout = this.sampleFlow
@@ -708,20 +714,6 @@ export class LoadService {
     }
   }
 
-  async saveTrainingData(workflowId: string, uid: string, data: TrainingData) {
-    this.loading.next(true);
-
-    var uploadData = JSON.parse(JSON.stringify(data));
-    if (uploadData.data == 'None') {
-      uploadData.data = '';
-    }
-    await this.db
-      .collection(`Users/${uid}/workflows/${workflowId}/data`)
-      .doc(data.id)
-      .set(uploadData, { merge: true });
-    this.loading.next(false);
-  }
-
   async saveAPI(workflowId: string, uid: string, data: APIRequest) {
     this.loading.next(true);
 
@@ -730,32 +722,16 @@ export class LoadService {
     //   uploadData.data = '';
     // }
     await this.db
-      .collection(`Users/${uid}/workflows/${workflowId}/APIs`)
+      .collection(`Workflows/${workflowId}/APIs`)
       .doc(data.id)
       .set(uploadData, { merge: true });
     this.loading.next(false);
   }
 
-  getTrainingData(workflowId: string, uid: string) {
-    this.db
-      .collection(`Users/${uid}/workflows/${workflowId}/data`)
-      .valueChanges()
-      .subscribe((docs2) => {
-        let data = docs2 as TrainingData[];
-
-        var returnData: Dict<TrainingData> = {};
-
-        data.forEach((d) => {
-          returnData[d.id] = d;
-        });
-
-        this.loadedTrainingData.next(returnData);
-      });
-  }
 
   getAPIKeys(workflowId: string, uid: string) {
     this.db
-      .collection(`Users/${uid}/workflows/${workflowId}/keys`)
+      .collection(`Workflows/${workflowId}/keys`)
       .valueChanges()
       .subscribe((docs2) => {
         let data = docs2 as Key[];
@@ -772,7 +748,7 @@ export class LoadService {
 
   getAPIs(workflowId: string, uid: string) {
     this.db
-      .collection(`Users/${uid}/workflows/${workflowId}/APIs`)
+      .collection(`Workflows/${workflowId}/APIs`)
       .valueChanges()
       .subscribe((docs2) => {
         let data = docs2 as APIRequest[];
@@ -797,7 +773,7 @@ export class LoadService {
       uploadData.key = '';
     }
     await this.db
-      .collection(`Users/${uid}/workflows/${workflowId}/keys`)
+      .collection(`Workflows/${workflowId}/keys`)
       .doc(data.id)
       .set(uploadData);
 
