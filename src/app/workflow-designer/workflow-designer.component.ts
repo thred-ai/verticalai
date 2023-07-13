@@ -54,7 +54,6 @@ export class WorkflowDesignerComponent
   public definitionJSON?: string;
 
   @Input() workflow?: Executable;
-  openLayouts = ['g-comp', 'general', 'config'];
 
   @ViewChild('gridModeSwitch', { read: ElementRef }) element:
     | ElementRef
@@ -64,12 +63,8 @@ export class WorkflowDesignerComponent
   @Input() models: Dict<AIModelType> = {};
   flowModels: Dict<AIModelType> = {};
 
-  @Input() triggers: Dict<Trigger> = {};
-  @Input() apiKeys: Dict<Key> = {};
   // @Input() apiRequests: Dict<APIRequest> = {};
   @Input() theme: 'light' | 'dark' = 'light';
-
-  dataTriggers: Trigger[] = [];
 
   openToolbar = false;
 
@@ -225,21 +220,6 @@ export class WorkflowDesignerComponent
     // });
   }
 
-  setStepProperty(data: Dict<any>) {
-    let step = data['step'] as Step;
-    let context = data['context'] as StepEditorContext;
-    let name = data['name'] as string;
-    let value = data['value'] as any;
-
-    if (step) {
-      step.properties[name] = value;
-      context?.notifyPropertiesChanged();
-      setTimeout(() => {
-        this.refreshStepEditor(step);
-      }, 500);
-    }
-  }
-
   saveAPIKey(id: string, data: string = '') {
     let apiKey = new Key(id, data);
     this.apiKeyChanged.emit(apiKey);
@@ -318,31 +298,6 @@ export class WorkflowDesignerComponent
     }
   }
 
-  changeBranchName(
-    newName: string,
-    step: BranchedStep,
-    i: number,
-    context: StepEditorContext
-  ) {
-    const map1 = new Map();
-    const map2 = new Map();
-
-    Object.keys(step.branches).forEach((key, index) => {
-      if (index == i) {
-        map1.set(newName, step.branches[key]);
-        map2.set(newName, index);
-        return;
-      }
-      map1.set(key, step.branches[key]);
-      map2.set(key, index);
-    });
-
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-
-    context.notifyChildrenChanged();
-  }
-
   // changeTriggerType(newType: string, context: GlobalEditorContext) {
   //   this.workflow!.layout.properties['trigger'] = newType;
 
@@ -353,15 +308,6 @@ export class WorkflowDesignerComponent
     this.workflow!.layout = definition;
     this.setAPISVG();
     this.saveLayout();
-  }
-
-
-  refreshStepEditor(step: Step) {
-    this.designer?.clearSelectedStep();
-
-    setTimeout(() => {
-      this.designer?.selectStepById(step.id);
-    }, 5);
   }
 
   public readonly stepsConfiguration: StepsConfiguration = {
@@ -452,8 +398,6 @@ export class WorkflowDesignerComponent
         };
       });
 
-      this.dataTriggers = Object.values(this.triggers);
-
       let gpt = this.models['LLM'].models['gpt-LLM'];
 
       if (gpt) {
@@ -522,14 +466,6 @@ export class WorkflowDesignerComponent
     // }
   }
 
-  setOpenLayouts(event: any) {
-    let id = event?.srcElement?.id;
-
-    if (id == 'accordion' || id == 'g-accordion') {
-      this.openLayouts = event.detail.value;
-    }
-  }
-
   public saveLayout() {
     // this.definition = definition;
 
@@ -541,20 +477,6 @@ export class WorkflowDesignerComponent
     context.notifyNameChanged();
   }
 
-  public updateProperty(
-    properties: Properties,
-    name: string,
-    value: any,
-    context: GlobalEditorContext | StepEditorContext
-  ) {
-    properties[name] = value;
-    context.notifyPropertiesChanged();
-  }
-
-  public reloadDefinitionClicked() {
-    // this.definition = createDefinition();
-    this.updateDefinitionJSON();
-  }
 
   private updateDefinitionJSON() {
     this.definitionJSON = JSON.stringify(this.workflow?.layout, null, 2);
