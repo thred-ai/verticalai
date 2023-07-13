@@ -381,19 +381,15 @@ export class WorkflowComponent implements OnInit {
             controllerId,
             this.workflow.value?.layout.sequence ?? []
           ),
-          workflow: this.workflow.value
+          workflow: this.workflow.value,
         },
       });
 
       ref.afterClosed().subscribe(async (val) => {
         if (val && val != '' && val != '0') {
-          
-          await this.save()
+          await this.save();
 
-          this.setWorkflow(this.workflow.value!.id, controllerId)
-
-    
-
+          this.setWorkflow(this.workflow.value!.id, controllerId);
         }
       });
     }
@@ -693,7 +689,8 @@ export class WorkflowComponent implements OnInit {
 
       case 'gpt-LLM':
         return this.classes['gpt'].text;
-
+      case 'dalle-TIM':
+        return this.classes['dalle'].text;
       case 'sd-TIM':
         return this.classes['sd'].text;
 
