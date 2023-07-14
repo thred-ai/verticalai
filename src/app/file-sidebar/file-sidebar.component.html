@@ -68,11 +68,8 @@
               ></ion-icon> -->
               
               <ion-label
-                class="fw-bold"
                 style="font-size: 14px"
-                (contextmenu)="
-                  item.id == 'app' ? onRightClick($event, item) : null
-                "
+                
                 >{{ item.name }}</ion-label
               >
             </ion-item>
@@ -122,7 +119,7 @@
         </ion-thumbnail>
         <ion-label
           style="font-size: small"
-          (contextmenu)="item.id != 'main' ? onRightClick($event, item) : null"
+          (contextmenu)="onRightClick($event, item)"
           >{{ item.name }}</ion-label
         >
       </ng-container>
@@ -151,7 +148,7 @@
 <!-- standard material menu -->
 <mat-menu #rightMenu="matMenu" class="bg-theme border-table">
   <ng-template matMenuContent let-item="item">
-    <ng-container *ngIf="item.id != 'app'; else appSettings">
+    <ng-container *ngIf="item.id != 'main'; else appSettings">
       <button mat-menu-item class="text-light" (click)="openControllerSettings(item.id)">
         Configure
       </button>

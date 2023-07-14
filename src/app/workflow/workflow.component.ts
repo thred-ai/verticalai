@@ -263,7 +263,7 @@ export class WorkflowComponent implements OnInit {
           'app',
           'category',
           this.analyzeTasks(w.layout.sequence),
-          new TaskTree('MainController', 'main', 'model', [], undefined, {
+          new TaskTree(w.name, 'main', 'model', [], undefined, {
             type: 'model',
             metaType: 'main',
             img: w.displayUrl,
