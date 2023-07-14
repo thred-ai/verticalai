@@ -312,17 +312,7 @@ export class WorkflowComponent implements OnInit {
 
     if (workflow && this.isValid) {
       try {
-        if (mode == 0 && this.workflowIcon) {
-          await this.loadService.uploadImg(
-            this.workflowIcon,
-            workflow.id,
-            workflow.creatorId
-          );
-          this.edited = false;
-          this.workflowIcon = undefined;
-
-          this.updateWorkflows(workflow);
-        } else if (mode == 1 && this.openStep.value && this.items.value) {
+        if (mode == 1 && this.openStep.value && this.items.value) {
           let exec = await this.fillExecutable(workflow);
 
           let result = await this.loadService.saveSmartUtil(exec);
@@ -381,6 +371,19 @@ export class WorkflowComponent implements OnInit {
 
     ref.afterClosed().subscribe(async (val) => {
       if (val && val != '' && val != '0') {
+        let img = val.img as File;
+
+        if (img && this.workflow.value) {
+          let url = await this.loadService.uploadImg(
+            img,
+            this.workflow.value.id
+          );
+
+          if (url) {
+            this.workflow.value.displayUrl = url;
+          }
+        }
+
         await this.save();
 
         this.setWorkflow(this.workflow.value!.id, controllerId);

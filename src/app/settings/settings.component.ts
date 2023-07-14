@@ -41,6 +41,7 @@ export class SettingsComponent implements OnInit {
   // @Output() apiKeyChanged = new EventEmitter<Key>();
 
   selectedFile?: Step;
+  newImg?: File;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -150,7 +151,12 @@ export class SettingsComponent implements OnInit {
       );
     }
     this.loading = false;
-    this.dialogRef.close({ file: this.selectedFile, apiKey: this.newAPIKey });
+    this.dialogRef.close({
+      file: this.selectedFile,
+      apiKey: this.newAPIKey,
+      workflow: this.workflow,
+      img: this.newImg,
+    });
   }
 
   async fileChangeEvent(event: any, type = 1): Promise<void> {
@@ -168,6 +174,7 @@ export class SettingsComponent implements OnInit {
       imgIcon!.src = base64;
 
       // this.iconChanged.emit(file);
+      this.newImg = file;
     };
 
     reader.readAsDataURL(blob);

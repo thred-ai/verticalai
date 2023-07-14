@@ -240,25 +240,25 @@ export class LoadService {
     this.loading.next(false);
   }
 
-  async uploadImg(file: File, id: string, uid: string) {
+  async uploadImg(file: File, id: string) {
     this.loading.next(true);
+
+    console.log(id);
+    console.log(file);
+
     try {
       let ref = this.storage.ref(`workflows/${id}/icon-${id}.png`);
       await ref.put(file, { cacheControl: 'no-cache' });
       let displayUrl = await ref.getDownloadURL().toPromise();
 
-      try {
-        await this.db
-          .collection(`Workflows`)
-          .doc(id)
-          .set({ displayUrl }, { merge: true });
-      } catch (error) {
-        console.log(error);
-      }
+      this.loading.next(false);
+
+      return displayUrl;
     } catch (error) {
       console.log(error);
     }
     this.loading.next(false);
+    return undefined;
   }
 
   async saveSmartUtil(data: Executable) {
@@ -634,7 +634,7 @@ export class LoadService {
       ref.where(firebase.firestore.FieldPath.documentId(), '==', uid)
     );
 
-    console.log("GETTING USER")
+    console.log('GETTING USER');
 
     let sub = query.valueChanges().subscribe(async (docs) => {
       let doc = docs[0] as DocumentData;
@@ -659,13 +659,15 @@ export class LoadService {
           let q = this.db.collection(`Workflows`);
 
           if (fetchOnlyAvailableworkflows) {
-
             q = this.db.collection(`Workflows`, (ref) =>
-              ref.where('status', 'in', [0, 1]).where('creatorId', '==', uid).orderBy('created', 'asc')
+              ref
+                .where('status', 'in', [0, 1])
+                .where('creatorId', '==', uid)
+                .orderBy('created', 'asc')
             );
           }
 
-          console.log("GETTING PRJECT")
+          console.log('GETTING PRJECT');
 
           let sub2 = q.valueChanges().subscribe((docs2) => {
             let docs_2 = (docs2 as Executable[]).map((workflow) => {
@@ -728,7 +730,6 @@ export class LoadService {
     this.loading.next(false);
   }
 
-
   getAPIKeys(workflowId: string, uid: string) {
     this.db
       .collection(`Workflows/${workflowId}/keys`)
@@ -766,7 +767,7 @@ export class LoadService {
   async saveAPIKeys(workflowId: string, uid: string, data: Key) {
     this.loading.next(true);
 
-    console.log(data)
+    console.log(data);
 
     var uploadData = JSON.parse(JSON.stringify(data));
     if (uploadData.key == 'None') {
@@ -801,7 +802,7 @@ export class LoadService {
     return undefined;
   }
 
-  iconUrlForController(componentType: string, type: string){
+  iconUrlForController(componentType: string, type: string) {
     switch (componentType) {
       //@ts-ignore
       case 'task':

@@ -104,11 +104,11 @@
         <div class="w-100">
           <div matDialogTitle class="text-white">Project Settings</div>
           
-          <div class="wrap-input1 w-100 pt-3 px-0">
+          <div class="wrap-input1 w-100 py-3 px-0">
             <p class="w-100 mb-3 text-white">Project Icon</p>
 
             <div
-              class="w-auto rounded-icon border-table shadow d-flex justify-content-center align-items-center mb-3"
+              class="w-auto rounded-icon border-table shadow d-flex justify-content-center align-items-center"
               style="
                 object-fit: contain;
                 aspect-ratio: 1;
@@ -145,7 +145,8 @@
             </div>
           </div>
 
-          <verticalai-text-field
+          <div class="wrap-input1 w-100 pb-3">
+            <verticalai-text-field
             [title]="'Project Name'"
             [bgColor]="'#1F1F1F'"
             [value]="workflow.name"
@@ -154,6 +155,9 @@
             (changed)="workflow.name = $event"
           >
           </verticalai-text-field>
+
+          </div>
+        
         </div>
       </div>
       <button
