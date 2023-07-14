@@ -312,22 +312,7 @@ export class WorkflowDesignerComponent
 
   public readonly stepsConfiguration: StepsConfiguration = {
     iconUrlProvider: (componentType: string, type: string) => {
-      switch (componentType) {
-        //@ts-ignore
-        case 'task':
-          switch (type) {
-            default:
-              let id2 = type.split('-')[1];
-              if (id2) {
-                let same = this.models[id2].models[type];
-                if (same) {
-                  return same.imgUrl;
-                }
-              }
-          }
-        default:
-          return `assets/${type}.png`;
-      }
+      return this.loadService.iconUrlForController(componentType, type)
     },
     canMoveStep: (sourceSequence, step, targetSequence, targetIndex) => {
       return true;

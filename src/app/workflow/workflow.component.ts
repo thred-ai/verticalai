@@ -266,8 +266,9 @@ export class WorkflowComponent implements OnInit {
           new TaskTree('MainController', 'main', 'model', [], undefined, {
             type: 'model',
             metaType: 'main',
+            img: w.displayUrl,
           }),
-          { type: 'folder' }
+          { type: 'folder', img: w.displayUrl }
         ),
       ]);
     }
@@ -522,7 +523,7 @@ export class WorkflowComponent implements OnInit {
               'category',
               this.analyzeTasks(sequence),
               undefined,
-              { type: 'folder' }
+              { type: 'folder', img: 'assets/switch.png' }
             )
           );
         });
@@ -543,9 +544,9 @@ export class WorkflowComponent implements OnInit {
               'model',
               [],
               undefined,
-              { type: 'model', metaType: switchTask.type }
+              { type: 'model', metaType: switchTask.type, img: 'assets/switch.png' }
             ),
-            { type: 'switch' }
+            { type: 'switch', img: 'assets/switch.png' }
           )
         );
       } else if (task.componentType == 'container') {
@@ -563,9 +564,9 @@ export class WorkflowComponent implements OnInit {
               'model',
               [],
               undefined,
-              { type: 'container', metaType: loopTask.type }
+              { type: 'container', metaType: loopTask.type, img: 'assets/container.png' }
             ),
-            { type: 'folder' }
+            { type: 'folder', img: 'assets/container.png' }
           )
         );
       } else {
@@ -577,7 +578,14 @@ export class WorkflowComponent implements OnInit {
             'model',
             [],
             undefined,
-            { type: 'model', metaType: task.type }
+            {
+              type: 'model',
+              metaType: task.type,
+              img: this.loadService.iconUrlForController(
+                task.componentType,
+                task.type
+              ),
+            }
           )
         );
       }

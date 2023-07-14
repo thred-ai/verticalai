@@ -60,3 +60,8 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
   height: calc(calc(var(--vh, 1vh) * 100) - 320px );
   width: 100%;
 }
+
+ion-thumbnail {
+  --size: 30px;
+  --border-radius: 50%;
+}

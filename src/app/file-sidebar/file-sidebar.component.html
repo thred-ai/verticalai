@@ -60,12 +60,13 @@
         >
           <ion-accordion class="bg-transparent" [value]="'code'">
             <ion-item slot="header" class="text-light no-padding">
-              <ion-icon
+              <!-- <ion-icon
                 class="text-secondary"
                 style="font-size: 14px"
                 [name]="item | taskIcon"
                 slot="start"
-              ></ion-icon>
+              ></ion-icon> -->
+              
               <ion-label
                 class="fw-bold"
                 style="font-size: 14px"
@@ -110,13 +111,15 @@
       (click)="selectedFile = item.id; selectedFileChanged.emit(item.id)"
     >
       <ng-container *ngIf="editingTask?.id != item.id">
-        <ion-icon
+        <!-- <ion-icon
           class="text-orange"
           style="font-size: small"
           [name]="item | taskIcon"
           slot="start"
-        ></ion-icon>
-
+        ></ion-icon> -->
+        <ion-thumbnail slot="start">
+          <img alt="Silhouette of mountains" [src]="item.metadata.img ?? ''" />
+        </ion-thumbnail>
         <ion-label
           style="font-size: small"
           (contextmenu)="item.id != 'main' ? onRightClick($event, item) : null"

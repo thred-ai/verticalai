@@ -801,6 +801,25 @@ export class LoadService {
     return undefined;
   }
 
+  iconUrlForController(componentType: string, type: string){
+    switch (componentType) {
+      //@ts-ignore
+      case 'task':
+        switch (type) {
+          default:
+            let id2 = type.split('-')[1];
+            if (id2) {
+              let same = this.loadedModels.value[id2].models[type];
+              if (same) {
+                return same.imgUrl;
+              }
+            }
+        }
+      default:
+        return `assets/${type}.png`;
+    }
+  }
+
   async getExecutable(id: string) {
     let url = await new Promise<Executable | undefined>((resolve, reject) => {
       this.functions
