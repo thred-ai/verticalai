@@ -38,6 +38,6 @@ export class IconSidebarComponent implements OnInit {
   }
 
   openSettings(){
-    
+    this.workflowComponent.openControllerSettings('main')
   }
 }

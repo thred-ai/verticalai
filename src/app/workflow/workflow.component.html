@@ -96,22 +96,6 @@
               <app-coming-soon [title]="'Controller Memory'"> </app-coming-soon>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'settings'">
-              <app-coming-soon [title]="'Controller Settings'">
-              </app-coming-soon>
-              <!-- <app-settings
-                [models]="models"
-                [triggers]="triggers"
-                [apiKeys]="apiKeys"
-                [workflow]="workflow.value"
-                (detailsChanged)="
-                  edited = true; workflow.next($event); save(1, true)
-                "
-                (iconChanged)="edited = true; workflowIcon = $event; save(0)"
-                (apiKeyChanged)="edited = true; newAPIKey = $event; save(3)"
-              >
-              </app-settings> -->
-            </ng-container>
           </as-split-area>
         </as-split>
       </as-split-area>
