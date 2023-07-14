@@ -54,7 +54,7 @@ export class SettingsComponent implements OnInit {
     this.selectedFile = data.step;
     this.workflow = data.workflow;
 
-    this.mode = this.apiKey && this.selectedFile ? 1 : 2;
+    this.mode = this.selectedFile ? 1 : 2;
   }
 
   ngOnInit(): void {}

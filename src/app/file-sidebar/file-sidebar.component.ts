@@ -112,6 +112,7 @@ export class FileSidebarComponent implements OnInit {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.preventDefault();
 
+    console.log(task)
 
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';
@@ -126,6 +127,7 @@ export class FileSidebarComponent implements OnInit {
   }
 
   openControllerSettings(id: string){
+    console.log(id)
     this.workflowComponent.openControllerSettings(id)
   }
 }

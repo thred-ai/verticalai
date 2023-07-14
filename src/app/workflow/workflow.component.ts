@@ -350,6 +350,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   openControllerSettings(controllerId: string = 'main') {
+    console.log(controllerId)
     let ref = this.dialog.open(SettingsComponent, {
       width: 'calc(var(--vh, 1vh) * 70)',
       maxWidth: '650px',
