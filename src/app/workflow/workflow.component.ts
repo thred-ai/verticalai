@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  HostListener,
   Inject,
   Input,
   OnInit,
@@ -8,19 +9,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogRef,
 } from '@angular/material/dialog';
 import { Dict, LoadService } from '../load.service';
 import { Developer } from '../models/user/developer.model';
-import { AIModel } from '../models/workflow/ai-model.model';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { Trigger } from '../models/workflow/trigger.model';
 import { TrainingData } from '../models/workflow/training-data.model';
 import { Key } from '../models/workflow/key.model';
 import { APIRequest } from '../models/workflow/api-request.model';
-import { ApiTesterComponent } from '../api-tester/api-tester.component';
 import { BehaviorSubject } from 'rxjs';
 import { Executable } from '../models/workflow/executable.model';
 import { TaskTree } from '../models/workflow/task-tree.model';
@@ -31,7 +28,6 @@ import {
   Step,
 } from 'sequential-workflow-designer';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Agent } from '../models/workflow/agent.model';
 
 import * as verticalkit from 'verticalkit/compiled';
 import { HttpClient } from '@angular/common/http';
@@ -68,8 +64,14 @@ export class WorkflowComponent implements OnInit {
 
   selectedIcon: string = 'schema';
 
-  onKeyDown($event: any): void {
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) { 
+    this.onKeyDown(event)
+  }
+
+  onKeyDown($event: KeyboardEvent): void {
     // Detect platform
+    console.log($event)
     if (navigator.platform.match('Mac')) {
       this.handleMacKeyEvents($event);
     } else {
@@ -80,6 +82,7 @@ export class WorkflowComponent implements OnInit {
   async handleMacKeyEvents($event: any) {
     // MetaKey documentation
     // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/metaKey
+    console.log($event)
     let charCode = String.fromCharCode($event.which).toLowerCase();
     if ($event.metaKey && charCode === 's') {
       $event.preventDefault();
