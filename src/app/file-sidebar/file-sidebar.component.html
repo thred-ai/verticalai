@@ -9,7 +9,7 @@
   <!-- [value]="openLayouts"
       (ionChange)="setOpenLayouts($event)" -->
 
-  <div class="w-100 p-3 d-flex justify-content-between align-content-center">
+  <div class="w-100 p-3 d-flex justify-content-between align-content-center border-bottom" style="height: 70px">
     <button
       class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex w-100 justify-content-center px-3 align-content-center py-2 my-auto"
       (click)="saveLayout()"
@@ -45,6 +45,13 @@
   </div>
 
   <ng-container *ngIf="executable">
+
+    <div class="w-100 text-light p-3">
+      <span class="text-start h5 fw-bold">
+        Explorer
+      </span>
+    </div>
+
     <ng-container
       *ngTemplateOutlet="recursiveList; context: { $implicit: items }"
     ></ng-container>
