@@ -224,7 +224,7 @@
       <img
         *ngIf="user && model"
         class="h-100 p-0 m-auto rounded-circle"
-        style="object-fit: contain; aspect-ratio: 1"
+        style="object-fit: cover; aspect-ratio: 1"
         [src]="
           chatInfo.chat.type == 'user' && user && user.url
             ? user.url
