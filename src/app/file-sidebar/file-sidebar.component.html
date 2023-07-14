@@ -66,12 +66,8 @@
                 [name]="item | taskIcon"
                 slot="start"
               ></ion-icon> -->
-              
-              <ion-label
-                style="font-size: 14px"
-                
-                >{{ item.name }}</ion-label
-              >
+
+              <ion-label style="font-size: 14px">{{ item.name }}</ion-label>
             </ion-item>
 
             <div class="ion-padding text-light" slot="content">
@@ -114,7 +110,11 @@
           [name]="item | taskIcon"
           slot="start"
         ></ion-icon> -->
-        <ion-thumbnail slot="start">
+        <!-- --border-radius: 50%; -->
+        <ion-thumbnail
+          slot="start"
+          [style.--border-radius]="item.id == 'main' ? '6px' : '50%'"
+        >
           <img alt="Silhouette of mountains" [src]="item.metadata.img ?? ''" />
         </ion-thumbnail>
         <ion-label
@@ -149,7 +149,11 @@
 <mat-menu #rightMenu="matMenu" class="bg-theme border-table">
   <ng-template matMenuContent let-item="item">
     <ng-container *ngIf="item.id != 'main'; else appSettings">
-      <button mat-menu-item class="text-light" (click)="openControllerSettings(item.id)">
+      <button
+        mat-menu-item
+        class="text-light"
+        (click)="openControllerSettings(item.id)"
+      >
         Configure
       </button>
 
@@ -159,7 +163,11 @@
       <button mat-menu-item class="text-light">Delete</button>
     </ng-container>
     <ng-template #appSettings>
-      <button mat-menu-item class="text-light" (click)="null">
+      <button
+        mat-menu-item
+        class="text-light"
+        (click)="openControllerSettings('main')"
+      >
         Project Settings
       </button>
     </ng-template>

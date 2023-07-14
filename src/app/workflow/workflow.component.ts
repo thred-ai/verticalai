@@ -8,9 +8,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import {
-  MatDialog,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Dict, LoadService } from '../load.service';
 import { Developer } from '../models/user/developer.model';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
@@ -65,13 +63,13 @@ export class WorkflowComponent implements OnInit {
   selectedIcon: string = 'schema';
 
   @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) { 
-    this.onKeyDown(event)
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.onKeyDown(event);
   }
 
   onKeyDown($event: KeyboardEvent): void {
     // Detect platform
-    console.log($event)
+    console.log($event);
     if (navigator.platform.match('Mac')) {
       this.handleMacKeyEvents($event);
     } else {
@@ -82,7 +80,7 @@ export class WorkflowComponent implements OnInit {
   async handleMacKeyEvents($event: any) {
     // MetaKey documentation
     // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/metaKey
-    console.log($event)
+    console.log($event);
     let charCode = String.fromCharCode($event.which).toLowerCase();
     if ($event.metaKey && charCode === 's') {
       $event.preventDefault();
@@ -362,31 +360,32 @@ export class WorkflowComponent implements OnInit {
   }
 
   openControllerSettings(controllerId: string = 'main') {
-    if (controllerId != 'main') {
-      let ref = this.dialog.open(SettingsComponent, {
-        width: 'calc(var(--vh, 1vh) * 70)',
-        maxWidth: '650px',
-        maxHeight: 'calc(var(--vh, 1vh) * 100)',
-        panelClass: 'app-full-bleed-dialog',
+    let ref = this.dialog.open(SettingsComponent, {
+      width: 'calc(var(--vh, 1vh) * 70)',
+      maxWidth: '650px',
+      maxHeight: 'calc(var(--vh, 1vh) * 100)',
+      panelClass: 'app-full-bleed-dialog',
 
-        data: {
-          apiKey: this.apiKeys[controllerId],
-          step: this.findStep(
-            controllerId,
-            this.workflow.value?.layout.sequence ?? []
-          ),
-          workflow: this.workflow.value,
-        },
-      });
+      data: {
+        apiKey: controllerId != 'main' ? this.apiKeys[controllerId] : undefined,
+        step:
+          controllerId != 'main'
+            ? this.findStep(
+                controllerId,
+                this.workflow.value?.layout.sequence ?? []
+              )
+            : undefined,
+        workflow: this.workflow.value,
+      },
+    });
 
-      ref.afterClosed().subscribe(async (val) => {
-        if (val && val != '' && val != '0') {
-          await this.save();
+    ref.afterClosed().subscribe(async (val) => {
+      if (val && val != '' && val != '0') {
+        await this.save();
 
-          this.setWorkflow(this.workflow.value!.id, controllerId);
-        }
-      });
-    }
+        this.setWorkflow(this.workflow.value!.id, controllerId);
+      }
+    });
   }
 
   @ViewChild(WorkflowDesignerComponent) designer?: WorkflowDesignerComponent;
@@ -547,7 +546,11 @@ export class WorkflowComponent implements OnInit {
               'model',
               [],
               undefined,
-              { type: 'model', metaType: switchTask.type, img: 'assets/switch.png' }
+              {
+                type: 'model',
+                metaType: switchTask.type,
+                img: 'assets/switch.png',
+              }
             ),
             { type: 'switch', img: 'assets/switch.png' }
           )
@@ -567,7 +570,11 @@ export class WorkflowComponent implements OnInit {
               'model',
               [],
               undefined,
-              { type: 'container', metaType: loopTask.type, img: 'assets/container.png' }
+              {
+                type: 'container',
+                metaType: loopTask.type,
+                img: 'assets/container.png',
+              }
             ),
             { type: 'folder', img: 'assets/container.png' }
           )

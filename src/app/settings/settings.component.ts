@@ -30,8 +30,9 @@ export class SettingsComponent implements OnInit {
 
   apiKey?: Key;
   newAPIKey?: Key;
+  mode: number = 1;
 
-  loading = false
+  loading = false;
 
   BranchedStep!: BranchedStep;
 
@@ -51,6 +52,8 @@ export class SettingsComponent implements OnInit {
     this.apiKey = data.apiKey;
     this.selectedFile = data.step;
     this.workflow = data.workflow;
+
+    this.mode = this.apiKey && this.selectedFile ? 1 : 2;
   }
 
   ngOnInit(): void {}
@@ -138,7 +141,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async save() {
-    this.loading = true
+    this.loading = true;
     if (this.newAPIKey && this.workflow) {
       await this.loadService.saveAPIKeys(
         this.workflow.id,
@@ -146,7 +149,27 @@ export class SettingsComponent implements OnInit {
         this.newAPIKey
       );
     }
-    this.loading = false
+    this.loading = false;
     this.dialogRef.close({ file: this.selectedFile, apiKey: this.newAPIKey });
+  }
+
+  async fileChangeEvent(event: any, type = 1): Promise<void> {
+    let file = event.target.files[0];
+
+    let buffer = await file.arrayBuffer();
+
+    var blob = new Blob([buffer]);
+
+    var reader = new FileReader();
+    reader.onload = (event: any) => {
+      var base64 = event.target.result;
+
+      let imgIcon = document.getElementById('imgIcon') as HTMLImageElement;
+      imgIcon!.src = base64;
+
+      // this.iconChanged.emit(file);
+    };
+
+    reader.readAsDataURL(blob);
   }
 }
