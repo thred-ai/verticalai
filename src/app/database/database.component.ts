@@ -199,7 +199,7 @@ export class DatabaseComponent implements OnInit {
   }
 
   newDoc(collection: TaskTree, docId: string = this.loadService.newUtilID) {
-    let doc = new Document(docId, '', [], 0, collection.id);
+    let doc = new Document(docId, '', 0, collection.id);
 
     //save doc
 
