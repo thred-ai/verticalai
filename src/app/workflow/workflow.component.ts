@@ -162,7 +162,7 @@ export class WorkflowComponent implements OnInit {
         if (same) {
           this.activeWorkflow = same;
           // same.layout.properties
-          this.selectFile(fileId);
+          this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         }
       } else {
         this.activeWorkflow = undefined;
@@ -216,16 +216,17 @@ export class WorkflowComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       let proj = params['project'];
       let file = params['file'];
+      let selectedModule = params['module'] ?? 'controllers';
 
       if (this.workflows) {
         if (!this.openStep.value && this.workflow) {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          this.selectFile(file ?? 'main', this.activeWorkflow, false);
+          this.selectFile(file ?? 'main', selectedModule, this.activeWorkflow, false);
 
           if (!this.openStep.value) {
-            this.selectFile('main', this.activeWorkflow, true);
+            this.selectFile('main', selectedModule, this.activeWorkflow, true);
           }
 
           this.loadService.loadedModels.subscribe((models) => {
@@ -310,7 +311,7 @@ export class WorkflowComponent implements OnInit {
   async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
 
-    console.log(this.isValid)
+    console.log(this.isValid);
 
     if (workflow && this.isValid) {
       try {
@@ -328,7 +329,7 @@ export class WorkflowComponent implements OnInit {
           return;
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     } else {
       console.log('masuk');
@@ -344,7 +345,7 @@ export class WorkflowComponent implements OnInit {
         if (s) {
           let source = s.properties['source'] as string;
           if (source == 'None' || source == null || source == undefined) {
-            console.log(s.type)
+            console.log(s.type);
             s.properties['source'] = this.defaultCode(s.type);
           }
         }
@@ -355,7 +356,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   openControllerSettings(controllerId: string = 'main') {
-    console.log(controllerId)
+    console.log(controllerId);
     let ref = this.dialog.open(SettingsComponent, {
       width: 'calc(var(--vh, 1vh) * 70)',
       maxWidth: '650px',
@@ -621,11 +622,13 @@ export class WorkflowComponent implements OnInit {
 
   selectFile(
     fileId: string | undefined,
+    selectedModule: string | undefined,
     workflow = this.workflow.value,
     update = true
   ) {
-    if (workflow && fileId) {
+    if (workflow && fileId && selectedModule) {
       this.openStep.next(this.findStep(fileId, workflow.layout.sequence));
+      this.selectedIcon = selectedModule
 
       if (update) {
         this.router.navigate([], {
@@ -633,6 +636,7 @@ export class WorkflowComponent implements OnInit {
           queryParams: {
             project: workflow.id,
             file: fileId,
+            module: selectedModule
           },
           queryParamsHandling: 'merge',
           // preserve the existing query params in the route
@@ -686,13 +690,11 @@ export class WorkflowComponent implements OnInit {
   }
 
   jsFormattedName(name: string, same: number) {
-    return (
-      name + (same > 1 ? `(${same})` : '')
-    );
+    return name + (same > 1 ? `(${same})` : '');
   }
 
   defaultCode(type: string) {
-    console.log(this.classes)
+    console.log(this.classes);
     switch (type) {
       case 'switch':
         return this.classes['branch'].text;
