@@ -44,7 +44,9 @@
         </ng-template>
       </button>
       <ng-template #save>
-        <verticalai-tooltip [text]="'Save \' ' + (executable?.name ?? 'Project') + ' \''"></verticalai-tooltip>
+        <verticalai-tooltip
+          [text]="'Save \' ' + (executable?.name ?? 'Project') + ' \''"
+        ></verticalai-tooltip>
       </ng-template>
     </div>
     <div
@@ -80,7 +82,13 @@
         slot="end"
         role="button"
         (click)="openControllerSettings('main')"
+        [mdbPopover]="projsettings"
+        placement="bottom"
+        [trigger]="'hover'"
       ></ion-icon>
+      <ng-template #projsettings>
+        <verticalai-tooltip [text]="'Project Settings'"></verticalai-tooltip>
+      </ng-template>
     </div>
 
     <ng-container
@@ -173,8 +181,14 @@
           [name]="'ellipsis-vertical'"
           slot="end"
           role="button"
+          [mdbPopover]="settings"
+          placement="bottom"
+          [trigger]="'hover'"
           (click)="onRightClick($event, item)"
         ></ion-icon>
+        <ng-template #settings>
+          <verticalai-tooltip [text]="'Actions'"></verticalai-tooltip>
+        </ng-template>
       </ng-container>
       <ng-container *ngIf="editingTask?.id == item.id">
         <ion-input #selectedName type="text" [value]="editingTask?.name">
