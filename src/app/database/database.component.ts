@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Executable } from '../models/workflow/executable.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { TaskTree } from '../models/workflow/task-tree.model';
+import { Dict, LoadService } from '../load.service';
+import { BehaviorSubject } from 'rxjs';
+import { Step } from 'sequential-workflow-designer';
 
 @Component({
   selector: 'app-database',
@@ -11,52 +14,75 @@ import { TaskTree } from '../models/workflow/task-tree.model';
 export class DatabaseComponent implements OnInit {
   executable?: Executable;
 
-  items: TaskTree[] = [];
+  items?: TaskTree[] = undefined;
 
-  selectedFile: string = '';
+  selectedFile?: Step;
 
-  constructor(private workflowComponent: WorkflowComponent) {}
+  loading = false;
+  loadingCol: Dict<boolean> = {};
+
+  constructor(
+    private workflowComponent: WorkflowComponent,
+    private loadService: LoadService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    let items = [
-      new TaskTree('JordanGPT1', '1', 'category', [
-        new TaskTree('My Name is Arta!', '1', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        }),
-        new TaskTree('My Name is Arta 2!', '1', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        })
-      ]),
-      new TaskTree('JordanGPT2', '2', 'category', [
-        new TaskTree('My Name is Jordan!', '2', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        }),
-      ]),
-      new TaskTree('JordanGPT3', '3', 'category', [
-        new TaskTree('My Name is Kazi!', '3', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        }),
-      ]),
-      new TaskTree('JordanGPT4', '4', 'category', [
-        new TaskTree('My Name is Tony!', '4', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        }),
-      ]),
-      new TaskTree('JordanGPT5', '5', 'category', [
-        new TaskTree('My Name is Alex!', '5', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        }),
-      ]),
-      new TaskTree('JordanGPT6', '6', 'category', [
-        new TaskTree('My Name is Arvin!', '6', 'model', [], undefined, {
-          embedding: JSON.stringify([0.1, 0.3, 0.8]),
-        }),
-      ]),
-    ];
+    this.loading = true;
+    this.workflowComponent.openStep.subscribe((step) => {
+      if (step) {
+        this.selectedFile = step;
 
-    this.workflowComponent.workflow.subscribe((w) => {
-      this.executable = w;
-      this.items = [new TaskTree('Collections', 'main', 'category', items)];
+        this.workflowComponent.workflow.subscribe((w) => {
+          this.executable = w;
+
+          if (w && this.selectedFile) {
+            this.loadService.getDatabaseInfo(
+              w.id,
+              this.selectedFile.id,
+              (docs) => {
+                this.items = Object.keys(docs).map((key) => {
+                  return new TaskTree(key, key, 'category', []);
+                });
+
+                if (this.items[0]) {
+                  this.openCollection(this.items[0]);
+                } else {
+                  this.loading = false;
+                }
+              }
+            );
+          }
+        });
+      }
     });
+  }
+
+  accordionOpened(event: any, item: TaskTree) {
+    let ids = event.detail.value as string[];
+    if (ids && ids.includes(item.id)) {
+      this.openCollection(item);
+    }
+  }
+
+  openCollection(collection: TaskTree) {
+    if (this.executable && this.selectedFile) {
+      this.loadingCol[collection.id] = true;
+      this.loadService.getDatabaseCollection(
+        this.executable.id,
+        this.selectedFile.id,
+        collection.id,
+        (docs) => {
+          if (docs) {
+            collection.sequence = Object.keys(docs).map((key, index) => {
+              return new TaskTree(key, key, 'model', [], undefined, docs[key]);
+            });
+          }
+          this.loading = false;
+          delete this.loadingCol[collection.id];
+          this.cdr.detectChanges();
+        }
+      );
+    }
   }
 }

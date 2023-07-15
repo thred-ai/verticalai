@@ -28,6 +28,7 @@ import { Executable } from './models/workflow/executable.model';
 import axios from 'axios';
 import { Agent } from './models/workflow/agent.model';
 import { RequestService } from './requests.service';
+import { Document } from './models/workflow/document.model';
 
 export interface Dict<T> {
   [key: string]: T;
@@ -744,6 +745,51 @@ export class LoadService {
         });
 
         this.loadedKeys.next(returnData);
+      });
+  }
+
+  getDatabaseCollection(
+    workflowId: string,
+    stepId: string,
+    collectionId: string,
+    callback: (docs: Dict<Document>) => any
+  ) {
+    this.db
+      .collection(
+        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs`
+      )
+      .valueChanges()
+      .subscribe((docs2) => {
+        let data = docs2 as Document[];
+
+        var returnData: Dict<Document> = {};
+
+        data.forEach((d) => {
+          returnData[d.id] = d;
+        });
+
+        callback(returnData);
+      });
+  }
+
+  getDatabaseInfo(
+    workflowId: string,
+    stepId: string,
+    callback: (docs: Dict<Dict<any>>) => any
+  ) {
+    this.db
+      .collection(`Workflows/${workflowId}/databases/${stepId}/collections`)
+      .valueChanges()
+      .subscribe((docs2) => {
+        let data = docs2 as Dict<any>[];
+
+        var returnData: Dict<Dict<any>> = {};
+
+        data.forEach((d) => {
+          returnData[d['id'] as string] = d;
+        });
+
+        callback(returnData);
       });
   }
 

@@ -1,14 +1,11 @@
-
-
 export class Document {
   id!: string;
-  key!: string;
+  text!: string;
+  embedding: number[];
 
-  constructor(
-    id: string,
-    key: string,
-    ) {
+  constructor(id: string, text: string, embedding: number[]) {
     this.id = id;
-    this.key = key
-   }
+    this.text = text;
+    this.embedding = embedding ?? [];
+  }
 }
