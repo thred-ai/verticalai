@@ -22,6 +22,7 @@ import { Trigger } from '../models/workflow/trigger.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Executable } from '../models/workflow/executable.model';
+import { Developer } from '../models/user/developer.model';
 
 @Component({
   selector: 'app-file-sidebar',
@@ -45,6 +46,9 @@ export class FileSidebarComponent implements OnInit {
 
   @Output() detailsChanged = new EventEmitter<Executable>();
   @Output() selectedFileChanged = new EventEmitter<string>();
+  @Output() openProj = new EventEmitter<string | undefined>();
+
+  loadedUser?: Developer;
 
   @Input() items: TaskTree[] = [];
 
@@ -76,6 +80,12 @@ export class FileSidebarComponent implements OnInit {
       if (step) {
         this.selectedFile = step.id;
         this.cdr.detectChanges()
+      }
+    });
+    this.loadService.loadedUser.subscribe((l) => {
+      if (l) {
+        this.loadedUser = l;
+        
       }
     });
     // this.workflowComponent.items.subscribe((i) => {

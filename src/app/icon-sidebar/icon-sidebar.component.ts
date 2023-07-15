@@ -20,7 +20,6 @@ export class IconSidebarComponent implements OnInit {
   @Output() selectedIconChanged = new EventEmitter<string>();
 
   expandedProjects = true
-  @Output() openProj = new EventEmitter<string | undefined>();
 
   ngOnInit(): void {
     this.loadService.loadedUser.subscribe((l) => {

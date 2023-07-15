@@ -7,7 +7,7 @@
     *ngIf="workflow.value && openStep.value && items.value; else noWorkflow"
   >
     <app-icon-sidebar
-      (openProj)="setWorkflow($event)"
+      
       [selectedIcon]="selectedIcon"
       (selectedIconChanged)="selectFile(openStep.value.id, $event)"
     ></app-icon-sidebar>
@@ -21,6 +21,7 @@
       [executable]="workflow.value"
       [items]="items.value"
       (detailsChanged)="publish()"
+      (openProj)="setWorkflow($event)"
       (selectedFileChanged)="selectFile($event, selectedIcon)"
     >
     </app-file-sidebar>

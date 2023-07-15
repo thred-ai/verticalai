@@ -39,11 +39,12 @@
     </button>
     <button
       class="btn bg-secondary border-0 rounded-10 fw-bold text-white d-flex justify-content-center py-2 px-2 align-content-center ms-2 my-auto"
-      (click)="saveLayout()"
+      [mdbPopover]="template2"
+      placement="bottom"
+      [trigger]="'click'"
+      #folderToggle
     >
-      <mat-icon class="fw-bold" style="aspect-ratio: 1">
-        system_update_alt
-      </mat-icon>
+      <mat-icon class="fw-bold" style="aspect-ratio: 1"> folder </mat-icon>
     </button>
   </div>
 
@@ -53,13 +54,12 @@
     >
       <span class="text-start h5 fw-bold my-auto"> Explorer </span>
       <ion-icon
-        class="text-secondary my-auto"
-        style="font-size: 20px; cursor: pointer;"
-        [name]="'ellipsis-vertical'"
+        class="text-light my-auto"
+        style="font-size: 20px; cursor: pointer"
+        [name]="'settings-outline'"
         slot="end"
         role="button"
-
-        (click)="onRightClick($event, items[0])"
+        (click)="openControllerSettings('main')"
       ></ion-icon>
     </div>
 
@@ -147,6 +147,14 @@
           "
           >{{ item.name }}</ion-label
         >
+        <ion-icon
+          class="text-secondary my-auto"
+          style="font-size: 15px; cursor: pointer"
+          [name]="'ellipsis-vertical'"
+          slot="end"
+          role="button"
+          (click)="onRightClick($event, item)"
+        ></ion-icon>
       </ng-container>
       <ng-container *ngIf="editingTask?.id == item.id">
         <ion-input #selectedName type="text" [value]="editingTask?.name">
@@ -198,3 +206,67 @@
     </ng-template>
   </ng-template>
 </mat-menu>
+
+<ng-template #template2>
+  <ng-container *ngIf="loadedUser && loadedUser.utils">
+    <div
+      class="bg-theme border-table text-start rounded d-flex justify-content-center align-items-center flex-column"
+      id="profile-menu"
+      style="min-width: 350px; max-height: 700px;"
+      (clickOutside)="folderToggle.click()"
+    >
+      <div class="big-design-header p-3 pb-3">
+        <b class="fw-bold text-light">Projects</b>
+        <p
+          class="rounded-circle fw-bold text-orange d-flex justify-content-center align-content-center"
+          style="aspect-ratio: 1"
+          role="button"
+          (click)="openProj.emit()"
+        >
+          <mat-icon style="aspect-ratio: 1"> add </mat-icon>
+        </p>
+      </div>
+
+      <div class="w-100 py-2 h-100" style="overflow-y: scroll" *ngIf="loadedUser.utils.length > 0">
+        <div
+          *ngFor="let n of loadedUser.utils ?? []"
+          class="d-flex justify-content-between align-items-center p-3 proj{{
+            executable && executable.id == n.id ? '-select' : ''
+          }}"
+          (click)="openProj.emit(n.id)"
+          role="button"
+        >
+          <div class="d-flex justify-content-between align-items-center">
+            <div
+              class="bg-white rounded-icon shadow d-flex justify-content-center align-items-center"
+              style="
+                object-fit: contain;
+                aspect-ratio: 1;
+                overflow: hidden;
+                width: 45px;
+              "
+            >
+              <img
+                class="m-auto rounded-icon"
+                style="object-fit: cover; height: 90%; width: 90%"
+                [src]="n.displayUrl"
+              />
+            </div>
+            <div class="text-start w-100 ms-2">
+              <div class="w-100 ps-2 text-light text-start fw-normal">
+                {{ n.name }}
+              </div>
+              <div
+                class="w-100 ps-2 text-light text-start fw-normal"
+                style="font-size: 10px"
+              >
+                {{ n.created | date }}
+              </div>
+            </div>
+          </div>
+          <mat-icon class="text-secondary"> chevron_right </mat-icon>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

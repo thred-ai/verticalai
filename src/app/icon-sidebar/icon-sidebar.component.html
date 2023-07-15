@@ -115,7 +115,7 @@
       <verticalai-tooltip [text]="'Profile'"></verticalai-tooltip>
     </ng-template>
   </div>
-  <div
+  <!-- <div
     class="w-100 proj mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     [mdbPopover]="projects"
@@ -202,9 +202,9 @@
         </ng-container>
       </ng-template>
     </div>
-  </div>
+  </div> -->
 
-  <div
+  <!-- <div
     class="w-100 proj{{
       selectedIcon == 'upload' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
@@ -226,7 +226,7 @@
         </ng-template>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div
     class="w-100 proj{{
@@ -317,28 +317,6 @@
       <mat-icon class="fw-bold">storage</mat-icon>
       <ng-template #database>
         <verticalai-tooltip [text]="'Database'"></verticalai-tooltip>
-      </ng-template>
-    </div>
-  </div>
-
-  <div
-    class="w-100 proj{{
-      selectedIcon == 'settings' ? '-select' : ''
-    }} mt-0 d-flex justify-content-center align-items-center"
-    style="aspect-ratio: 1"
-    role="button"
-    (click)="openSettings()"
-    [mdbPopover]="settings"
-    placement="right"
-    [trigger]="'hover'"
-  >
-    <div
-      class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
-      style="aspect-ratio: 1"
-    >
-      <mat-icon class="fw-bold">settings_applications</mat-icon>
-      <ng-template #settings>
-        <verticalai-tooltip [text]="'Project Settings'"></verticalai-tooltip>
       </ng-template>
     </div>
   </div>
