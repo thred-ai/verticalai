@@ -203,7 +203,7 @@ export class DatabaseComponent implements OnInit {
 
     //save doc
 
-    collection.sequence.push(this.docToTaskTree(doc));
+    collection.sequence.unshift(this.docToTaskTree(doc));
   }
 
   editDoc(event: any, doc: TaskTree) {
