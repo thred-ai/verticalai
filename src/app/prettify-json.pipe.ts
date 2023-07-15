@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class PrettifyJsonPipe implements PipeTransform {
 
   transform(value: any) {
-    var pretty = JSON.stringify(value, undefined, 4);
+    var pretty = JSON.stringify(value);
     return pretty
   }
 

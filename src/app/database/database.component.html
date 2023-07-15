@@ -48,6 +48,14 @@
                         <ion-label class="fw-bold" style="font-size: 14px">{{
                           item.name
                         }}</ion-label>
+                        <ion-icon
+                          class="text-orange"
+                          style="font-size: small"
+                          [name]="'ellipsis-vertical'"
+                          slot="start"
+                          role="button"
+                          (click)="onRightClick($event, item)"
+                        ></ion-icon>
                       </ion-item>
 
                       <div class="ion-padding text-light" slot="content">
@@ -66,7 +74,10 @@
                           *ngIf="!loadingCol[item.id]; else loadingc"
                         >
                           <ng-container
-                            *ngIf="item.sequence.length > 0; else emptyCollection"
+                            *ngIf="
+                              item.sequence.length > 0;
+                              else emptyCollection
+                            "
                           >
                             <ng-container
                               *ngTemplateOutlet="
@@ -127,7 +138,7 @@
                     style="font-size: small"
                     slot="label"
                   >
-                    {{ item.metadata.embedding }}
+                    {{ item.metadata.embedding | prettifyJson }}
                   </div>
                 </ion-textarea>
               </ng-container>
@@ -149,3 +160,27 @@
     </div>
   </div>
 </div>
+
+<div
+  style="visibility: hidden; position: fixed"
+  [style.left]="menuTopLeftPosition.x"
+  [style.top]="menuTopLeftPosition.y"
+  [matMenuTriggerFor]="rightMenu"
+></div>
+
+<mat-menu #rightMenu="matMenu" class="bg-theme border-table">
+  <ng-template matMenuContent let-item="item">
+    <ng-container *ngIf="item.type == 'category'; else docSettings">
+      <button mat-menu-item class="text-light" (click)="deleteCollection(item)">Delete Collection</button>
+    </ng-container>
+    <ng-template #docSettings>
+      <button
+        mat-menu-item
+        class="text-light"
+        (click)="null"
+      >
+        Delete Document
+      </button>
+    </ng-template>
+  </ng-template>
+</mat-menu>

@@ -772,13 +772,28 @@ export class LoadService {
       });
   }
 
+  async deleteDatabaseCollection(
+    workflowId: string,
+    stepId: string,
+    collectionId: string
+  ) {
+    await this.db
+      .doc(
+        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}`
+      )
+      .update({ status: 1 });
+  }
+
   getDatabaseInfo(
     workflowId: string,
     stepId: string,
     callback: (docs: Dict<Dict<any>>) => any
   ) {
     this.db
-      .collection(`Workflows/${workflowId}/databases/${stepId}/collections`)
+      .collection(
+        `Workflows/${workflowId}/databases/${stepId}/collections`,
+        (ref) => ref.where('status', '==', 0)
+      )
       .valueChanges()
       .subscribe((docs2) => {
         let data = docs2 as Dict<any>[];

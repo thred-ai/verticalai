@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Executable } from '../models/workflow/executable.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import { Dict, LoadService } from '../load.service';
 import { BehaviorSubject } from 'rxjs';
 import { Step } from 'sequential-workflow-designer';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-database',
@@ -65,6 +66,12 @@ export class DatabaseComponent implements OnInit {
     }
   }
 
+  openMenu($event: Event){
+    $event.stopPropagation()
+    $event.preventDefault()
+    console.log("meu")
+  }
+
   openCollection(collection: TaskTree) {
     if (this.executable && this.selectedFile) {
       this.loadingCol[collection.id] = true;
@@ -85,4 +92,39 @@ export class DatabaseComponent implements OnInit {
       );
     }
   }
+
+  @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger?: MatMenuTrigger;
+  menuTopLeftPosition = { x: '0', y: '0' };
+
+  onRightClick(event: MouseEvent, task: TaskTree) {
+    // preventDefault avoids to show the visualization of the right-click menu of the browser
+    event.stopPropagation()
+    event.preventDefault();
+
+    console.log(task)
+
+    // we record the mouse position in our object
+    this.menuTopLeftPosition.x = event.clientX + 'px';
+    this.menuTopLeftPosition.y = event.clientY + 'px';
+
+    // we open the menu
+    // we pass to the menu the information about our object
+    this.matMenuTrigger!.menuData = { item: task };
+
+    // we open the menu
+    this.matMenuTrigger!.openMenu();
+  }
+
+
+  async deleteCollection(collection: TaskTree){
+    if (this.executable && this.selectedFile) {
+      await this.loadService.deleteDatabaseCollection(
+        this.executable.id,
+        this.selectedFile.id,
+        collection.id
+      );
+      this.cdr.detectChanges();
+    }
+  }
+  
 }
