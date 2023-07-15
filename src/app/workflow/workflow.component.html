@@ -48,7 +48,7 @@
             </div>
           </as-split-area> -->
           <as-split-area [size]="60">
-            <ng-container *ngIf="selectedIcon == 'schema'">
+            <ng-container *ngIf="selectedIcon == 'controllers'">
               <verticalai-workflow-designer
                 #designer
                 [models]="models"
@@ -63,7 +63,7 @@
               </verticalai-workflow-designer>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'test'">
+            <ng-container *ngIf="selectedIcon == 'run'">
               <div class="w-100 h-100" style="background-color: #131313">
                 <app-terminal [model]="workflow.value"></app-terminal>
               </div>
@@ -73,7 +73,7 @@
               <app-coming-soon [title]="'Upload Project'"> </app-coming-soon>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'script'">
+            <ng-container *ngIf="selectedIcon == 'code'">
               <app-workflow-code
                 *ngIf="
                   (openStep.value.id == 'main' && workflow.value
@@ -92,7 +92,7 @@
               ></app-workflow-code>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'memory'">
+            <ng-container *ngIf="selectedIcon == 'database'">
               <!-- <app-coming-soon [title]="'Database'"> </app-coming-soon> -->
 
               <app-database></app-database>

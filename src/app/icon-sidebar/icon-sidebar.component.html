@@ -230,12 +230,12 @@
 
   <div
     class="w-100 proj{{
-      selectedIcon == 'test' ? '-select' : ''
+      selectedIcon == 'run' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIconChanged.emit('test')"
-    [mdbPopover]="test"
+    (click)="selectedIconChanged.emit('run')"
+    [mdbPopover]="run"
     placement="right"
     [trigger]="'hover'"
   >
@@ -245,7 +245,7 @@
     >
       <div class="w-100 h-100">
         <mat-icon class="fw-bold">terminal</mat-icon>
-        <ng-template #test>
+        <ng-template #run>
           <verticalai-tooltip [text]="'Run Project'"></verticalai-tooltip>
         </ng-template>
       </div>
@@ -254,11 +254,11 @@
 
   <div
     class="w-100 proj{{
-      selectedIcon == 'schema' ? '-select' : ''
+      selectedIcon == 'controllers' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIconChanged.emit('schema')"
+    (click)="selectedIconChanged.emit('controllers')"
     [mdbPopover]="editor"
     placement="right"
     [trigger]="'hover'"
@@ -277,12 +277,12 @@
 
   <div
     class="w-100 proj{{
-      selectedIcon == 'script' ? '-select' : ''
+      selectedIcon == 'code' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIconChanged.emit('script')"
-    [mdbPopover]="script"
+    (click)="selectedIconChanged.emit('code')"
+    [mdbPopover]="code"
     placement="right"
     [trigger]="'hover'"
   >
@@ -292,7 +292,7 @@
       role="button"
     >
       <mat-icon class="fw-bold">code</mat-icon>
-      <ng-template #script>
+      <ng-template #code>
         <verticalai-tooltip [text]="'Code'"></verticalai-tooltip>
       </ng-template>
     </div>
@@ -300,12 +300,12 @@
 
   <div
     class="w-100 proj{{
-      selectedIcon == 'memory' ? '-select' : ''
+      selectedIcon == 'database' ? '-select' : ''
     }} mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
     role="button"
-    (click)="selectedIconChanged.emit('memory')"
-    [mdbPopover]="memory"
+    (click)="selectedIconChanged.emit('database')"
+    [mdbPopover]="database"
     placement="right"
     [trigger]="'hover'"
   >
@@ -315,7 +315,7 @@
       role="button"
     >
       <mat-icon class="fw-bold">storage</mat-icon>
-      <ng-template #memory>
+      <ng-template #database>
         <verticalai-tooltip [text]="'Database'"></verticalai-tooltip>
       </ng-template>
     </div>
