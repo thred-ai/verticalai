@@ -136,7 +136,6 @@ import { TooltipComponent } from './tooltip/tooltip.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { SettingsComponent } from './settings/settings.component';
 import { DatabaseComponent } from './database/database.component';
-import { DatabaseTableComponent } from './database-table/database-table.component';
 import { CollectionInfoComponent } from './collection-info/collection-info.component';
 
 @NgModule({
@@ -195,7 +194,6 @@ import { CollectionInfoComponent } from './collection-info/collection-info.compo
     ComingSoonComponent,
     SettingsComponent,
     DatabaseComponent,
-    DatabaseTableComponent,
     CollectionInfoComponent,
   ],
   imports: [
