@@ -66,10 +66,10 @@ export class DatabaseComponent implements OnInit {
     }
   }
 
-  openMenu($event: Event){
-    $event.stopPropagation()
-    $event.preventDefault()
-    console.log("meu")
+  openMenu($event: Event) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    console.log('meu');
   }
 
   openCollection(collection: TaskTree) {
@@ -98,10 +98,10 @@ export class DatabaseComponent implements OnInit {
 
   onRightClick(event: MouseEvent, task: TaskTree) {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
-    event.stopPropagation()
+    event.stopPropagation();
     event.preventDefault();
 
-    console.log(task)
+    console.log(task);
 
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';
@@ -115,8 +115,7 @@ export class DatabaseComponent implements OnInit {
     this.matMenuTrigger!.openMenu();
   }
 
-
-  async deleteCollection(collection: TaskTree){
+  async deleteCollection(collection: TaskTree) {
     if (this.executable && this.selectedFile) {
       await this.loadService.deleteDatabaseCollection(
         this.executable.id,
@@ -126,5 +125,16 @@ export class DatabaseComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  
+
+  async deleteCollectionDoc(doc: TaskTree) {
+    if (this.executable && this.selectedFile) {
+      await this.loadService.deleteDatabaseCollectionDoc(
+        this.executable.id,
+        this.selectedFile.id,
+        doc.metadata['collection'],
+        doc.id
+      );
+      this.cdr.detectChanges();
+    }
+  }
 }

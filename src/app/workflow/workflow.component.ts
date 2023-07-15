@@ -310,6 +310,8 @@ export class WorkflowComponent implements OnInit {
   async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
 
+    console.log(this.isValid)
+
     if (workflow && this.isValid) {
       try {
         if (mode == 1 && this.openStep.value && this.items.value) {
@@ -325,7 +327,9 @@ export class WorkflowComponent implements OnInit {
           }
           return;
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       console.log('masuk');
     }
@@ -340,6 +344,7 @@ export class WorkflowComponent implements OnInit {
         if (s) {
           let source = s.properties['source'] as string;
           if (source == 'None' || source == null || source == undefined) {
+            console.log(s.type)
             s.properties['source'] = this.defaultCode(s.type);
           }
         }
@@ -682,17 +687,12 @@ export class WorkflowComponent implements OnInit {
 
   jsFormattedName(name: string, same: number) {
     return (
-      name
-        .toLowerCase()
-        .split(' ')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join('')
-        .split('-')
-        .join('') + (same > 1 ? `(${same})` : '')
+      name + (same > 1 ? `(${same})` : '')
     );
   }
 
   defaultCode(type: string) {
+    console.log(this.classes)
     switch (type) {
       case 'switch':
         return this.classes['branch'].text;

@@ -756,7 +756,8 @@ export class LoadService {
   ) {
     this.db
       .collection(
-        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs`
+        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs`,
+        (ref) => ref.where('status', '==', 0)
       )
       .valueChanges()
       .subscribe((docs2) => {
@@ -780,6 +781,19 @@ export class LoadService {
     await this.db
       .doc(
         `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}`
+      )
+      .update({ status: 1 });
+  }
+
+  async deleteDatabaseCollectionDoc(
+    workflowId: string,
+    stepId: string,
+    collectionId: string,
+    docId: string
+  ) {
+    await this.db
+      .doc(
+        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs/${docId}`
       )
       .update({ status: 1 });
   }
