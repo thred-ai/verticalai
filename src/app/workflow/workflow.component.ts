@@ -264,10 +264,10 @@ export class WorkflowComponent implements OnInit {
           'app',
           'category',
           this.analyzeTasks(w.layout.sequence),
-          new TaskTree(w.name, 'main', 'model', [], undefined, {
+          new TaskTree('MainController', 'main', 'model', [], undefined, {
             type: 'model',
             metaType: 'main',
-            img: w.displayUrl,
+            img: 'assets/main.png',
           }),
           { type: 'folder', img: w.displayUrl }
         ),

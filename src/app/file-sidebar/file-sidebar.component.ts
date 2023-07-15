@@ -111,6 +111,7 @@ export class FileSidebarComponent implements OnInit {
   onRightClick(event: MouseEvent, task: TaskTree) {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.preventDefault();
+    event.stopPropagation()
 
     console.log(task)
 

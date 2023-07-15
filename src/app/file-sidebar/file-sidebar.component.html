@@ -9,7 +9,10 @@
   <!-- [value]="openLayouts"
       (ionChange)="setOpenLayouts($event)" -->
 
-  <div class="w-100 p-3 d-flex justify-content-between align-content-center border-bottom" style="height: 70px">
+  <div
+    class="w-100 p-3 d-flex justify-content-between align-content-center border-bottom"
+    style="height: 70px"
+  >
     <button
       class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex w-100 justify-content-center px-3 align-content-center py-2 my-auto"
       (click)="saveLayout()"
@@ -45,11 +48,19 @@
   </div>
 
   <ng-container *ngIf="executable">
+    <div
+      class="w-100 text-light p-3 d-flex justify-content-between align-items-center mb-2"
+    >
+      <span class="text-start h5 fw-bold my-auto"> Explorer </span>
+      <ion-icon
+        class="text-secondary my-auto"
+        style="font-size: 14px; cursor: pointer;"
+        [name]="'ellipsis-vertical'"
+        slot="end"
+        role="button"
 
-    <div class="w-100 text-light p-3">
-      <span class="text-start h5 fw-bold">
-        Explorer
-      </span>
+        (click)="onRightClick($event, items[0])"
+      ></ion-icon>
     </div>
 
     <ng-container
@@ -67,14 +78,21 @@
         >
           <ion-accordion class="bg-transparent" [value]="'code'">
             <ion-item slot="header" class="text-light no-padding">
-              <!-- <ion-icon
-                class="text-secondary"
-                style="font-size: 14px"
-                [name]="item | taskIcon"
+              <ion-thumbnail
+                *ngIf="item.id == 'app'"
                 slot="start"
-              ></ion-icon> -->
+                [style.--border-radius]="'6px'"
+              >
+                <img [src]="item.metadata.img ?? ''" />
+              </ion-thumbnail>
 
-              <ion-label style="font-size: 14px">{{ item.name }}</ion-label>
+              <ion-label
+                style="font-size: 14px"
+                (contextmenu)="
+                  item.id == 'app' ? onRightClick($event, item) : undefined
+                "
+                >{{ item.name }}</ion-label
+              >
             </ion-item>
 
             <div class="ion-padding text-light" slot="content">
@@ -112,21 +130,21 @@
     >
       <ng-container *ngIf="editingTask?.id != item.id">
         <!-- <ion-icon
-          class="text-orange"
-          style="font-size: small"
-          [name]="item | taskIcon"
+          *ngIf="item.id == 'main'"
+          class="text-orange me-3"
+          [name]="'cube'"
           slot="start"
         ></ion-icon> -->
         <!-- --border-radius: 50%; -->
-        <ion-thumbnail
-          slot="start"
-          [style.--border-radius]="item.id == 'main' ? '6px' : '50%'"
-        >
-          <img alt="Silhouette of mountains" [src]="item.metadata.img ?? ''" />
+
+        <ion-thumbnail slot="start" [style.--border-radius]="'50%'">
+          <img [src]="item.metadata.img ?? ''" />
         </ion-thumbnail>
         <ion-label
           style="font-size: small"
-          (contextmenu)="onRightClick($event, item)"
+          (contextmenu)="
+            item.id != 'main' ? onRightClick($event, item) : undefined
+          "
           >{{ item.name }}</ion-label
         >
       </ng-container>
@@ -155,7 +173,7 @@
 <!-- standard material menu -->
 <mat-menu #rightMenu="matMenu" class="bg-theme border-table">
   <ng-template matMenuContent let-item="item">
-    <ng-container *ngIf="item.id != 'main'; else appSettings">
+    <ng-container *ngIf="item.id != 'app'; else appSettings">
       <button
         mat-menu-item
         class="text-light"

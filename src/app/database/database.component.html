@@ -52,7 +52,7 @@
                           class="text-orange"
                           style="font-size: small"
                           [name]="'ellipsis-vertical'"
-                          slot="start"
+                          slot="end"
                           role="button"
                           (click)="onRightClick($event, item)"
                         ></ion-icon>
@@ -142,6 +142,15 @@
                   </div>
                 </ion-textarea>
               </ng-container>
+              <ion-icon
+                class="text-orange"
+                [po]
+                style="font-size: small"
+                [name]="'ellipsis-vertical'"
+                slot="end"
+                role="button"
+                (click)="onRightClick($event, item)"
+              ></ion-icon>
             </ion-item>
           </ng-template>
         </ng-container>
@@ -171,14 +180,12 @@
 <mat-menu #rightMenu="matMenu" class="bg-theme border-table">
   <ng-template matMenuContent let-item="item">
     <ng-container *ngIf="item.type == 'category'; else docSettings">
-      <button mat-menu-item class="text-light" (click)="deleteCollection(item)">Delete Collection</button>
+      <button mat-menu-item class="text-light" (click)="deleteCollection(item)">
+        Delete Collection
+      </button>
     </ng-container>
     <ng-template #docSettings>
-      <button
-        mat-menu-item
-        class="text-light"
-        (click)="null"
-      >
+      <button mat-menu-item class="text-light" (click)="(null)">
         Delete Document
       </button>
     </ng-template>
