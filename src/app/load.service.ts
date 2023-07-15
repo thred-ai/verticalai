@@ -29,6 +29,7 @@ import axios from 'axios';
 import { Agent } from './models/workflow/agent.model';
 import { RequestService } from './requests.service';
 import { Document } from './models/workflow/document.model';
+import { Collection } from './models/workflow/collection.model';
 
 export interface Dict<T> {
   [key: string]: T;
@@ -785,6 +786,18 @@ export class LoadService {
       .update({ status: 1 });
   }
 
+  async createDatabaseCollection(
+    workflowId: string,
+    stepId: string,
+    collection: Collection
+  ) {
+    await this.db
+      .doc(
+        `Workflows/${workflowId}/databases/${stepId}/collections/${collection.id}`
+      )
+      .set(JSON.parse(JSON.stringify(collection)));
+  }
+
   async deleteDatabaseCollectionDoc(
     workflowId: string,
     stepId: string,
@@ -798,6 +811,28 @@ export class LoadService {
       .update({ status: 1 });
   }
 
+  async checkCollectionName(
+    workflowId: string,
+    stepId: string,
+    collectionId: string
+  ): Promise<Boolean> {
+    return new Promise((resolve, reject) => {
+      let d = this.db
+        .doc(
+          `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}`
+        )
+        .valueChanges()
+        .subscribe((doc) => {
+          let d = doc as any;
+          if (d && d.id == collectionId) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        });
+    });
+  }
+
   async updateDatabaseCollectionDoc(
     workflowId: string,
     stepId: string,
@@ -808,13 +843,14 @@ export class LoadService {
     await this.db
       .doc(
         `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs/${docId}`
-      ).set(JSON.parse(JSON.stringify(doc)), { merge: true });
+      )
+      .set(JSON.parse(JSON.stringify(doc)), { merge: true });
   }
 
   getDatabaseInfo(
     workflowId: string,
     stepId: string,
-    callback: (docs: Dict<Dict<any>>) => any
+    callback: (docs: Dict<Collection>) => any
   ) {
     this.db
       .collection(
@@ -823,9 +859,9 @@ export class LoadService {
       )
       .valueChanges()
       .subscribe((docs2) => {
-        let data = docs2 as Dict<any>[];
+        let data = docs2 as Collection[];
 
-        var returnData: Dict<Dict<any>> = {};
+        var returnData: Dict<Collection> = {};
 
         data.forEach((d) => {
           returnData[d['id'] as string] = d;

@@ -137,6 +137,7 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { SettingsComponent } from './settings/settings.component';
 import { DatabaseComponent } from './database/database.component';
 import { DatabaseTableComponent } from './database-table/database-table.component';
+import { CollectionInfoComponent } from './collection-info/collection-info.component';
 
 @NgModule({
   declarations: [
@@ -195,6 +196,7 @@ import { DatabaseTableComponent } from './database-table/database-table.componen
     SettingsComponent,
     DatabaseComponent,
     DatabaseTableComponent,
+    CollectionInfoComponent,
   ],
   imports: [
     CommonModule,

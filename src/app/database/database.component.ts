@@ -7,6 +7,9 @@ import { BehaviorSubject } from 'rxjs';
 import { Step } from 'sequential-workflow-designer';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Document } from '../models/workflow/document.model';
+import { Collection } from '../models/workflow/collection.model';
+import { MatDialog } from '@angular/material/dialog';
+import { CollectionInfoComponent } from '../collection-info/collection-info.component';
 
 @Component({
   selector: 'app-database',
@@ -25,14 +28,17 @@ export class DatabaseComponent implements OnInit {
 
   editingDocs: Dict<string> = {};
 
+
   constructor(
     private workflowComponent: WorkflowComponent,
     private loadService: LoadService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
+
     this.workflowComponent.openStep.subscribe((step) => {
       if (step) {
         this.selectedFile = step;
@@ -41,19 +47,17 @@ export class DatabaseComponent implements OnInit {
           this.executable = w;
 
           if (w && this.selectedFile) {
+
             this.loadService.getDatabaseInfo(
               w.id,
               this.selectedFile.id,
               (docs) => {
-                this.items = Object.keys(docs).map((key) => {
-                  return new TaskTree(key, key, 'category', []);
+
+                this.items = Object.values(docs).map((col) => {
+                  return this.colToTaskTree(col);
                 });
 
-                if (this.items[0]) {
-                  this.openCollection(this.items[0]);
-                } else {
-                  this.loading = false;
-                }
+                this.loading = false
               }
             );
           }
@@ -100,6 +104,10 @@ export class DatabaseComponent implements OnInit {
     return new TaskTree(doc.id, doc.id, 'model', [], undefined, doc);
   }
 
+  colToTaskTree(col: Collection) {
+    return new TaskTree(col.id, col.id, 'category', []);
+  }
+
   taskTreeToDoc(doc: TaskTree) {
     return doc.metadata as Document;
   }
@@ -133,6 +141,47 @@ export class DatabaseComponent implements OnInit {
         this.selectedFile.id,
         collection.id
       );
+      this.cdr.detectChanges();
+    }
+  }
+
+  async newCollection() {
+    if (this.executable && this.selectedFile) {
+      let ref = this.dialog.open(CollectionInfoComponent, {
+        width: 'calc(var(--vh, 1vh) * 70)',
+        maxWidth: '650px',
+        maxHeight: 'calc(var(--vh, 1vh) * 100)',
+        panelClass: 'app-full-bleed-dialog',
+
+        data: {
+          workflow: this.executable,
+          file: this.selectedFile,
+        },
+      });
+
+      ref.afterClosed().subscribe(async (val) => {
+        if (val && val != '' && val != '0') {
+          this.loading = true;
+
+          this.cdr.detectChanges()
+          let col = val as Collection;
+
+          setTimeout(async () => {
+            await this.loadService.createDatabaseCollection(
+              this.executable!.id,
+              this.selectedFile!.id,
+              col
+            );
+          }, 750);
+          
+
+        }
+      });
+      // let col = new Collection
+      // await this.loadService.createDatabaseCollection(
+      //   this.executable.id,
+      //   this.selectedFile.id,
+      // );
       this.cdr.detectChanges();
     }
   }
@@ -171,8 +220,10 @@ export class DatabaseComponent implements OnInit {
     if (this.executable && this.selectedFile) {
       if (doc) {
         if (this.editingDocs[doc.id]) {
-          doc.metadata['text'] = JSON.parse(JSON.stringify(this.editingDocs[doc.id]));
-          delete this.editingDocs[doc.id]
+          doc.metadata['text'] = JSON.parse(
+            JSON.stringify(this.editingDocs[doc.id])
+          );
+          delete this.editingDocs[doc.id];
         }
         let document = this.taskTreeToDoc(doc);
 
