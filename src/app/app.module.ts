@@ -61,7 +61,6 @@ import {
   MatDatepickerModule,
   MAT_DATE_RANGE_SELECTION_STRATEGY,
 } from '@angular/material/datepicker';
-import { DataTableComponent } from './data-table/data-table.component';
 import { ViewsPipe } from './views.pipe';
 import { LiveEarthViewPipePipe } from './live-earth-view-pipe.pipe';
 import { safeHtmlPipe } from './safeHtml.pipe';
@@ -136,6 +135,8 @@ import { NgClickOutsideDirective } from 'ng-click-outside2';
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { SettingsComponent } from './settings/settings.component';
+import { DatabaseComponent } from './database/database.component';
+import { DatabaseTableComponent } from './database-table/database-table.component';
 
 @NgModule({
   declarations: [
@@ -144,7 +145,6 @@ import { SettingsComponent } from './settings/settings.component';
     DashboardComponent,
     CollectionTableComponent,
     StatusComponent,
-    DataTableComponent,
     NotificationComponent,
     IsRoutePipe,
     ViewsPipe,
@@ -193,6 +193,8 @@ import { SettingsComponent } from './settings/settings.component';
     TooltipComponent,
     ComingSoonComponent,
     SettingsComponent,
+    DatabaseComponent,
+    DatabaseTableComponent,
   ],
   imports: [
     CommonModule,

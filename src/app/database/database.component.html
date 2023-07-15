@@ -1,0 +1,149 @@
+<div class="w-100 h-100 mx-0 bg-theme">
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <div
+      class="bg-theme-2 border-table rounded w-100 h-100"
+      style="
+        max-width: 1000px !important;
+        max-height: 700px !important;
+        overflow: hidden;
+      "
+    >
+      <!-- [value]="openLayouts"
+      (ionChange)="setOpenLayouts($event)" -->
+
+      <ng-container *ngIf="executable">
+        <div
+          class="w-100 text-light p-3 d-flex justify-content-between align-items-center"
+        >
+          <span class="text-start h5 fw-bold"> Database </span>
+          <button
+            class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2"
+          >
+            <ng-container>Add</ng-container>
+            <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+              add
+            </mat-icon>
+          </button>
+        </div>
+
+        <div class="w-100 h-100 p-3" style="overflow-y: scroll">
+          <ng-container
+            *ngTemplateOutlet="recursiveList; context: { $implicit: items }"
+          ></ng-container>
+        </div>
+      </ng-container>
+
+      <ng-template #recursiveList let-list>
+        <div class="w-100" *ngFor="let item of list">
+          <ng-container *ngIf="item.type == 'category'; else modelTab">
+            <ion-accordion-group
+              class="example-headers-align bg-transparent"
+              [multiple]="true"
+              [value]="'main'"
+            >
+              <ion-accordion class="bg-transparent" [value]="item.id">
+                <ion-item slot="header" class="text-light no-padding">
+                  <!-- <ion-icon
+                class="text-secondary"
+                style="font-size: 14px"
+                [name]="item | taskIcon"
+                slot="start"
+              ></ion-icon> -->
+
+                  <ion-label class="fw-bold" style="font-size: 14px">{{
+                    item.name
+                  }}</ion-label>
+                </ion-item>
+
+                <div class="ion-padding text-light" slot="content">
+                  <!-- <ion-icon
+                      class="text-secondary"
+                      style="font-size: 14px"
+                      [name]="item | taskIcon"
+                      slot="start"
+                    ></ion-icon> -->
+
+                  <ng-container *ngIf="item.categoryTask as catTask">
+                    <ng-container
+                      *ngTemplateOutlet="
+                        modelItem;
+                        context: { $implicit: catTask }
+                      "
+                    ></ng-container>
+                  </ng-container>
+
+                  <ng-container
+                    *ngTemplateOutlet="
+                      recursiveList;
+                      context: { $implicit: item.sequence }
+                    "
+                  ></ng-container>
+                </div>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ng-container>
+          <ng-template #modelTab>
+            <ng-container
+              *ngTemplateOutlet="modelItem; context: { $implicit: item }"
+            ></ng-container>
+          </ng-template>
+        </div>
+      </ng-template>
+      <ng-template #modelItem let-item>
+        <ion-item
+          slot="header"
+          class="text-light w-100 border-0 file-item {{
+            selectedFile == item.id ? 'selected' : ''
+          }} py-2"
+          role="button"
+          (click)="selectedFile = item.id"
+        >
+          <ng-container>
+            <!-- <ion-icon
+          class="text-orange"
+          style="font-size: small"
+          [name]="item | taskIcon"
+          slot="start"
+        ></ion-icon> -->
+            <!-- --border-radius: 50%; -->
+
+            <!-- <ion-thumbnail
+              slot="start"
+              [style.--border-radius]="item.id == 'main' ? '6px' : '50%'"
+            >
+              <img
+                alt="Silhouette of mountains"
+                [src]="item.metadata.img ?? ''"
+              />
+            </ion-thumbnail> -->
+
+            <!-- <ion-label style="font-size: small"></ion-label> -->
+            <ion-textarea
+              [placeholder]="'No Data'"
+              labelPlacement="stacked"
+              [value]="item.name"
+            >
+              <div class="text-secondary" style="font-size: small" slot="label">
+                {{ item.metadata.embedding }}
+              </div>
+            </ion-textarea>
+
+            <!-- <ion-label style="font-size: small">{{ item.name }}</ion-label>
+
+            <ion-label style="font-size: small">{{ item.name }}</ion-label> -->
+          </ng-container>
+          <!-- <ng-container *ngIf="editingTask?.id == item.id">
+            <ion-input #selectedName type="text" [value]="editingTask?.name">
+            </ion-input>
+            <ion-icon
+              class="text-orange"
+              name="checkmark-circle"
+              slot="end"
+              (click)="saveFieldName(editingTask!, selectedName.value)"
+            ></ion-icon>
+          </ng-container> -->
+        </ion-item>
+      </ng-template>
+    </div>
+  </div>
+</div>
