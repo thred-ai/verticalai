@@ -11,15 +11,15 @@
       <!-- [value]="openLayouts"
       (ionChange)="setOpenLayouts($event)" -->
 
-      <ng-container *ngIf="executable">
+      <ng-container *ngIf="executable && selectedFile">
         <div
           class="w-100 text-light p-3 d-flex justify-content-between align-items-center"
         >
-          <span class="text-start h5 fw-bold"> Collections </span>
+          <span class="text-start h5 fw-bold">Collections</span>
           <button
             class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2"
             (click)="newCollection()"
-            >
+          >
             <ng-container>Add</ng-container>
             <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
               add
@@ -45,9 +45,7 @@
                   >
                     <ion-accordion class="bg-transparent" [value]="item.id">
                       <ion-item slot="header" class="text-light no-padding">
-                        <ion-label class="fw-bold">{{
-                          item.name
-                        }}</ion-label>
+                        <ion-label class="fw-bold">{{ item.name }}</ion-label>
                         <ion-icon
                           class="text-secondary"
                           [name]="'ellipsis-vertical'"
