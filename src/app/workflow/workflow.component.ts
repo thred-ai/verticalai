@@ -215,7 +215,7 @@ export class WorkflowComponent implements OnInit {
 
     this.route.queryParams.subscribe((params) => {
       let proj = params['project'];
-      let file = params['file'];
+      let file = params['file'] ?? 'main';
       let selectedModule = params['module'] ?? 'controllers';
 
       if (this.workflows) {
