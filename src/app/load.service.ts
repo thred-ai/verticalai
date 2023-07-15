@@ -824,7 +824,7 @@ export class LoadService {
         .valueChanges()
         .subscribe((doc) => {
           let d = doc as any;
-          if (d && d.id == collectionId) {
+          if (d && d.id == collectionId && d.status == 0) {
             resolve(false);
           } else {
             resolve(true);
