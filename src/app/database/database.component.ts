@@ -6,6 +6,7 @@ import { Dict, LoadService } from '../load.service';
 import { BehaviorSubject } from 'rxjs';
 import { Step } from 'sequential-workflow-designer';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { Document } from '../models/workflow/document.model';
 
 @Component({
   selector: 'app-database',
@@ -21,6 +22,8 @@ export class DatabaseComponent implements OnInit {
 
   loading = false;
   loadingCol: Dict<boolean> = {};
+
+  editingDocs: Dict<string> = {};
 
   constructor(
     private workflowComponent: WorkflowComponent,
@@ -81,8 +84,8 @@ export class DatabaseComponent implements OnInit {
         collection.id,
         (docs) => {
           if (docs) {
-            collection.sequence = Object.keys(docs).map((key, index) => {
-              return new TaskTree(key, key, 'model', [], undefined, docs[key]);
+            collection.sequence = Object.values(docs).map((doc, index) => {
+              return this.docToTaskTree(doc);
             });
           }
           this.loading = false;
@@ -91,6 +94,14 @@ export class DatabaseComponent implements OnInit {
         }
       );
     }
+  }
+
+  docToTaskTree(doc: Document) {
+    return new TaskTree(doc.id, doc.id, 'model', [], undefined, doc);
+  }
+
+  taskTreeToDoc(doc: TaskTree) {
+    return doc.metadata as Document;
   }
 
   @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger?: MatMenuTrigger;
@@ -135,6 +146,44 @@ export class DatabaseComponent implements OnInit {
         doc.id
       );
       this.cdr.detectChanges();
+    }
+  }
+
+  newDoc(collection: TaskTree, docId: string = this.loadService.newUtilID) {
+    let doc = new Document(docId, '', [], 0, collection.id);
+
+    //save doc
+
+    collection.sequence.push(this.docToTaskTree(doc));
+  }
+
+  editDoc(event: any, doc: TaskTree) {
+    let text = event.detail.value;
+
+    if (text && text.split(' ').join('') != '') {
+      this.editingDocs[doc.id] = text;
+    } else if (this.editingDocs[doc.id]) {
+      delete this.editingDocs[doc.id];
+    }
+  }
+
+  async updateDoc(doc: TaskTree) {
+    if (this.executable && this.selectedFile) {
+      if (doc) {
+        if (this.editingDocs[doc.id]) {
+          doc.metadata['text'] = JSON.parse(JSON.stringify(this.editingDocs[doc.id]));
+          delete this.editingDocs[doc.id]
+        }
+        let document = this.taskTreeToDoc(doc);
+
+        await this.loadService.updateDatabaseCollectionDoc(
+          this.executable.id,
+          this.selectedFile.id,
+          document.collection,
+          document.id,
+          document
+        );
+      }
     }
   }
 }

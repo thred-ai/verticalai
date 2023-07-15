@@ -1,7 +1,7 @@
 <div class="w-100 h-100 mx-0 bg-theme">
   <div class="w-100 h-100 d-flex justify-content-center align-items-center">
     <div
-      class="bg-theme-2 border-table rounded w-100 h-100 p-3"
+      class="bg-theme-2 border-table rounded w-100 h-100 d-flex justify-content-center align-items-center flex-column p-3"
       style="
         max-width: 1200px !important;
         max-height: 700px !important;
@@ -45,12 +45,11 @@
                   >
                     <ion-accordion class="bg-transparent" [value]="item.id">
                       <ion-item slot="header" class="text-light no-padding">
-                        <ion-label class="fw-bold" style="font-size: 14px">{{
+                        <ion-label class="fw-bold">{{
                           item.name
                         }}</ion-label>
                         <ion-icon
-                          class="text-orange"
-                          style="font-size: small"
+                          class="text-secondary"
                           [name]="'ellipsis-vertical'"
                           slot="end"
                           role="button"
@@ -59,6 +58,20 @@
                       </ion-item>
 
                       <div class="ion-padding text-light" slot="content">
+                        <ion-item
+                          slot="header"
+                          class="text-light border-0 add-item"
+                          role="button"
+                        >
+                          <ion-icon
+                            class="text-orange"
+                            [name]="'add'"
+                            slot="end"
+                            role="button"
+                            (click)="newDoc(item)"
+                          ></ion-icon>
+                        </ion-item>
+
                         <ng-template #loadingc>
                           <div
                             class="w-100 d-flex flex-column justify-content-center align-items-center"
@@ -132,20 +145,30 @@
                   [placeholder]="'No Data'"
                   labelPlacement="stacked"
                   [value]="item.metadata.text"
+                  (ionChange)="editDoc($event, item)"
                 >
                   <div
-                    class="text-secondary"
+                    class="text-secondary text-start"
                     style="font-size: small"
                     slot="label"
                   >
-                    {{ item.metadata.embedding | prettifyJson }}
+                    ID: {{ item.id }}
+                    <!-- item.metadata.embedding.length > 0
+                        ? (item.metadata.embedding | prettifyJson)
+                        : "" -->
                   </div>
                 </ion-textarea>
               </ng-container>
               <ion-icon
-                class="text-orange"
-                [po]
-                style="font-size: small"
+                class="text-orange p-0"
+                *ngIf="editingDocs[item.id]"
+                [name]="'checkmark-circle'"
+                slot="end"
+                role="button"
+                (click)="updateDoc(item)"
+              ></ion-icon>
+              <ion-icon
+                class="text-secondary"
                 [name]="'ellipsis-vertical'"
                 slot="end"
                 role="button"
@@ -185,7 +208,11 @@
       </button>
     </ng-container>
     <ng-template #docSettings>
-      <button mat-menu-item class="text-light" (click)="deleteCollectionDoc(item)">
+      <button
+        mat-menu-item
+        class="text-light"
+        (click)="deleteCollectionDoc(item)"
+      >
         Delete Document
       </button>
     </ng-template>

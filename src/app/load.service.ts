@@ -798,6 +798,19 @@ export class LoadService {
       .update({ status: 1 });
   }
 
+  async updateDatabaseCollectionDoc(
+    workflowId: string,
+    stepId: string,
+    collectionId: string,
+    docId: string,
+    doc: Document
+  ) {
+    await this.db
+      .doc(
+        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs/${docId}`
+      ).set(JSON.parse(JSON.stringify(doc)), { merge: true });
+  }
+
   getDatabaseInfo(
     workflowId: string,
     stepId: string,

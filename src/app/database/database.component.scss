@@ -41,6 +41,14 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
   cursor: pointer;
 }
 
+.add-item {
+  --border-color: transparent;
+  color: #ffffff;
+  font-weight: normal;
+  --background: transparent !important;
+  cursor: pointer;
+}
+
 .file-item.selected {
   --background: #1E293B !important;
 }
