@@ -3,10 +3,14 @@
   [hasBackdrop]="false"
   (backdropClick)="nav.close()"
 >
-  <mat-sidenav #nav [position]="'end'" 
-    ><div class="bg-theme-2 h-100 border-table-left d-flex justify-content-center align-items-center flex-column" style="width: 250px">
-      <div class="w-100 p-2 pe-3 d-flex justify-content-between align-items-center border-table-bottom">
-
+  <mat-sidenav #nav [position]="'end'"
+    ><div
+      class="bg-theme-2 h-100 border-table-left d-flex justify-content-center align-items-center flex-column"
+      style="width: 250px"
+    >
+      <div
+        class="w-100 p-2 pe-3 d-flex justify-content-between align-items-center border-table-bottom"
+      >
         <button
           class="btn border-0 fw-bold text-white d-flex justify-content-center p-2 align-content-center"
           (click)="nav.close()"
@@ -14,39 +18,49 @@
           <mat-icon class="fw-bold" style="aspect-ratio: 1"> close </mat-icon>
         </button>
 
-        <span class="fw-bold text-light ">
-          Controllers
-        </span>
+        <span class="fw-bold text-light"> Controllers </span>
       </div>
-      
-      <div id="toolbar-nav" class="w-100 h-100 p-3" style="overflow-y: scroll;">
 
-      </div>
-    </div></mat-sidenav
-  >
+      <div
+        id="toolbar-nav"
+        class="w-100 h-100 p-3"
+        style="overflow-y: scroll"
+      ></div></div
+  ></mat-sidenav>
   <mat-sidenav-content>
     <div class="h-100 w-100" style="position: relative" id="test" #parent>
-
-      <div class="position-absolute d-flex justify-content-between align-items-center m-3" style="z-index: 55; right: 0">
+      <div
+        class="position-absolute d-flex justify-content-between align-items-center m-3"
+        style="z-index: 55; right: 0"
+      >
         <div
-        class="bg-theme-2 border-table rounded-10 px-2 py-1 me-2"
-      >
-        <mat-slide-toggle
-          #gridModeSwitch
-          class="text-light"
-          [ngModel]="showingGrid"
-          (ngModelChange)="showGrid = $event"
-        ></mat-slide-toggle>
-      </div>
+          class="bg-theme-2 border-table rounded-10 px-2 py-1 me-2"
 
-      <button
-        class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center p-1 ms-2 align-content-center"
-        (click)="nav.open(); setToolbarLoc()"
-      >
-        <mat-icon class="fw-bold" style="aspect-ratio: 1"> add </mat-icon>
-      </button>
+        >
+          <mat-slide-toggle
+            #gridModeSwitch
+            class="text-light"
+            [ngModel]="showingGrid"
+            (ngModelChange)="showGrid = $event"
+          ></mat-slide-toggle>
+          <!-- <ng-template #grid>
+            <verticalai-tooltip [text]="'Toggle Grid'"></verticalai-tooltip>
+          </ng-template> -->
+        </div>
+
+        <button
+          class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center p-1 ms-2 align-content-center"
+          (click)="nav.open(); setToolbarLoc()"
+          [mdbPopover]="add"
+          placement="bottom"
+          [trigger]="'hover'"
+        >
+          <mat-icon class="fw-bold" style="aspect-ratio: 1"> add </mat-icon>
+        </button>
+        <ng-template #add>
+          <verticalai-tooltip [text]="'Controllers'"></verticalai-tooltip>
+        </ng-template>
       </div>
-      
 
       <ng-container *ngIf="workflow">
         <sqd-designer
