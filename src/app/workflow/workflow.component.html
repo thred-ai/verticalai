@@ -29,24 +29,6 @@
     <as-split class="w-100 h-100" class="vertical" direction="vertical">
       <as-split-area class="horizontal" [size]="70">
         <as-split class="w-100 h-100" direction="horizontal">
-          <!-- <as-split-area [size]="40">
-            <div
-              class="w-100 h-100 d-flex justify-content-between align-items-start"
-            >
-                <app-workflow-code
-                  [code]="
-                    openStep.properties['source']
-                      ? openStep.properties['source']!
-                      : defaultCode(openStep.type)
-                  "
-                  (codeChanged)="
-                    edited = true;
-                    (openStep.properties['source'] = $event);
-                    save()
-                  "
-                ></app-workflow-code>
-            </div>
-          </as-split-area> -->
           <as-split-area [size]="60">
             <div
               class="w-100 h-100"
@@ -104,20 +86,9 @@
             >
               <app-database></app-database>
             </div>
-            <!-- <app-coming-soon [title]="'Database'"> </app-coming-soon> -->
           </as-split-area>
         </as-split>
       </as-split-area>
-
-      <!-- <as-split-area [size]="30">
-        <div
-          class="h-100 d-flex justify-content-between align-items-end flex-column w-100"
-        >
-          <div class="terminal-width h-100 bg-black">
-            <app-terminal [model]="workflow.value"></app-terminal>
-          </div>
-        </div>
-      </as-split-area> -->
     </as-split>
   </div>
 
