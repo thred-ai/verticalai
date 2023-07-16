@@ -808,7 +808,7 @@ export class LoadService {
       .doc(
         `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs/${docId}`
       )
-      .update({ status: 1 });
+      .delete();
   }
 
   async checkCollectionName(
