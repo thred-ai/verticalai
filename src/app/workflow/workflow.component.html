@@ -48,7 +48,11 @@
             </div>
           </as-split-area> -->
           <as-split-area [size]="60">
-            <ng-container *ngIf="selectedIcon == 'controllers'">
+            <div
+              class="w-100 h-100"
+              [hidden]="selectedIcon != 'controllers'"
+              style="background-color: #131313"
+            >
               <verticalai-workflow-designer
                 #designer
                 [models]="models"
@@ -61,7 +65,7 @@
                 (selectedFileChanged)="selectFile($event, selectedIcon)"
               >
               </verticalai-workflow-designer>
-            </ng-container>
+            </div>
 
             <div
               class="w-100 h-100"
