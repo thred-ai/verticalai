@@ -5,19 +5,6 @@
   min-height: fill-available;
 }
 
-:host
-  ::ng-deep
-  .mat-slide-toggle.mat-checked:not(.mat-disabled)
-  .mat-slide-toggle-bar {
-  background-color: var(--primaryHoverColor);
-}
-
-:host
-  ::ng-deep
-  .mat-slide-toggle.mat-checked:not(.mat-disabled)
-  .mat-slide-toggle-thumb {
-  background-color: var(--primaryColor);
-}
 
 .layout-top {
   height: calc(calc(var(--vh, 1vh) * 100) - 320px);
