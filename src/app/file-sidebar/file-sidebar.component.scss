@@ -42,7 +42,7 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
 }
 
 .file-item.selected {
-  --background: #1E293B !important;
+  --background: #fffaf538 !important;
 }
 
 .file-item:not(.selected):hover {
@@ -72,7 +72,7 @@ ion-icon {
 }
 
 .proj:hover{
-  background-color: #1E293B;
+  background-color: #3b371e;
 }
 
 .proj-select{
