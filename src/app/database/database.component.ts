@@ -23,11 +23,11 @@ export class DatabaseComponent implements OnInit {
 
   selectedFile?: Step;
 
+
   loading = false;
   loadingCol: Dict<boolean> = {};
 
   editingDocs: Dict<string> = {};
-
 
   constructor(
     private workflowComponent: WorkflowComponent,
@@ -39,7 +39,9 @@ export class DatabaseComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
+    console.log("oi")
     this.workflowComponent.openStep.subscribe((step) => {
+      console.log(step)
       if (step) {
         this.selectedFile = step;
 
@@ -47,17 +49,18 @@ export class DatabaseComponent implements OnInit {
           this.executable = w;
 
           if (w && this.selectedFile) {
-
             this.loadService.getDatabaseInfo(
               w.id,
               this.selectedFile.id,
               (docs) => {
 
                 this.items = Object.values(docs).map((col) => {
-                  return this.colToTaskTree(col);
+                  let task = this.colToTaskTree(col);
+                  
+                  return task;
                 });
 
-                this.loading = false
+                this.loading = false;
               }
             );
           }
@@ -163,7 +166,7 @@ export class DatabaseComponent implements OnInit {
         if (val && val != '' && val != '0') {
           this.loading = true;
 
-          this.cdr.detectChanges()
+          this.cdr.detectChanges();
           let col = val as Collection;
 
           setTimeout(async () => {
@@ -173,8 +176,6 @@ export class DatabaseComponent implements OnInit {
               col
             );
           }, 750);
-          
-
         }
       });
       // let col = new Collection

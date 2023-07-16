@@ -7,7 +7,6 @@
     *ngIf="workflow.value && openStep.value && items.value; else noWorkflow"
   >
     <app-icon-sidebar
-      
       [selectedIcon]="selectedIcon"
       (selectedIconChanged)="selectFile(openStep.value.id, $event)"
     ></app-icon-sidebar>
@@ -64,11 +63,13 @@
               </verticalai-workflow-designer>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'run'">
-              <div class="w-100 h-100" style="background-color: #131313">
-                <app-terminal [model]="workflow.value"></app-terminal>
-              </div>
-            </ng-container>
+            <div
+              class="w-100 h-100"
+              [hidden]="selectedIcon != 'run'"
+              style="background-color: #131313"
+            >
+              <app-terminal [model]="workflow.value"></app-terminal>
+            </div>
 
             <ng-container *ngIf="selectedIcon == 'upload'">
               <app-coming-soon [title]="'Upload Project'"> </app-coming-soon>
@@ -93,11 +94,13 @@
               ></app-workflow-code>
             </ng-container>
 
-            <ng-container *ngIf="selectedIcon == 'database'">
-              <!-- <app-coming-soon [title]="'Database'"> </app-coming-soon> -->
-
+            <div
+              class="w-100 h-100 bg-theme"
+              [hidden]="selectedIcon != 'database'"
+            >
               <app-database></app-database>
-            </ng-container>
+            </div>
+            <!-- <app-coming-soon [title]="'Database'"> </app-coming-soon> -->
           </as-split-area>
         </as-split>
       </as-split-area>

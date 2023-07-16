@@ -223,7 +223,12 @@ export class WorkflowComponent implements OnInit {
           this.activeWorkflow =
             this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
 
-          this.selectFile(file ?? 'main', selectedModule, this.activeWorkflow, false);
+          this.selectFile(
+            file ?? 'main',
+            selectedModule,
+            this.activeWorkflow,
+            false
+          );
 
           if (!this.openStep.value) {
             this.selectFile('main', selectedModule, this.activeWorkflow, true);
@@ -627,8 +632,10 @@ export class WorkflowComponent implements OnInit {
     update = true
   ) {
     if (workflow && fileId && selectedModule) {
-      this.openStep.next(this.findStep(fileId, workflow.layout.sequence));
-      this.selectedIcon = selectedModule
+      if (this.openStep.value?.id != fileId) {
+        this.openStep.next(this.findStep(fileId, workflow.layout.sequence));
+      }
+      this.selectedIcon = selectedModule;
 
       if (update) {
         this.router.navigate([], {
@@ -636,7 +643,7 @@ export class WorkflowComponent implements OnInit {
           queryParams: {
             project: workflow.id,
             file: fileId,
-            module: selectedModule
+            module: selectedModule,
           },
           queryParamsHandling: 'merge',
           // preserve the existing query params in the route
