@@ -137,6 +137,7 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { SettingsComponent } from './settings/settings.component';
 import { DatabaseComponent } from './database/database.component';
 import { CollectionInfoComponent } from './collection-info/collection-info.component';
+import { TextAreaRenderPipe } from './text-area-render.pipe';
 
 @NgModule({
   declarations: [
@@ -195,6 +196,7 @@ import { CollectionInfoComponent } from './collection-info/collection-info.compo
     SettingsComponent,
     DatabaseComponent,
     CollectionInfoComponent,
+    TextAreaRenderPipe,
   ],
   imports: [
     CommonModule,

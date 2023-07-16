@@ -136,7 +136,7 @@
               <ion-textarea
                 [placeholder]="'No Data'"
                 labelPlacement="stacked"
-                [value]="item.metadata.text"
+                [value]="item.metadata.text | textAreaRender"
                 [autoGrow]="true"
                 (ionChange)="editDoc($event, item)"
               >

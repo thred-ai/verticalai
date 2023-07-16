@@ -28,7 +28,7 @@
       [style.max-height]="maxHeight > 0 ? maxHeight + 'px' : 'auto'"
       [style.overflow-y]="maxHeight > 0 ? 'scroll' : 'visible'"
       fill="solid"
-      [value]="value"
+      [value]="value | textAreaRender"
       [autoGrow]="true"
       [disabled]="disabled"
       [placeholder]="placeholder"
