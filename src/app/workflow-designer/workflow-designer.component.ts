@@ -270,7 +270,6 @@ export class WorkflowDesignerComponent
         (document.getElementsByClassName('sqd-scrollbox')[0] as HTMLDivElement);
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
 
-
       if (content && parent && parent.firstChild != content) {
         // let newElem = content.cloneNode(true)
         // console.log(newElem)
@@ -312,7 +311,7 @@ export class WorkflowDesignerComponent
 
   public readonly stepsConfiguration: StepsConfiguration = {
     iconUrlProvider: (componentType: string, type: string) => {
-      return this.loadService.iconUrlForController(componentType, type)
+      return this.loadService.iconUrlForController(componentType, type);
     },
     canMoveStep: (sourceSequence, step, targetSequence, targetIndex) => {
       return true;
@@ -417,6 +416,20 @@ export class WorkflowDesignerComponent
   public onDesignerReady(designer: Designer) {
     this.designer = designer;
 
+    if (document.eventListeners){
+      console.log(document.eventListeners("keyup"))
+      let l = document.eventListeners("keyup")[0]
+      document.removeEventListener('keyup', l)
+    }
+
+    // window.addEventListener(
+    //   'keypress',
+    //   function (event) {
+    //     event.stopImmediatePropagation();
+    //   },
+    //   true
+    // );
+
     // this.setToolbarLoc()
 
     try {
@@ -429,7 +442,7 @@ export class WorkflowDesignerComponent
           this.selectedFileChanged.emit('main');
         }
       });
-  
+
       this.workflowComponent.openStep.subscribe((step) => {
         if (step && step.id != 'main') {
           this.designer?.selectStepById(step.id);
@@ -437,10 +450,7 @@ export class WorkflowDesignerComponent
           this.designer?.clearSelectedStep();
         }
       });
-    } catch (error) {
-      
-    }
-    
+    } catch (error) {}
 
     // async function clearListener(id: string) {
     //   let doc = document.getElementsByClassName('sqd-selected')[0];
@@ -461,7 +471,6 @@ export class WorkflowDesignerComponent
     step.name = (event.target as HTMLInputElement).value;
     context.notifyNameChanged();
   }
-
 
   private updateDefinitionJSON() {
     this.definitionJSON = JSON.stringify(this.workflow?.layout, null, 2);
