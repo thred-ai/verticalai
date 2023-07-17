@@ -41,6 +41,7 @@
                   class="example-headers-align bg-transparent"
                   [multiple]="true"
                   (ionChange)="accordionOpened($event, item)"
+                  id="accordion"
                 >
                   <ion-accordion class="bg-transparent" [value]="item.id">
                     <ion-item slot="header" class="text-light no-padding">
@@ -139,6 +140,7 @@
                 [value]="item.metadata.text"
                 [autoGrow]="true"
                 (ionChange)="editDoc($event, item)"
+                id="textArea"
               >
                 <div
                   class="text-secondary text-start"

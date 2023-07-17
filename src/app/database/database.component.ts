@@ -24,7 +24,6 @@ export class DatabaseComponent implements OnInit {
 
   selectedFile?: Step;
 
-
   loading = false;
   loadingCol: Dict<boolean> = {};
 
@@ -40,9 +39,9 @@ export class DatabaseComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
-    console.log("oi")
+    console.log('oi');
     this.workflowComponent.openStep.subscribe((step) => {
-      console.log(step)
+      console.log(step);
       if (step) {
         this.selectedFile = step;
 
@@ -54,10 +53,9 @@ export class DatabaseComponent implements OnInit {
               w.id,
               this.selectedFile.id,
               (docs) => {
-
                 this.items = Object.values(docs).map((col) => {
                   let task = this.colToTaskTree(col);
-                  
+
                   return task;
                 });
 
@@ -71,9 +69,12 @@ export class DatabaseComponent implements OnInit {
   }
 
   accordionOpened(event: any, item: TaskTree) {
-    let ids = event.detail.value as string[];
-    if (ids && ids.includes(item.id)) {
-      this.openCollection(item);
+    console.log(event);
+    if (event.srcElement.id == 'accordion') {
+      let ids = event.detail.value as string[];
+      if (ids && ids.includes(item.id)) {
+        this.openCollection(item);
+      }
     }
   }
 
@@ -92,9 +93,9 @@ export class DatabaseComponent implements OnInit {
         collection.id,
         (docs) => {
           if (docs) {
-            let pipe = new TextAreaRenderPipe()
+            let pipe = new TextAreaRenderPipe();
             collection.sequence = Object.values(docs).map((doc, index) => {
-              doc.text = pipe.transform(doc.text)
+              doc.text = pipe.transform(doc.text);
               return this.docToTaskTree(doc);
             });
           }
@@ -211,12 +212,14 @@ export class DatabaseComponent implements OnInit {
   }
 
   editDoc(event: any, doc: TaskTree) {
-    let text = event.detail.value;
+    if (event.srcElement.id == 'textArea') {
+      let text = event.detail.value;
 
-    if (text && text.split(' ').join('') != '') {
-      this.editingDocs[doc.id] = text;
-    } else if (this.editingDocs[doc.id]) {
-      delete this.editingDocs[doc.id];
+      if (text && text.split(' ').join('') != '') {
+        this.editingDocs[doc.id] = text;
+      } else if (this.editingDocs[doc.id]) {
+        delete this.editingDocs[doc.id];
+      }
     }
   }
 
