@@ -10,6 +10,7 @@ import { Document } from '../models/workflow/document.model';
 import { Collection } from '../models/workflow/collection.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CollectionInfoComponent } from '../collection-info/collection-info.component';
+import { TextAreaRenderPipe } from '../text-area-render.pipe';
 
 @Component({
   selector: 'app-database',
@@ -91,7 +92,9 @@ export class DatabaseComponent implements OnInit {
         collection.id,
         (docs) => {
           if (docs) {
+            let pipe = new TextAreaRenderPipe()
             collection.sequence = Object.values(docs).map((doc, index) => {
+              doc.text = pipe.transform(doc.text)
               return this.docToTaskTree(doc);
             });
           }
