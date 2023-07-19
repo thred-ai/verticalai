@@ -86,7 +86,7 @@ export class WorkflowDesignerComponent
 
   get flowGroup(): ToolboxGroupConfiguration {
     return {
-      name: 'Execution',
+      name: 'Vertical AI',
       steps: [
         {
           componentType: 'switch',

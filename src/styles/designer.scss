@@ -62,12 +62,12 @@
   width: 100%;
   position: relative;
   overflow: scroll;
-  max-height: 600px;
+  height: calc(calc(var(--vh, 1vh) * 100) - 100px) !important;
 }
 .sqd-scrollbox-body {
-  width: 100%;
-  
+  width: 100%;  
 }
+
 .sqd-toolbox-filter {
   display: block;
   box-sizing: border-box;
@@ -96,9 +96,9 @@
   display: flex;
   justify-content: start;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
   font-size: 13px;
   // height: 40px;
   width: 100%; //
