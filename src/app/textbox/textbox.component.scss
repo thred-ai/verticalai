@@ -32,6 +32,12 @@
       }
     }
   }
+
+
+
+:host:ng-deep .native-textarea[disabled].sc-ion-textarea-md:not(.cloned-input){
+  opacity: 1 !important;
+}
   
   
   @keyframes blink {
