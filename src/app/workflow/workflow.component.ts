@@ -711,6 +711,8 @@ export class WorkflowComponent implements OnInit {
         return this.classes['gpt'].text;
       case 'gpt3-LLM':
         return this.classes['gpt3'].text;
+      case 'repl-replicate':
+          return this.classes['replicate'].text;
       case 'dalle-TIM':
         return this.classes['dalle'].text;
       case 'sd-TIM':
