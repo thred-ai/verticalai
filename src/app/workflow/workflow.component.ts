@@ -162,7 +162,7 @@ export class WorkflowComponent implements OnInit {
         if (same) {
           this.activeWorkflow = same;
           // same.layout.properties
-          this.selectFile(fileId, this.selectedIcon ?? 'run');
+          this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         }
       } else {
         this.activeWorkflow = undefined;
@@ -216,7 +216,7 @@ export class WorkflowComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       let proj = params['project'];
       let file = params['file'] ?? 'main';
-      let selectedModule = params['module'] ?? 'run';
+      let selectedModule = params['module'] ?? 'controllers';
 
       if (this.workflows) {
         if (!this.openStep.value && this.workflow) {
