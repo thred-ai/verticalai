@@ -14,14 +14,12 @@
     style="height: 70px"
   >
     <div
-      class="my-auto w-100"
+      class="my-auto"
+      [matTooltip]="'Save \' ' + (executable?.name ?? 'Project') + ' \''"
     >
       <button
-        class="btn bg-theme rounded-10 shadow-0 fw-bold text-white d-flex w-100 justify-content-start px-0 align-content-center py-2"
+        class="btn bg-theme rounded-10 shadow-0 fw-bold text-white d-flex justify-content-start px-0 align-content-center py-2"
         (click)="saveLayout()"
-        [mdbPopover]="save"
-      placement="bottom"
-      [trigger]="'hover'"
       >
         <!-- (click)="edited ? save() : publish(workflow)"
         [disabled]="loading" -->
@@ -43,18 +41,8 @@
           </mat-icon>
         </ng-template>
       </button>
-      <ng-template #save>
-        <verticalai-tooltip
-          [text]="'Save \' ' + (executable?.name ?? 'Project') + ' \''"
-        ></verticalai-tooltip>
-      </ng-template>
     </div>
-    <div
-      class="ms-2 my-auto"
-      [mdbPopover]="projects"
-      placement="bottom"
-      [trigger]="'hover'"
-    >
+    <div class="ms-2 my-auto" [matTooltip]="'Browse Projects'">
       <button
         class="btn bg-theme shadow-0 rounded-10 fw-bold text-white d-flex justify-content-center py-2 px-0 align-content-center"
         [mdbPopover]="template2"
@@ -64,9 +52,6 @@
       >
         <mat-icon class="fw-bold" style="aspect-ratio: 1"> folder </mat-icon>
       </button>
-      <ng-template #projects>
-        <verticalai-tooltip [text]="'Browse Projects'"></verticalai-tooltip>
-      </ng-template>
     </div>
   </div>
 
@@ -82,13 +67,8 @@
         slot="end"
         role="button"
         (click)="openControllerSettings('main')"
-        [mdbPopover]="projsettings"
-        placement="bottom"
-        [trigger]="'hover'"
+        [matTooltip]="'Project Settings'"
       ></ion-icon>
-      <ng-template #projsettings>
-        <verticalai-tooltip [text]="'Project Settings'"></verticalai-tooltip>
-      </ng-template>
     </div>
 
     <ng-container
@@ -181,14 +161,9 @@
           [name]="'ellipsis-vertical'"
           slot="end"
           role="button"
-          [mdbPopover]="settings"
-          placement="bottom"
-          [trigger]="'hover'"
+          [matTooltip]="'Actions'"
           (click)="onRightClick($event, item)"
         ></ion-icon>
-        <ng-template #settings>
-          <verticalai-tooltip [text]="'Actions'"></verticalai-tooltip>
-        </ng-template>
       </ng-container>
       <ng-container *ngIf="editingTask?.id == item.id">
         <ion-input #selectedName type="text" [value]="editingTask?.name">

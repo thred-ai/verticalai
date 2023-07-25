@@ -3,7 +3,7 @@
   [hasBackdrop]="false"
   (backdropClick)="nav.close()"
 >
-  <mat-sidenav #nav [position]="'end'" [opened]="true"
+  <mat-sidenav #nav [position]="'end'" [opened]="false"
     ><div
       class="bg-theme h-100 d-flex justify-content-center align-items-center flex-column"
       style="width: 250px"
@@ -42,24 +42,19 @@
             class="text-light"
             [ngModel]="showingGrid"
             (ngModelChange)="showGrid = $event"
+            [matTooltip]="'Toggle Grid'"
           ></mat-slide-toggle>
-          <!-- <ng-template #grid>
-            <verticalai-tooltip [text]="'Toggle Grid'"></verticalai-tooltip>
-          </ng-template> -->
         </div>
 
         <button
           class="btn bg-theme rounded-10 border-0 fw-bold text-white d-flex justify-content-center p-1 ms-2 align-content-center"
           (click)="nav.open(); setToolbarLoc()"
-          [mdbPopover]="add"
-          placement="bottom"
-          [trigger]="'hover'"
+          [matTooltip]="'Add Controllers'"
+          [matTooltipPosition]="'left'"
         >
           <mat-icon class="fw-bold" style="aspect-ratio: 1"> add </mat-icon>
         </button>
-        <ng-template #add>
-          <verticalai-tooltip [text]="'Controllers'"></verticalai-tooltip>
-        </ng-template>
+        
       </div>
 
       <ng-container *ngIf="workflow">
