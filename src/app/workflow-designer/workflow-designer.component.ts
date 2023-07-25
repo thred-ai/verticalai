@@ -270,8 +270,8 @@ export class WorkflowDesignerComponent
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
 
       if (content && parent && parent.firstChild != content) {
-        // let newElem = content.cloneNode(true)
-        // console.log(newElem)
+        let newElem = content.cloneNode(true)
+        console.log(newElem)
         parent.firstChild?.remove();
         parent.appendChild(content);
         this.toolBar = content;
