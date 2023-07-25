@@ -11,7 +11,7 @@
         <div class="w-100">
           <div matDialogTitle class="text-white">Configure Controller</div>
         </div>
-        <div class="w-100 mb-3">
+        <div class="w-100 pb-3">
           <verticalai-text-field
             [title]="'Name'"
             [value]="selectedFile.name"
@@ -23,7 +23,7 @@
           </verticalai-text-field>
         </div>
 
-        <ng-container
+        <!-- <ng-container
           *ngIf="
             selectedFile.properties['type'] == 'model' ||
             selectedFile.properties['type'] == 'web'
@@ -52,7 +52,7 @@
               </verticalai-text-field>
             </div>
           </ng-container>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container *ngIf="selectedFile.componentType == 'switch'">
           <ng-container *ngIf="selectedFile | cast : BranchedStep as branchStep"
@@ -160,6 +160,7 @@
         
         </div>
       </div>
+
       <button
         class="btn bg-theme border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
         (click)="save()"
