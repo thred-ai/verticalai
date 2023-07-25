@@ -7,7 +7,7 @@
 }
 
 .sqd-theme-dark.sqd-designer {
-  background: #131313;
+  background: #1c1c1c;
 }
 
 /* dark > .sqd-toolbox */
@@ -119,12 +119,10 @@
   stroke: #fff;
 }
 .sqd-label-rect {
-  fill: var(--primaryColor);
+  fill: #3e3e3e5f;
 }
 .sqd-label-rect.sqd-label-secondary {
-  stroke: #7f7f7f;
-  stroke-width: 0.5px;
-  fill: #131313d4;
+  fill: #3e3e3e5f;
 }
 .sqd-label-text {
   fill: #fff;

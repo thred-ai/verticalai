@@ -90,9 +90,9 @@ export class WorkflowDesignerComponent
       steps: [
         {
           componentType: 'switch',
-          name: 'BranchController',
+          name: 'Branch',
           properties: {
-            defaultName: 'BranchController',
+            defaultName: 'Branch',
             order: {
               'Option 1': 0,
               'Option 2': 1,
@@ -107,9 +107,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'container',
-          name: 'RepeatController',
+          name: 'Repeat',
           properties: {
-            defaultName: 'RepeatController',
+            defaultName: 'Repeat',
             frequency: 1,
           },
           type: 'container',
@@ -118,9 +118,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'task',
-          name: 'BreakController',
+          name: 'Break',
           properties: {
-            defaultName: 'BreakController',
+            defaultName: 'Break',
             type: 'break',
           },
           type: 'break',
