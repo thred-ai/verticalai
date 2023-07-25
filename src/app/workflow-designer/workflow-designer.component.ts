@@ -66,7 +66,6 @@ export class WorkflowDesignerComponent
   // @Input() apiRequests: Dict<APIRequest> = {};
   @Input() theme: 'light' | 'dark' = 'light';
 
-  openToolbar = false;
 
   get pluginGroup(): ToolboxGroupConfiguration {
     return {
@@ -404,6 +403,8 @@ export class WorkflowDesignerComponent
       // var erdUltraFast = elementResizeDetectorMaker({
       //   strategy: "scroll" //<- For ultra performance.
       // });
+
+      this.setToolbarLoc()
 
       erd.listenTo(document.getElementById('test'), (element: HTMLElement) => {
         var width = element.offsetWidth;
