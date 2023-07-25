@@ -2,22 +2,13 @@
   class="w-100"
   style="
     height: calc(calc(var(--vh, 1vh) * 100) - 70px);
-    background-image: radial-gradient(
-      circle at center,
-      #4b251b 0,
-      #1c1615,
-      #000 100%
-    );
+    
   "
 >
   <div
     class="w-100 h-100 position-relative d-flex flex-column justify-content-center align-items-center"
   >
-    <img
-      class="w-100 h-100 position-absolute"
-      [src]="'assets/auth_design.svg'"
-      style="object-fit: cover; opacity: 0.4"
-    />
+  
     <div
       class="positiion-absolute w-100 h-100 d-flex justify-content-center align-items-center px-3 py-2 py-md-0"
     >
@@ -142,7 +133,7 @@
                     </div>
                     <div class="w-100 py-1 mt-3">
                       <button
-                        class="btn bg-orange rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
+                        class="btn bg-theme rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
                         (click)="continue()"
                         id="continue"
                       >
@@ -234,7 +225,7 @@
                     </div>
                     <div class="w-100 py-1 mt-3">
                       <button
-                        class="btn bg-orange rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
+                        class="btn bg-theme rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
                         (click)="continue()"
                         id="continue"
                       >
