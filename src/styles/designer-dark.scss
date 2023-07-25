@@ -75,7 +75,6 @@
 .sqd-smart-editor {
   background: #151515;
   border-left: #7f7f7f solid 0.5px;
-
 }
 .sqd-smart-editor-toggle {
   background: #1f1f1f;
@@ -85,15 +84,17 @@
 /* dark > .sqd-step-task */
 
 .sqd-step-task-rect {
-  fill: #3e3e3e5f;
+  fill: #fff;
 
   filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.15));
 }
 .sqd-step-task-rect.sqd-selected {
   stroke: #fff;
+
+  fill: #ffffffaa;
 }
 .sqd-step-task-text {
-  fill: #ffffff;
+  fill: #373737;
 }
 .sqd-step-task-empty-icon {
   fill: #c6c6c6;
@@ -107,7 +108,6 @@
 
 .sqd-output {
   fill: var(--primaryColor);
-
 }
 
 /* dark > .sqd-region */
@@ -119,10 +119,11 @@
   stroke: #fff;
 }
 .sqd-label-rect {
-  fill: #3e3e3e5f;
+  fill: var(--primaryColor);
 }
 .sqd-label-rect.sqd-label-secondary {
-  fill: #3e3e3e5f;
+  //fill: #3e3e3e5f;
+  fill: var(--primaryColor);
 }
 .sqd-label-text {
   fill: #fff;
