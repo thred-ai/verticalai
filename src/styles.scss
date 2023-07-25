@@ -72,6 +72,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -11955,6 +11956,8 @@ mat-sidenav {
   font-size: 0.95em;
   color: gray;
 }
+
+
 
 /* SCCS alternative */
 .mat-calendar-body-active {
