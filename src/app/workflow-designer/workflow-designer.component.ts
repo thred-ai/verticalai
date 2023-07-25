@@ -281,6 +281,10 @@ export class WorkflowDesignerComponent
     }, 0);
   }
 
+  resize(){
+    window.dispatchEvent(new Event('resize'));
+  }
+
   showingGrid = true;
 
   set showGrid(value: boolean) {
