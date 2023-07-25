@@ -1,5 +1,5 @@
 <div
-  class="bg-theme-2 h-100 border-table-right"
+  class="bg-theme h-100"
   style="
     width: 250px !important;
     min-width: 250px !important;
@@ -10,23 +10,23 @@
       (ionChange)="setOpenLayouts($event)" -->
 
   <div
-    class="w-100 p-3 d-flex justify-content-between align-content-center border-bottom"
+    class="w-100 p-3 d-flex justify-content-between align-content-center"
     style="height: 70px"
   >
     <div
       class="my-auto w-100"
-      [mdbPopover]="save"
-      placement="bottom"
-      [trigger]="'hover'"
     >
       <button
-        class="btn bg-theme border-0 rounded-10 fw-bold text-white d-flex w-100 justify-content-center px-3 align-content-center py-2"
+        class="btn bg-theme rounded-10 shadow-0 fw-bold text-white d-flex w-100 justify-content-start px-0 align-content-center py-2"
         (click)="saveLayout()"
+        [mdbPopover]="save"
+      placement="bottom"
+      [trigger]="'hover'"
       >
         <!-- (click)="edited ? save() : publish(workflow)"
         [disabled]="loading" -->
         <ng-container *ngIf="loading; else buttonTitles">
-          <span class="mx-auto">
+          <span class="ms-0">
             {{ "Saving" }}
             <span
               class="spinner-border spinner-border-sm ms-2 m-auto"
@@ -56,7 +56,7 @@
       [trigger]="'hover'"
     >
       <button
-        class="btn bg-theme border-0 rounded-10 fw-bold text-white d-flex justify-content-center py-2 px-2 align-content-center"
+        class="btn bg-theme shadow-0 rounded-10 fw-bold text-white d-flex justify-content-center py-2 px-0 align-content-center"
         [mdbPopover]="template2"
         placement="bottom"
         [trigger]="'click'"
@@ -213,7 +213,7 @@
 ></div>
 
 <!-- standard material menu -->
-<mat-menu #rightMenu="matMenu" class="bg-theme border-table">
+<mat-menu #rightMenu="matMenu" class="bg-theme">
   <ng-template matMenuContent let-item="item">
     <ng-container *ngIf="item.id != 'app'; else appSettings">
       <button
@@ -244,7 +244,7 @@
 <ng-template #template2>
   <ng-container *ngIf="loadedUser && loadedUser.utils">
     <div
-      class="bg-theme border-table text-start rounded d-flex justify-content-center align-items-center flex-column"
+      class="bg-theme-2 text-start rounded d-flex justify-content-center align-items-center flex-column"
       id="profile-menu"
       style="min-width: 350px; max-height: 700px"
       (clickOutside)="folderToggle.click()"

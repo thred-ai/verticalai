@@ -5,7 +5,6 @@
   min-height: fill-available;
 }
 
-
 .layout-top {
   height: calc(calc(var(--vh, 1vh) * 100) - 320px);
   width: 100%;
@@ -14,6 +13,10 @@
 .terminal-width {
   height: 100%;
   width: calc(100vw - 320px);
+}
+
+.sidebar {
+  box-shadow: 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
 }
 
 // :host ::ng-deep .horizontal {

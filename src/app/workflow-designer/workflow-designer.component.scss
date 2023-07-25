@@ -92,6 +92,13 @@
   background-color: white //var(--primaryHoverColor);
 }
 
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
 :host
   ::ng-deep
   .mat-slide-toggle.mat-checked:not(.mat-disabled)
