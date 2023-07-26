@@ -9,48 +9,92 @@
     [position]="'end'"
     [opened]="true"
     (openedChange)="resize()"
-    ><div
-      class="bg-theme h-100 d-flex justify-content-center align-items-center flex-column"
+  >
+    <div
+      class="bg-theme h-100"
       style="width: 250px"
+      [hidden]="selectedFile && selectedFile != 'main'"
     >
       <div
-        class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
+        class="h-100 d-flex justify-content-center align-items-center flex-column"
       >
-        
-        <span class="fw-bold text-light"> Controllers </span>
-      </div>
+        <div
+          class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
+        >
+          <span class="fw-bold text-light">
+            Controllers <br /><span class="fw-normal" style="font-size: x-small"
+              >Drag and drop</span
+            ></span
+          >
+        </div>
 
+        <div
+          id="toolbar-nav"
+          class="w-100 h-100 p-3"
+          style="overflow-y: scroll"
+        ></div>
+      </div>
+    </div>
+
+    <div
+      class="bg-theme h-100"
+      [class.rightBarExtend]="selectedFile && selectedFile != 'main'"
+      style="width: 350px"
+      [hidden]="selectedFile && selectedFile == 'main'"
+    >
       <div
-        id="toolbar-nav"
-        class="w-100 h-100 p-3"
-        style="overflow-y: scroll"
-      ></div></div
-  ></mat-sidenav>
+        class="h-100 d-flex justify-content-center align-items-center flex-column"
+      >
+        <div
+          class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
+        >
+          <span class="fw-bold text-light">
+            Controller <br /><span class="fw-normal" style="font-size: x-small"
+              >Settings</span
+            ></span
+          >
+        </div>
+
+        <div
+          class="w-100 h-100 p-3"
+          style="overflow-y: scroll"
+        >
+
+        <div>
+          
+        </div>
+      </div>
+      </div>
+    </div>
+  </mat-sidenav>
   <mat-sidenav-content class="bg-theme-2">
-    <div class="w-100 h-100" [style.padding-right]="nav.opened ? '250px' : '0'">
+    <div
+      class="w-100 h-100"
+      [style.padding-right]="
+        nav.opened ? (selectedFile == 'main' ? '250px' : '350px') : '0'
+      "
+    >
       <div class="h-100 w-100" style="position: relative" id="test" #parent>
         <div
           class="position-absolute d-flex justify-content-between align-items-center m-3"
-          style="z-index: 55; right: 0; top: 0;"
+          style="z-index: 55; right: 0; top: 0"
         >
-          
-
           <a
             class="btn bg-theme rounded-10 border-0 fw-bold text-white d-flex justify-content-center p-1 align-content-center"
             (click)="nav.toggle(); setToolbarLoc()"
             [matTooltip]="'Toggle Controller Menu'"
             [matTooltipPosition]="'left'"
           >
-            <mat-icon class="fw-bold" style="aspect-ratio: 1"> {{nav.opened ? 'close' : "add"}} </mat-icon>
+            <mat-icon class="fw-bold" style="aspect-ratio: 1">
+              {{ nav.opened ? "close" : "add" }}
+            </mat-icon>
           </a>
-          
         </div>
 
         <div
           class="position-absolute d-flex justify-content-between align-items-center m-3"
           style="z-index: 55; left: 0; bottom: 0"
         >
-
           <div class="bg-theme rounded-10 px-2 py-1">
             <mat-slide-toggle
               #gridModeSwitch

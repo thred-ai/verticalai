@@ -59,6 +59,7 @@
                       [models]="models"
                       [workflow]="workflow.value"
                       [theme]="theme"
+                      [selectedFile]="openStep.value.id"
                       (detailsChanged)="
                         edited = true; workflow.next($event); save(1, true)
                       "
