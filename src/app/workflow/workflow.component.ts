@@ -540,7 +540,7 @@ export class WorkflowComponent implements OnInit {
               'category',
               this.analyzeTasks(sequence),
               undefined,
-              { type: 'folder', img: 'assets/switch.png' }
+              { type: 'folder', img: 'assets/branch.png' }
             )
           );
         });
@@ -564,7 +564,7 @@ export class WorkflowComponent implements OnInit {
               {
                 type: 'model',
                 metaType: switchTask.type,
-                img: 'assets/switch.png',
+                img: 'assets/switch2.png',
               }
             ),
             { type: 'switch', img: 'assets/switch.png' }
@@ -588,7 +588,7 @@ export class WorkflowComponent implements OnInit {
               {
                 type: 'container',
                 metaType: loopTask.type,
-                img: 'assets/container.png',
+                img: 'assets/container2.png',
               }
             ),
             { type: 'folder', img: 'assets/container.png' }

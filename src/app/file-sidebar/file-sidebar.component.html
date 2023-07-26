@@ -87,7 +87,6 @@
           <ion-accordion class="bg-transparent" [value]="'code'">
             <ion-item slot="header" class="text-light no-padding">
               <ion-thumbnail
-                *ngIf="item.id == 'app'"
                 slot="start"
                 [style.--border-radius]="'6px'"
               >
@@ -95,7 +94,7 @@
               </ion-thumbnail>
 
               <ion-label
-                style="font-size: 14px"
+                style="font-size: 14px;"
                 (contextmenu)="
                   item.id == 'app' ? onRightClick($event, item) : undefined
                 "
@@ -132,7 +131,7 @@
       slot="header"
       class="text-light w-100 border-0 file-item {{
         selectedFile == item.id ? 'selected' : ''
-      }} py-2"
+      }}"
       role="button"
       (click)="selectedFile = item.id; selectedFileChanged.emit(item.id)"
     >
