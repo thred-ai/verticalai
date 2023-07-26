@@ -13,7 +13,8 @@
     <div
       class="bg-theme h-100"
       style="width: 250px"
-      [hidden]="selectedFile && selectedFile != 'main'"
+      [hidden]="selectedFile && selectedFile.id != 'main'"
+      [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'"
     >
       <div
         class="h-100 d-flex justify-content-center align-items-center flex-column"
@@ -38,9 +39,9 @@
 
     <div
       class="bg-theme h-100"
-      [class.rightBarExtend]="selectedFile && selectedFile != 'main'"
+      [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'"
       style="width: 350px"
-      [hidden]="selectedFile && selectedFile == 'main'"
+      [hidden]="selectedFile && selectedFile.id == 'main'"
     >
       <div
         class="h-100 d-flex justify-content-center align-items-center flex-column"
@@ -55,15 +56,27 @@
           >
         </div>
 
-        <div
-          class="w-100 h-100 p-3"
-          style="overflow-y: scroll"
-        >
-
-        <div>
-          
+        <div class="w-100 h-100 p-3" style="overflow-y: scroll">
+          <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
+            <div class="w-100 pb-3">
+              <verticalai-text-field
+                [title]="'Instructions'"
+                [value]="selectedFile.properties['systemPrompt']"
+                [placeholder]="'ex. Speak with an energetic tone'"
+                (changed)="selectedFile.properties['systemPrompt'] = $event"
+              >
+              </verticalai-text-field>
+            </div>
+            <div class="w-100 pb-3">
+              <verticalai-layout-slider
+                [value]="selectedFile.properties['temp'] ?? 0.5"
+                [title]="'Creativity Level'"
+                [lineFillColor]="'#0A99FF'"
+              >
+              </verticalai-layout-slider>
+            </div>
+          </ng-container>
         </div>
-      </div>
       </div>
     </div>
   </mat-sidenav>
@@ -71,7 +84,7 @@
     <div
       class="w-100 h-100"
       [style.padding-right]="
-        nav.opened ? (selectedFile == 'main' ? '250px' : '350px') : '0'
+        nav.opened ? (selectedFile.id == 'main' ? '250px' : '350px') : '0'
       "
     >
       <div class="h-100 w-100" style="position: relative" id="test" #parent>

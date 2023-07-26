@@ -9,7 +9,7 @@ export class TextboxComponent implements OnInit {
   @Input() title: string = '';
   @Input() value: any;
   @Input() placeholder: string = '';
-  @Input() defaultValue: any = 'None';
+  @Input() defaultValue: any = '';
   @Input() simplify: boolean = false;
   @Input() type: string = 'text';
   @Input() borderColor: string = 'transparent';
