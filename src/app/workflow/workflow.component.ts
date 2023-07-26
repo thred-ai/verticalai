@@ -490,6 +490,7 @@ export class WorkflowComponent implements OnInit {
       // }
       // this.loadService.loadedUser.next(dev);
       this.cdr.detectChanges();
+
     }
   }
 
@@ -696,6 +697,40 @@ export class WorkflowComponent implements OnInit {
     return stepToReturn;
   }
 
+  findSequenceOfStep(id: string, tasks: Sequence) {
+    var sequenceToReturn: Sequence | undefined;
+
+    if (id == 'main') {
+      sequenceToReturn = tasks;
+    } else {
+      tasks.forEach((task) => {
+        if (task.id == id) {
+          sequenceToReturn = tasks;
+        } else {
+          if (task.componentType == 'switch') {
+            let branchTask = task as BranchedStep;
+
+            Object.values(branchTask.branches).forEach((b) => {
+              let path = this.findSequenceOfStep(id, b);
+              if (path) {
+                sequenceToReturn = path;
+              }
+            });
+          } else if (task.componentType == 'container') {
+            let loopTask = task as SequentialStep;
+            let path = this.findSequenceOfStep(id, loopTask.sequence);
+
+            if (path) {
+              sequenceToReturn = path;
+            }
+          }
+        }
+      });
+    }
+
+    return sequenceToReturn;
+  }
+
   jsFormattedName(name: string, same: number) {
     return name + (same > 1 ? `(${same})` : '');
   }
@@ -712,7 +747,7 @@ export class WorkflowComponent implements OnInit {
       case 'gpt3-LLM':
         return this.classes['gpt3'].text;
       case 'repl-replicate':
-          return this.classes['replicate'].text;
+        return this.classes['replicate'].text;
       case 'dalle-TIM':
         return this.classes['dalle'].text;
       case 'sd-TIM':

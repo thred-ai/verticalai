@@ -14,7 +14,7 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
   //   --inner-border-width: 1;
 }
 
-:host ::ng-deep .ion-padding {
+:host::ng-deep .ion-padding {
   padding-right: 0px;
   padding-left: 10px;
   padding-top: 0px;
@@ -24,7 +24,7 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
   overflow: hidden;
 }
 
-:host ::ng-deep .ion-accordion-toggle-icon {
+:host::ng-deep .ion-accordion-toggle-icon {
   font-size: small;
   color: #6c757d;
 }
@@ -74,7 +74,7 @@ ion-icon {
 }
 
 .proj:hover{
-  background-color: #3b371e;
+  background-color: #2e2e2e5f;
 }
 
 .proj-select{

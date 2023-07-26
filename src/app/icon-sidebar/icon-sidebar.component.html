@@ -220,25 +220,7 @@
     </div>
   </div> -->
 
-    <div
-      class="w-100 proj{{
-        selectedIcon == 'run' ? '-select' : ''
-      }} mt-0 d-flex justify-content-center align-items-center"
-      style="aspect-ratio: 1"
-      role="button"
-      (click)="selectedIconChanged.emit('run')"
-      [matTooltip]="'Test'"
-      [matTooltipPosition]="'right'"
-    >
-      <div
-        class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
-        style="aspect-ratio: 1"
-      >
-        <div class="w-100 h-100">
-          <mat-icon class="fw-bold">terminal</mat-icon>
-        </div>
-      </div>
-    </div>
+    
 
     <div
       class="w-100 proj{{
@@ -261,22 +243,25 @@
 
     <div
       class="w-100 proj{{
-        selectedIcon == 'code' ? '-select' : ''
+        selectedIcon == 'run' ? '-select' : ''
       }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
       role="button"
-      (click)="selectedIconChanged.emit('code')"
-      [matTooltip]="'Scripts'"
+      (click)="selectedIconChanged.emit('run')"
+      [matTooltip]="'Test'"
       [matTooltipPosition]="'right'"
     >
       <div
-        class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-0"
+        class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center"
         style="aspect-ratio: 1"
-        role="button"
       >
-        <mat-icon class="fw-bold">code</mat-icon>
+        <div class="w-100 h-100">
+          <mat-icon class="fw-bold">terminal</mat-icon>
+        </div>
       </div>
     </div>
+
+    
 
     <div
       class="w-100 proj{{
@@ -296,7 +281,29 @@
         <mat-icon class="fw-bold">storage</mat-icon>
       </div>
     </div>
+
+    <div
+      class="w-100 proj{{
+        selectedIcon == 'code' ? '-select' : ''
+      }} mt-0 d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+      role="button"
+      (click)="selectedIconChanged.emit('code')"
+      [matTooltip]="'Scripts'"
+      [matTooltipPosition]="'right'"
+    >
+      <div
+        class="mx-2 text-light fw-bold d-flex justify-content-center align-items-center mt-0"
+        style="aspect-ratio: 1"
+        role="button"
+      >
+        <mat-icon class="fw-bold">code</mat-icon>
+      </div>
+    </div>
+    
   </div>
+
+
 
   <div class="rounded-circle icons w-100 p-1" style="aspect-ratio: inherit">
     <img

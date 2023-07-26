@@ -43,9 +43,11 @@ export class FileSidebarComponent implements OnInit {
   @Input() apiKeys: Dict<Key> = {};
   @Input() apiRequests: Dict<APIRequest> = {};
   @Input() executable?: Executable;
+  @Input() selectedIcon?: string;
 
   @Output() detailsChanged = new EventEmitter<Executable>();
   @Output() selectedFileChanged = new EventEmitter<string>();
+  @Output() publish = new EventEmitter<Executable>();
   @Output() openProj = new EventEmitter<string | undefined>();
 
   loadedUser?: Developer;
@@ -67,7 +69,28 @@ export class FileSidebarComponent implements OnInit {
 
     this.loading = true;
 
-    this.detailsChanged.emit(this.workflow);
+    this.publish.emit(this.workflow);
+  }
+
+  removeFile(id: string) {
+    let file = this.workflowComponent.findSequenceOfStep(
+      id,
+      this.workflow?.layout.sequence ?? []
+    );
+
+    if (this.loadService.confirmDelete()) {
+      if (file && this.workflow && this.selectedIcon) {
+        let index = file.findIndex((f) => f.id == id);
+        if (index > -1) {
+          file.splice(index, 1);
+          this.detailsChanged.emit(this.workflow);
+
+          if (this.selectedIcon == 'controllers') {
+            this.workflowComponent.setWorkflow(this.workflow!.id, 'main');
+          }
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -79,13 +102,12 @@ export class FileSidebarComponent implements OnInit {
     this.workflowComponent.openStep.subscribe((step) => {
       if (step) {
         this.selectedFile = step.id;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
       }
     });
     this.loadService.loadedUser.subscribe((l) => {
       if (l) {
         this.loadedUser = l;
-        
       }
     });
     // this.workflowComponent.items.subscribe((i) => {
@@ -121,9 +143,9 @@ export class FileSidebarComponent implements OnInit {
   onRightClick(event: MouseEvent, task: TaskTree) {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.preventDefault();
-    event.stopPropagation()
+    event.stopPropagation();
 
-    console.log(task)
+    console.log(task);
 
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';
@@ -137,8 +159,8 @@ export class FileSidebarComponent implements OnInit {
     this.matMenuTrigger!.openMenu();
   }
 
-  openControllerSettings(id: string){
-    console.log(id)
-    this.workflowComponent.openControllerSettings(id)
+  openControllerSettings(id: string) {
+    console.log(id);
+    this.workflowComponent.openControllerSettings(id);
   }
 }

@@ -9,20 +9,6 @@ import { CurrencyMaskInputMode } from 'ngx-currency';
 })
 export class LayoutSliderComponent implements OnInit {
 
-  customCurrencyMaskConfig = {
-    align: 'center',
-    allowNegative: false,
-    allowZero: true,
-    decimal: '.',
-    precision: 0,
-    prefix: '',
-    suffix: '',
-    thousands: ',',
-    min: 0,
-    max: 100,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  };
-
   constructor() { }
 
   ngOnInit(): void {
@@ -30,10 +16,19 @@ export class LayoutSliderComponent implements OnInit {
 
   @Output() valueChange = new EventEmitter<number>();
 
-  @Input() value: number = 0
+  @Input() value: any = 0
 
   @Input() min: number = 0
   @Input() max: number = 100
+  @Input() title: string = 'Slider'
+  @Input() textColor: string = '#ffffff';
+  @Input() lineColor: string = '#131313d4';
+  @Input() lineFillColor: string = '#ffffff';
+  @Input() knobColor: string = '#ffffff';
+  @Input() knobTextColor: string = '#131313d4';
+
+  @Input() simplify: boolean = false;
+
 
   sliderVal(event: Event){
     console.log((event as RangeCustomEvent).detail.value)

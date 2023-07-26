@@ -15,7 +15,7 @@
 
 <ng-template #input>
   <div
-    class="rounded-{{
+    class="{{
       corners
     }} w-100 px-2 pe-3 d-flex justify-content-between align-content-center"
     style="border-width: 1; border-style: solid"
@@ -32,10 +32,11 @@
       [autoGrow]="true"
       [disabled]="disabled"
       [placeholder]="placeholder"
+      [labelPlacement]="'stacked'"
       (ionInput)="onInput($event)"
     ></ion-textarea>
+    
     <ng-template #animate>
-      <ng-container *ngIf="animation == 'typing'">
         <div
           class="d-flex justify-content-start align-content-start w-100"
           style="height: 75px"
@@ -46,7 +47,6 @@
             <span></span>
           </div>
         </div>
-      </ng-container>
     </ng-template>
   </div>
 </ng-template>

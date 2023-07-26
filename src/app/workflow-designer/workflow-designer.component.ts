@@ -178,7 +178,7 @@ export class WorkflowDesignerComponent
   // @Output() apiRequestChanged = new EventEmitter<APIRequest>();
   @Output() selectedFileChanged = new EventEmitter<string>();
 
-  @Input() selectedFile!: string;
+  selectedFile!: Step;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -323,7 +323,7 @@ export class WorkflowDesignerComponent
       return true;
     },
     canDeleteStep: (step, parentSequence) => {
-      return confirm('Are you sure you want to delete this controller?');
+      return this.loadService.confirmDelete()
     },
     isDeletable: (step, parentSequence) => {
       // let ref = this._snackBar.open('Delete Controller', 'Delete');
@@ -415,6 +415,13 @@ export class WorkflowDesignerComponent
         var height = element.offsetHeight;
         window.dispatchEvent(new Event('resize'));
       });
+
+      this.workflowComponent.openStep.subscribe((step) => {
+        if (step) {
+          this.selectedFile = step;
+          this.cdr.detectChanges();
+        }
+      });
     }
   }
 
@@ -446,6 +453,7 @@ export class WorkflowDesignerComponent
         } else {
           this.selectedFileChanged.emit('main');
         }
+        this.cdr.detectChanges()
       });
 
       this.workflowComponent.openStep.subscribe((step) => {
