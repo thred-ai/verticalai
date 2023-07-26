@@ -410,11 +410,11 @@ export class WorkflowDesignerComponent
 
       this.setToolbarLoc()
 
-      erd.listenTo(document.getElementById('test'), (element: HTMLElement) => {
-        var width = element.offsetWidth;
-        var height = element.offsetHeight;
-        window.dispatchEvent(new Event('resize'));
-      });
+      // erd.listenTo(document.getElementById('test'), (element: HTMLElement) => {
+      //   var width = element.offsetWidth;
+      //   var height = element.offsetHeight;
+      //   window.dispatchEvent(new Event('resize'));
+      // });
 
       this.workflowComponent.openStep.subscribe((step) => {
         if (step) {
@@ -483,6 +483,16 @@ export class WorkflowDesignerComponent
   public updateName(step: Step, event: Event, context: StepEditorContext) {
     step.name = (event.target as HTMLInputElement).value;
     context.notifyNameChanged();
+  }
+
+  onInput(ev: any) {
+    var value = ev.target!.value;
+
+    // if (value == '') {
+    //   value = this.defaultValue;
+    // }
+
+    return value
   }
 
   private updateDefinitionJSON() {
