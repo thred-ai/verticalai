@@ -86,15 +86,12 @@
         >
           <ion-accordion class="bg-transparent" [value]="'code'">
             <ion-item slot="header" class="text-light no-padding">
-              <ion-thumbnail
-                slot="start"
-                [style.--border-radius]="'6px'"
-              >
+              <ion-thumbnail slot="start" [style.--border-radius]="'6px'">
                 <img [src]="item.metadata.img ?? ''" />
               </ion-thumbnail>
 
               <ion-label
-                style="font-size: 14px;"
+                style="font-size: 14px"
                 (contextmenu)="
                   item.id == 'app' ? onRightClick($event, item) : undefined
                 "
@@ -155,6 +152,7 @@
           >{{ item.name }}</ion-label
         >
         <ion-icon
+          *ngIf="item.id != 'main'"
           class="text-secondary my-auto"
           style="font-size: 15px; cursor: pointer"
           [name]="'ellipsis-vertical'"
@@ -189,7 +187,9 @@
 <!-- standard material menu -->
 <mat-menu #rightMenu="matMenu" class="bg-theme">
   <ng-template matMenuContent let-item="item">
-    <ng-container *ngIf="item.id != 'app'; else appSettings">
+    <ng-container
+      *ngIf="item.id != 'app' && item.id != 'main'; else appSettings"
+    >
       <button
         mat-menu-item
         class="text-light"
@@ -198,10 +198,7 @@
         Configure
       </button>
 
-      <button mat-menu-item class="text-light" (click)="editingTask = item">
-        Rename
-      </button>
-      <button mat-menu-item class="text-light">Delete</button>
+      <button mat-menu-item class="text-light" (click)="removeFile(item.id)">Delete</button>
     </ng-container>
     <ng-template #appSettings>
       <button

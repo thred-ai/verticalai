@@ -323,7 +323,7 @@ export class WorkflowDesignerComponent
       return true;
     },
     canDeleteStep: (step, parentSequence) => {
-      return confirm('Are you sure you want to delete this controller?');
+      return this.loadService.confirmDelete()
     },
     isDeletable: (step, parentSequence) => {
       // let ref = this._snackBar.open('Delete Controller', 'Delete');

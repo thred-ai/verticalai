@@ -165,8 +165,6 @@
         class="btn bg-theme border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
         (click)="save()"
       >
-        <!-- (click)="edited ? save() : publish(workflow)"
-        [disabled]="loading" -->
         <ng-container *ngIf="loading; else buttonTitles">
           <span class="mx-auto">
             {{ "Saving" }}

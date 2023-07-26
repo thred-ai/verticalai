@@ -85,6 +85,10 @@ export class LoadService {
     },
   };
 
+  confirmDelete(){
+    return confirm('Are you sure you want to delete this controller?');
+  }
+
   set activeTheme(value: 'light' | 'dark') {
     document.documentElement.style.setProperty(
       '--primaryColor',
