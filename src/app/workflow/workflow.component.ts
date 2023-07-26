@@ -738,22 +738,22 @@ export class WorkflowComponent implements OnInit {
   defaultCode(type: string) {
     console.log(this.classes);
     switch (type) {
-      case 'switch':
-        return this.classes['branch'].text;
-      case 'container':
-        return this.classes['repeat'].text;
-      case 'gpt-LLM':
-        return this.classes['gpt'].text;
-      case 'gpt3-LLM':
-        return this.classes['gpt3'].text;
-      case 'repl-replicate':
-        return this.classes['replicate'].text;
-      case 'dalle-TIM':
-        return this.classes['dalle'].text;
-      case 'sd-TIM':
-        return this.classes['sd'].text;
-      case 'main':
-        return this.classes['main'].text;
+      // case 'switch':
+      //   return this.classes['branch'].text;
+      // case 'container':
+      //   return this.classes['repeat'].text;
+      // case 'gpt-LLM':
+      //   return this.classes['gpt'].text;
+      // case 'gpt3-LLM':
+      //   return this.classes['gpt3'].text;
+      // case 'repl-replicate':
+      //   return this.classes['replicate'].text;
+      // case 'dalle-TIM':
+      //   return this.classes['dalle'].text;
+      // case 'sd-TIM':
+      //   return this.classes['sd'].text;
+      // case 'main':
+      //   return this.classes['main'].text;
 
       default:
         return this.classes['default'].text;
