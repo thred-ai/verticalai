@@ -120,9 +120,19 @@
 .sqd-label-rect {
   fill: var(--primaryColor);
 }
-.sqd-label-rect.sqd-label-secondary {
+.sqd-label-secondary {
   //fill: #3e3e3e5f;
-  fill: var(--primaryColor);
+  fill: #fff;
+
+  .sqd-label-text{
+    display: none !important;
+  }
+
+  .sqd-label-rect{
+    width: 22px !important;
+    x: -11px !important;
+    clip-path: circle();
+  }
 }
 .sqd-label-text {
   fill: #fff;

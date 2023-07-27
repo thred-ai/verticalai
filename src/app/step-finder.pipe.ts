@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BranchedStep, Definition, Step } from 'sequential-workflow-designer';
+import { BranchedStep, Definition, Step } from 'vertical-ai-designer';
 
 @Pipe({
   name: 'stepFinder'

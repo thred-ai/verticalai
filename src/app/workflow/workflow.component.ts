@@ -24,7 +24,7 @@ import {
   BranchedStep,
   SequentialStep,
   Step,
-} from 'sequential-workflow-designer';
+} from 'vertical-ai-designer';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as verticalkit from 'verticalkit/compiled';

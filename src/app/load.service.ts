@@ -19,7 +19,7 @@ import {
   Definition,
   Sequence,
   SequentialStep,
-} from 'sequential-workflow-designer';
+} from 'vertical-ai-designer';
 import { TrainingData } from './models/workflow/training-data.model';
 import { Key } from './models/workflow/key.model';
 import { APIRequest } from './models/workflow/api-request.model';

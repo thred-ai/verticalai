@@ -15,8 +15,9 @@
       class="bg-theme h-100"
       style="width: 250px"
       [hidden]="selectedFile && selectedFile.id != 'main'"
-      [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'"
     >
+    <!-- [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'" -->
+
       <div
         class="h-100 d-flex justify-content-center align-items-center flex-column"
       >
@@ -40,10 +41,11 @@
 
     <div
       class="bg-theme h-100"
-      [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'"
       style="width: 350px"
       [hidden]="selectedFile && selectedFile.id == 'main'"
     >
+    <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
+
       <div
         class="h-100 d-flex justify-content-center align-items-center flex-column"
       >
@@ -108,6 +110,71 @@
               >
               </verticalai-layout-slider>
             </div> -->
+          </ng-container>
+
+          <ng-container *ngIf="selectedFile.componentType == 'switch'">
+            <ng-container
+              *ngIf="selectedFile | cast : BranchedStep as branchStep"
+              ><div
+                class="w-100 d-flex justify-content-between align-content-center mb-3 mt-4 text-white"
+              >
+                <p class="w-100">Decision Paths</p>
+                <mat-icon
+                  class="m-auto text-orange"
+                  role="button"
+                  (click)="newBranch(branchStep)"
+                >
+                  add
+                </mat-icon>
+              </div>
+
+              <div class="w-100" style="max-height: 400px; overflow-y: scroll">
+                <div
+                  *ngFor="
+                    let branch of (branchStep.branches | dictToArr) ?? [];
+                    index as i
+                  "
+                  class="pb-4"
+                >
+                  <div class="w-100 mb-2">
+                    <verticalai-text-field
+                      [value]="branch.name"
+                      [defaultValue]="'Option ' + (i + 1)"
+                      [placeholder]="'Branch Name'"
+                      [btn]="true"
+                      [simplify]="true"
+                      [btnIcon]="'close'"
+                      (btnClicked)="deleteBranch(branchStep, branch.name)"
+                      (changed)="
+                        isNameTaken($event, branchStep)
+                          ? null
+                          : changeBranchName($event, branchStep, i)
+                          
+                      "
+                    >
+                    </verticalai-text-field>
+                  </div>
+
+                  <div class="w-100 pb-3">
+                    <verticalai-textbox
+                      [title]="'Description'"
+                      [simplify]="true"
+                      [value]="
+                        (branchStep.properties['branches'] | cast : any)[
+                          branch.name
+                        ]?.description ?? ''
+                      "
+                      [corners]="'rounded-10'"
+                      [placeholder]="'Description (Required)'"
+                      (changed)="
+                        setBranchDescription(branchStep, branch.name, $event)
+                      "
+                    >
+                    </verticalai-textbox>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </ng-container>
 
           <ng-container

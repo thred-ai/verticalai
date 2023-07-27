@@ -12,7 +12,7 @@ import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { Executable } from '../models/workflow/executable.model';
 import { Key } from '../models/workflow/key.model';
 import { Trigger } from '../models/workflow/trigger.model';
-import { BranchedStep, Step } from 'sequential-workflow-designer';
+import { BranchedStep, Step } from 'vertical-ai-designer';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -33,8 +33,6 @@ export class SettingsComponent implements OnInit {
   mode: number = 1;
 
   loading = false;
-
-  BranchedStep!: BranchedStep;
 
   // @Output() detailsChanged = new EventEmitter<Executable>();
   // @Output() iconChanged = new EventEmitter<File>();
@@ -64,82 +62,6 @@ export class SettingsComponent implements OnInit {
     // this.apiKeyChanged.emit(apiKey);
   }
 
-  newBranch(step: BranchedStep) {
-    const map1 = new Map();
-    const map2 = new Map();
-
-    Object.keys(step.branches).forEach((key, index) => {
-      map1.set(key, step.branches[key]);
-      map2.set(key, index);
-    });
-
-    let name = `Option ${(Object.keys(step.branches) as string[]).length + 1}`;
-
-    if (this.isNameTaken(name, step)) {
-      var index = 1;
-      do {
-        index += 1;
-        name = `Option ${
-          (Object.keys(step.branches) as string[]).length + index
-        }`;
-      } while (this.isNameTaken(name, step));
-    }
-    map1.set(name, []);
-    map2.set(name, map1.size - 1);
-
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-  }
-
-  changeBranchName(newName: string, step: BranchedStep, i: number) {
-    const map1 = new Map();
-    const map2 = new Map();
-
-    Object.keys(step.branches).forEach((key, index) => {
-      if (index == i) {
-        map1.set(newName, step.branches[key]);
-        map2.set(newName, index);
-        return;
-      }
-      map1.set(key, step.branches[key]);
-      map2.set(key, index);
-    });
-
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-  }
-
-  deleteBranch(step: BranchedStep, nameToRemove: string) {
-    const map1 = new Map();
-    const map2 = new Map();
-
-    let branches = Object.keys(step.branches);
-
-    if (branches.length == 2) {
-      return;
-    }
-    branches.forEach((key, index) => {
-      if (key != nameToRemove) {
-        map1.set(key, step.branches[key]);
-      }
-    });
-
-    var index = 0;
-    map1.forEach((m: any, key: string) => {
-      map2.set(key, index);
-      index += 1;
-    });
-
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-  }
-
-  isNameTaken(name: string, step: BranchedStep) {
-    if (step.branches[name]) {
-      return true;
-    }
-    return false;
-  }
 
   async save() {
     this.loading = true;

@@ -4,7 +4,7 @@ import { WorkflowComponent } from '../workflow/workflow.component';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import { Dict, LoadService } from '../load.service';
 import { BehaviorSubject } from 'rxjs';
-import { Step } from 'sequential-workflow-designer';
+import { Step } from 'vertical-ai-designer';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Document } from '../models/workflow/document.model';
 import { Collection } from '../models/workflow/collection.model';
