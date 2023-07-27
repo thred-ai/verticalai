@@ -409,14 +409,14 @@ export class WorkflowDesignerComponent
 
       this.setToolbarLoc();
 
-      erd.listenTo(
-        document.getElementById('container'),
-        (element: HTMLElement) => {
-          var width = element.offsetWidth;
-          var height = element.offsetHeight;
-          window.dispatchEvent(new Event('resize'));
-        }
-      );
+      // erd.listenTo(
+      //   document.getElementById('container'),
+      //   (element: HTMLElement) => {
+      //     var width = element.offsetWidth;
+      //     var height = element.offsetHeight;
+      //     window.dispatchEvent(new Event('resize'));
+      //   }
+      // );
 
       this.workflowComponent.openStep.subscribe((step) => {
         if (step) {
@@ -454,19 +454,20 @@ export class WorkflowDesignerComponent
     try {
       this.designer?.onSelectedStepIdChanged.subscribe((id) => {
         console.log(id);
-        if (id) {
-          this.selectedFileChanged.emit(id);
-          // clearListener(id)
-        } else {
-          this.selectedFileChanged.emit('main');
-        }
+        setTimeout(() => {
+          if (id) {
+            this.selectedFileChanged.emit(id);
+            // clearListener(id)
+          } else {
+            this.selectedFileChanged.emit('main');
+          }
+        }, 1);
+
         this.rerenderDesigner();
       });
 
       this.workflowComponent.openStep.subscribe((step) => {
         if (step) {
-          console.log(step);
-          this.selectedFile = step;
           if (step.id != 'main') {
             this.designer?.selectStepById(step.id);
           } else {
@@ -475,6 +476,9 @@ export class WorkflowDesignerComponent
           this.rerenderDesigner();
         }
       });
+
+
+
     } catch (error) {}
 
     // async function clearListener(id: string) {
