@@ -39,7 +39,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CodeEditorComponent } from '../code-editor/code-editor.component';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { listeners } from 'process';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { TaskTree } from '../models/workflow/task-tree.model';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -53,7 +54,7 @@ export class WorkflowDesignerComponent
 
   public definitionJSON?: string;
 
-  @Input() workflow?: Executable;
+  workflow?: Executable;
 
   BranchedStep!: BranchedStep;
   any!: any;
@@ -357,16 +358,20 @@ export class WorkflowDesignerComponent
 
   done = false;
 
-  public ngOnInit() {
-    // // this.workflowComponent.workflow.subscribe(w => {
-    //   // if (w){
-    //     this.workflow = undefined
-    //     this.designer = undefined
+  openPathSettings() {}
 
-    //     this.cdr.detectChanges()
-    //     this.workflow = w
-    //   }
-    // // })
+  public ngOnInit() {
+    this.shouldRefresh = true;
+    this.workflowComponent.workflow.subscribe((w) => {
+      if (w && this.shouldRefresh) {
+        this.workflow = undefined;
+        this.designer = undefined;
+
+        this.cdr.detectChanges();
+        this.workflow = w;
+      }
+      this.shouldRefresh = false;
+    });
 
     this.done = true;
 
@@ -478,7 +483,6 @@ export class WorkflowDesignerComponent
           if (step.id != 'main') {
             this.designer?.selectStepById(step.id);
             console.log(this.stepContext);
-            
           } else {
             this.designer?.clearSelectedStep();
           }
@@ -612,16 +616,8 @@ export class WorkflowDesignerComponent
     step.properties['order'] = Object.fromEntries(map2);
     step.properties['branches'] = Object.fromEntries(map3);
 
-    let context = this.designer?.createStepEditorContext(step.id);
-
-    context?.notifyChildrenChanged();
-
-    this.designer?.clearSelectedStep();
-
-    setTimeout(() => {
-      this.designer?.selectStepById(step.id);
-    }, 5);
-
+    this.shouldRefresh = true;
+    this.saveLayout();
   }
 
   setBranchDescription(
@@ -638,9 +634,11 @@ export class WorkflowDesignerComponent
     branches[branchName] = {
       description,
     };
-    this.saveLayout()
 
+    this.saveLayout();
   }
+
+  shouldRefresh = false;
 
   changeBranchName(newName: string, step: BranchedStep, i: number) {
     const map1 = new Map();
@@ -665,7 +663,8 @@ export class WorkflowDesignerComponent
 
     // this.rerenderDesigner()
     // this.saveLayout();
-    this.saveLayout()
+    this.shouldRefresh = true;
+    this.saveLayout();
   }
 
   deleteBranch(step: BranchedStep, nameToRemove: string) {
@@ -696,15 +695,27 @@ export class WorkflowDesignerComponent
     step.properties['branches'] = Object.fromEntries(map3);
     let context = this.designer?.createStepEditorContext(step.id);
 
-    context?.notifyChildrenChanged();
+    this.shouldRefresh = true;
+    this.saveLayout();
+  }
 
-    this.designer?.clearSelectedStep();
+  @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger?: MatMenuTrigger;
+  menuTopLeftPosition = { x: '0', y: '0' };
 
-    setTimeout(() => {
-      this.designer?.selectStepById(step.id);
-    }, 5);
+  onRightClick(event: MouseEvent, branch: string, step: BranchedStep) {
+    // preventDefault avoids to show the visualization of the right-click menu of the browser
+    event.preventDefault();
+    event.stopPropagation();
 
+    // we record the mouse position in our object
+    this.menuTopLeftPosition.x = event.clientX + 'px';
+    this.menuTopLeftPosition.y = event.clientY + 'px';
 
-    // this.saveLayout();
+    // we open the menu
+    // we pass to the menu the information about our object
+    this.matMenuTrigger!.menuData = { item: branch, step };
+
+    // we open the menu
+    this.matMenuTrigger!.openMenu();
   }
 }

@@ -8990,7 +8990,7 @@ mat-sidenav {
 }
 
 .bg-orange:hover {
-  background-color: #f5601d !important;
+  background-color: var(--primaryHoverColor) !important;
 }
 
 .icons {
@@ -9010,7 +9010,7 @@ mat-sidenav {
 }
 
 .bg-orange {
-  background-color: #4FC3F7 !important;
+  background-color: var(--primaryColor) !important;
 }
 
 .text-orange {

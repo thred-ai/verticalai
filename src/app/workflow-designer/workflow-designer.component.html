@@ -16,7 +16,7 @@
       style="width: 250px"
       [hidden]="selectedFile && selectedFile.id != 'main'"
     >
-    <!-- [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'" -->
+      <!-- [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'" -->
 
       <div
         class="h-100 d-flex justify-content-center align-items-center flex-column"
@@ -44,7 +44,7 @@
       style="width: 350px"
       [hidden]="selectedFile && selectedFile.id == 'main'"
     >
-    <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
+      <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
 
       <div
         class="h-100 d-flex justify-content-center align-items-center flex-column"
@@ -116,7 +116,7 @@
             <ng-container
               *ngIf="selectedFile | cast : BranchedStep as branchStep"
               ><div
-                class="w-100 d-flex justify-content-between align-content-center mb-3 mt-4 text-white"
+                class="w-100 d-flex justify-content-between align-content-center pb-3 mb-3 mt-4 text-white border-table-bottom"
               >
                 <p class="w-100">Decision Paths</p>
                 <mat-icon
@@ -128,15 +128,37 @@
                 </mat-icon>
               </div>
 
-              <div class="w-100" style="max-height: 400px; overflow-y: scroll">
+              <div class="w-100">
                 <div
                   *ngFor="
                     let branch of (branchStep.branches | dictToArr) ?? [];
                     index as i
                   "
-                  class="pb-4"
+                  class="pb-4 d-flex justify-content-between align-items-center"
                 >
-                  <div class="w-100 mb-2">
+                  <div class="text-white fw-bold">
+                    {{ branch.name }}
+                  </div>
+                  <!-- 
+                  <div
+                    class="btn bg-orange text-white fw-bold rounded-10"
+                  >
+                    Edit 
+                  </div> -->
+
+                  <div
+                    class="btn bg-orange text-white fw-bold rounded-10 d-flex p-2 justify-content-center align-items-center"
+                    (click)="onRightClick($event, branch.name, branchStep)"
+                  >
+                    <ion-icon
+                      class="m-auto"
+                      [name]="'settings-outline'"
+                      slot="end"
+                      role="button"
+                      [matTooltip]="'Actions'"
+                    ></ion-icon>
+                  </div>
+                  <!-- <div class="w-100 mb-2">
                     <verticalai-text-field
                       [value]="branch.name"
                       [defaultValue]="'Option ' + (i + 1)"
@@ -153,9 +175,9 @@
                       "
                     >
                     </verticalai-text-field>
-                  </div>
+                  </div> -->
 
-                  <div class="w-100 pb-3">
+                  <!-- <div class="w-100 pb-3">
                     <verticalai-textbox
                       [title]="'Description'"
                       [simplify]="true"
@@ -171,7 +193,7 @@
                       "
                     >
                     </verticalai-textbox>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </ng-container>
@@ -429,3 +451,21 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<div
+  style="visibility: hidden; position: fixed"
+  [style.left]="menuTopLeftPosition.x"
+  [style.top]="menuTopLeftPosition.y"
+  [matMenuTriggerFor]="rightMenu"
+></div>
+
+<!-- standard material menu -->
+<mat-menu #rightMenu="matMenu" class="bg-theme">
+  <ng-template matMenuContent let-item="item" let-step="step">
+    <ng-container *ngIf="item.id != 'app' && item.id != 'main'">
+      <button mat-menu-item class="text-light">Edit Path</button>
+
+      <button mat-menu-item class="text-light" (click)="deleteBranch(step, item)">Delete</button>
+    </ng-container>
+  </ng-template>
+</mat-menu>
