@@ -19,7 +19,7 @@ import {
   Definition,
   Sequence,
   SequentialStep,
-} from 'sequential-workflow-designer';
+} from 'vertical-ai-designer';
 import { TrainingData } from './models/workflow/training-data.model';
 import { Key } from './models/workflow/key.model';
 import { APIRequest } from './models/workflow/api-request.model';
@@ -71,7 +71,7 @@ export class LoadService {
   themes = {
     dark: {
       primaryColor: '#0A99FF',
-      primaryHoverColor: '#64B5F6',
+      primaryHoverColor: '#34aafe',
       gridColor: '#242424',
       backgroundPrimaryColor: '#',
       backgroundSecondaryColor: '#F4F5F8',
@@ -505,7 +505,8 @@ export class LoadService {
                   d.imgUrl,
                   d.type,
                   d.status,
-                  d.description
+                  d.description,
+                  d.variations
                 );
               });
               this.loadedModels.next(models);

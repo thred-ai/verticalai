@@ -1,4 +1,4 @@
-import { Definition } from 'sequential-workflow-designer';
+import { Definition } from 'vertical-ai-designer';
 import * as uuid from 'uuid';
 import { Plan } from './plan.model';
 import { Subscription } from './subscription.model';

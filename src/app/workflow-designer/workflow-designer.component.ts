@@ -24,8 +24,8 @@ import {
   StepsConfiguration,
   ToolboxConfiguration,
   ToolboxGroupConfiguration,
-} from 'sequential-workflow-designer';
-import { DesignerComponent } from 'sequential-workflow-designer-angular';
+} from 'vertical-ai-designer';
+import { DesignerComponent } from 'vertical-ai-designer-angular';
 import { Dict, LoadService } from '../load.service';
 import { Executable } from '../models/workflow/executable.model';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
@@ -39,7 +39,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CodeEditorComponent } from '../code-editor/code-editor.component';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { listeners } from 'process';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { TaskTree } from '../models/workflow/task-tree.model';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -53,7 +54,10 @@ export class WorkflowDesignerComponent
 
   public definitionJSON?: string;
 
-  @Input() workflow?: Executable;
+  workflow?: Executable;
+
+  BranchedStep!: BranchedStep;
+  any!: any;
 
   @ViewChild('gridModeSwitch', { read: ElementRef }) element:
     | ElementRef
@@ -88,12 +92,16 @@ export class WorkflowDesignerComponent
       steps: [
         {
           componentType: 'switch',
-          name: 'Branch',
+          name: 'Decision',
           properties: {
-            defaultName: 'Branch',
+            defaultName: 'Decision',
             order: {
               'Option 1': 0,
               'Option 2': 1,
+            },
+            branches: {
+              'Option 1': { description: '' },
+              'Option 2': { description: '' },
             },
           },
           type: 'switch',
@@ -339,7 +347,6 @@ export class WorkflowDesignerComponent
     isDraggable: (step, parentSequence) => {
       return true;
     },
-    validator: () => true,
   };
 
   isNameTaken(name: string, step: BranchedStep) {
@@ -351,16 +358,20 @@ export class WorkflowDesignerComponent
 
   done = false;
 
-  public ngOnInit() {
-    // // this.workflowComponent.workflow.subscribe(w => {
-    //   // if (w){
-    //     this.workflow = undefined
-    //     this.designer = undefined
+  openPathSettings() {}
 
-    //     this.cdr.detectChanges()
-    //     this.workflow = w
-    //   }
-    // // })
+  public ngOnInit() {
+    this.shouldRefresh = true;
+    this.workflowComponent.workflow.subscribe((w) => {
+      if (w && this.shouldRefresh) {
+        this.workflow = undefined;
+        this.designer = undefined;
+
+        this.cdr.detectChanges();
+        this.workflow = w;
+      }
+      this.shouldRefresh = false;
+    });
 
     this.done = true;
 
@@ -409,14 +420,14 @@ export class WorkflowDesignerComponent
 
       this.setToolbarLoc();
 
-      erd.listenTo(
-        document.getElementById('container'),
-        (element: HTMLElement) => {
-          var width = element.offsetWidth;
-          var height = element.offsetHeight;
-          window.dispatchEvent(new Event('resize'));
-        }
-      );
+      // erd.listenTo(
+      //   document.getElementById('container'),
+      //   (element: HTMLElement) => {
+      //     var width = element.offsetWidth;
+      //     var height = element.offsetHeight;
+      //     window.dispatchEvent(new Event('resize'));
+      //   }
+      // );
 
       this.workflowComponent.openStep.subscribe((step) => {
         if (step) {
@@ -454,24 +465,28 @@ export class WorkflowDesignerComponent
     try {
       this.designer?.onSelectedStepIdChanged.subscribe((id) => {
         console.log(id);
-        if (id) {
-          this.selectedFileChanged.emit(id);
-          // clearListener(id)
-        } else {
-          this.selectedFileChanged.emit('main');
-        }
+        setTimeout(() => {
+          if (id) {
+            this.selectedFileChanged.emit(id);
+            // clearListener(id)
+          } else {
+            this.selectedFileChanged.emit('main');
+          }
+        }, 1);
+
         this.rerenderDesigner();
       });
 
       this.workflowComponent.openStep.subscribe((step) => {
+        this.stepContext = undefined;
         if (step) {
-          console.log(step);
-          this.selectedFile = step;
           if (step.id != 'main') {
             this.designer?.selectStepById(step.id);
+            console.log(this.stepContext);
           } else {
             this.designer?.clearSelectedStep();
           }
+          console.log(this.stepContext);
           this.rerenderDesigner();
         }
       });
@@ -486,9 +501,12 @@ export class WorkflowDesignerComponent
     // }
   }
 
+  stepContext?: StepEditorContext;
+
   public saveLayout() {
     // this.definition = definition;
 
+    // if (this.)
     this.detailsChanged.emit(this.workflow);
   }
 
@@ -566,5 +584,138 @@ export class WorkflowDesignerComponent
     //   }
     // }
     // }, 1);
+  }
+
+  newBranch(step: BranchedStep) {
+    const map1 = new Map();
+    const map2 = new Map();
+    const map3 = new Map();
+
+    Object.keys(step.branches).forEach((key, index) => {
+      map1.set(key, step.branches[key]);
+      map2.set(key, index);
+      map3.set(key, (step.properties['branches'] as Dict<any>)[key]);
+    });
+
+    let name = `Option ${(Object.keys(step.branches) as string[]).length + 1}`;
+
+    if (this.isNameTaken(name, step)) {
+      var index = 1;
+      do {
+        index += 1;
+        name = `Option ${
+          (Object.keys(step.branches) as string[]).length + index
+        }`;
+      } while (this.isNameTaken(name, step));
+    }
+    map1.set(name, []);
+    map2.set(name, map1.size - 1);
+    map3.set(name, (step.properties['branches'] as Dict<any>)[name]);
+
+    step.branches = Object.fromEntries(map1);
+    step.properties['order'] = Object.fromEntries(map2);
+    step.properties['branches'] = Object.fromEntries(map3);
+
+    this.shouldRefresh = true;
+    this.saveLayout();
+  }
+
+  setBranchDescription(
+    step: BranchedStep,
+    branchName: string,
+    description: string
+  ) {
+    if (!step.properties['branches']) {
+      step.properties['branches'] = {};
+    }
+
+    let branches = step.properties['branches'] as Dict<any>;
+
+    branches[branchName] = {
+      description,
+    };
+
+    this.saveLayout();
+  }
+
+  shouldRefresh = false;
+
+  changeBranchName(newName: string, step: BranchedStep, i: number) {
+    const map1 = new Map();
+    const map2 = new Map();
+    const map3 = new Map();
+
+    Object.keys(step.branches).forEach((key, index) => {
+      var name = key;
+      if (index == i) {
+        name = newName;
+      }
+      map1.set(name, step.branches[key]);
+      map2.set(name, index);
+      map3.set(name, (step.properties['branches'] as Dict<any>)[key]);
+    });
+
+    step.branches = Object.fromEntries(map1);
+    step.properties['order'] = Object.fromEntries(map2);
+    step.properties['branches'] = Object.fromEntries(map3);
+
+    // this.workflowComponent?.openStep.next(step)
+
+    // this.rerenderDesigner()
+    // this.saveLayout();
+    this.shouldRefresh = true;
+    this.saveLayout();
+  }
+
+  deleteBranch(step: BranchedStep, nameToRemove: string) {
+    const map1 = new Map();
+    const map2 = new Map();
+    const map3 = new Map();
+
+    let branches = Object.keys(step.branches);
+
+    if (branches.length == 2) {
+      return;
+    }
+    branches.forEach((key, index) => {
+      if (key != nameToRemove) {
+        map1.set(key, step.branches[key]);
+      }
+    });
+
+    var index = 0;
+    map1.forEach((m: any, key: string) => {
+      map2.set(key, index);
+      map3.set(key, (step.properties['branches'] as Dict<any>)[key]);
+      index += 1;
+    });
+
+    step.branches = Object.fromEntries(map1);
+    step.properties['order'] = Object.fromEntries(map2);
+    step.properties['branches'] = Object.fromEntries(map3);
+    let context = this.designer?.createStepEditorContext(step.id);
+
+    this.shouldRefresh = true;
+    this.saveLayout();
+  }
+
+  @ViewChild(MatMenuTrigger, { static: true }) matMenuTrigger?: MatMenuTrigger;
+  menuTopLeftPosition = { x: '0', y: '0' };
+
+  onRightClick(event: MouseEvent, branch: string, step: BranchedStep) {
+    // preventDefault avoids to show the visualization of the right-click menu of the browser
+    event.preventDefault();
+    event.stopPropagation();
+
+    // we record the mouse position in our object
+    this.menuTopLeftPosition.x = event.clientX + 'px';
+    this.menuTopLeftPosition.y = event.clientY + 'px';
+
+    // we open the menu
+    // we pass to the menu the information about our object
+    this.matMenuTrigger!.menuData = { item: branch, step };
+
+    // we open the menu
+    this.matMenuTrigger!.openMenu();
   }
 }

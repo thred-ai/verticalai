@@ -93,7 +93,7 @@ import { LayoutSliderComponent } from './layout-slider/layout-slider.component';
 import { WorkflowStatusPipe } from './workflow-status.pipe';
 import { IonicModule } from '@ionic/angular';
 import { WorkflowDesignerComponent } from './workflow-designer/workflow-designer.component';
-import { SequentialWorkflowDesignerModule } from 'sequential-workflow-designer-angular';
+import { VerticalAIDesignerModule } from 'vertical-ai-designer-angular';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { TextFieldComponent } from './text-field/text-field.component';
 import { DictToArrPipe } from './dict-to-arr.pipe';
@@ -259,7 +259,7 @@ import { TextAreaRenderPipe } from './text-area-render.pipe';
     ColorPickerModule,
     NgxSliderModule,
     NgxDefaultImageModule,
-    SequentialWorkflowDesignerModule,
+    VerticalAIDesignerModule,
     IonicModule,
     ClipboardModule,
     AngularSplitModule,

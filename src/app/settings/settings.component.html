@@ -53,51 +53,6 @@
             </div>
           </ng-container>
         </ng-container> -->
-
-        <ng-container *ngIf="selectedFile.componentType == 'switch'">
-          <ng-container *ngIf="selectedFile | cast : BranchedStep as branchStep"
-            ><div
-              class="w-100 d-flex justify-content-between align-content-center mb-3 mt-4 text-white"
-            >
-              <p class="w-100">Branches</p>
-              <mat-icon
-                class="m-auto text-orange"
-                role="button"
-                (click)="newBranch(branchStep)"
-              >
-                add
-              </mat-icon>
-            </div>
-
-            <div class="w-100" style="max-height: 400px; overflow-y: scroll">
-              <div
-                *ngFor="
-                  let branch of (branchStep.branches | dictToArr) ?? [];
-                  index as i
-                "
-              >
-                <div class="w-100 mb-3">
-                  <verticalai-text-field
-                    [value]="branch.name"
-                    [defaultValue]="'Option ' + (i + 1)"
-                    [placeholder]="'Branch Name'"
-                    [btn]="true"
-                    [simplify]="true"
-                    [btnIcon]="'close'"
-                    [bgColor]="'#1F1F1F'"
-                    (btnClicked)="deleteBranch(branchStep, branch.name)"
-                    (changed)="
-                      isNameTaken($event, branchStep)
-                        ? null
-                        : changeBranchName($event, branchStep, i)
-                    "
-                  >
-                  </verticalai-text-field>
-                </div>
-              </div>
-            </div>
-          </ng-container>
-        </ng-container>
       </div>
 
       <div class="w-100 h-100" *ngIf="mode == 2">

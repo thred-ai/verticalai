@@ -1,4 +1,4 @@
-import { Request } from "./request.model";
+import { Request } from './request.model';
 
 export class AIModel {
   name!: string;
@@ -7,7 +7,8 @@ export class AIModel {
   imgUrl!: string;
   type!: string;
   status!: number;
-  description: string
+  description: string;
+  variations: any[];
 
   constructor(
     name: string,
@@ -16,14 +17,16 @@ export class AIModel {
     imgUrl: string,
     type: string,
     status: number,
-    description?: string
+    description?: string,
+    variations?: any[]
   ) {
     this.id = id;
     this.developer = developer ?? 'Unknown Developer';
     this.name = name ?? 'New Model';
     this.imgUrl = imgUrl ?? '';
     this.type = type ?? 'Unknown';
-    this.status = status ?? 1
-    this.description = (description ?? '').split("/n").join('<br>')
+    this.status = status ?? 1;
+    this.description = description ?? '';
+    this.variations = variations ?? [];
   }
 }
