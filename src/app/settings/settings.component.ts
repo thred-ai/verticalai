@@ -30,6 +30,8 @@ export class SettingsComponent implements OnInit {
 
   apiKey?: Key;
   newAPIKey?: Key;
+  newBranch: Dict<any> = {};
+
   mode: number = 1;
 
   loading = false;
@@ -41,6 +43,8 @@ export class SettingsComponent implements OnInit {
   selectedFile?: Step;
   newImg?: File;
 
+  any!: any;
+
   constructor(
     private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -51,8 +55,20 @@ export class SettingsComponent implements OnInit {
     this.apiKey = data.apiKey;
     this.selectedFile = data.step;
     this.workflow = data.workflow;
+    this.newBranch['title'] = data.branch;
 
-    this.mode = this.selectedFile ? 1 : 2;
+    if (
+      this.selectedFile &&
+      this.selectedFile.properties['branches'] &&
+      this.newBranch['title']
+    ) {
+      this.newBranch['description'] =
+        (this.selectedFile.properties['branches'] as Dict<any>)[
+          this.newBranch['title']
+        ]?.description ?? '';
+    }
+
+    this.mode = this.selectedFile ? (this.newBranch['title'] ? 3 : 1) : 2;
   }
 
   ngOnInit(): void {}
@@ -61,7 +77,6 @@ export class SettingsComponent implements OnInit {
     this.newAPIKey = new Key(id, data);
     // this.apiKeyChanged.emit(apiKey);
   }
-
 
   async save() {
     this.loading = true;
@@ -78,6 +93,7 @@ export class SettingsComponent implements OnInit {
       apiKey: this.newAPIKey,
       workflow: this.workflow,
       img: this.newImg,
+      ...this.newBranch,
     });
   }
 

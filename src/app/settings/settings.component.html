@@ -58,7 +58,7 @@
       <div class="w-100 h-100" *ngIf="mode == 2">
         <div class="w-100">
           <div matDialogTitle class="text-white">Project Settings</div>
-          
+
           <div class="wrap-input1 w-100 py-3 px-0">
             <p class="w-100 mb-3 text-white">Project Icon</p>
 
@@ -102,17 +102,45 @@
 
           <div class="wrap-input1 w-100 pb-3">
             <verticalai-text-field
-            [title]="'Project Name'"
-            [bgColor]="'#1F1F1F'"
-            [value]="workflow.name"
-            [defaultValue]="workflow.name"
-            [placeholder]="'Project Name'"
-            (changed)="workflow.name = $event"
-          >
-          </verticalai-text-field>
-
+              [title]="'Project Name'"
+              [bgColor]="'#1F1F1F'"
+              [value]="workflow.name"
+              [defaultValue]="workflow.name"
+              [placeholder]="'Project Name'"
+              (changed)="workflow.name = $event"
+            >
+            </verticalai-text-field>
           </div>
-        
+        </div>
+      </div>
+
+      <div class="w-100 h-100" *ngIf="mode == 3 && newBranch['title'] && selectedFile">
+        <div class="w-100">
+          <div matDialogTitle class="text-white">Path Settings</div>
+
+          <div class="wrap-input1 w-100 pb-3">
+            <verticalai-text-field
+              [title]="'Path Name'"
+              [bgColor]="'#1F1F1F'"
+              [value]="newBranch['title']"
+              [defaultValue]="newBranch['title']"
+              [placeholder]="'Path Name'"
+              (changed)="newBranch['title'] = $event"
+            >
+            </verticalai-text-field>
+          </div>
+
+          <div class="wrap-input1 w-100 pb-3">
+            <verticalai-textbox
+              [title]="'Description'"
+              [bgColor]="'#1F1F1F'"
+              [value]="newBranch['description']"
+              [corners]="'rounded-10'"
+              [placeholder]="'Description (Required)'"
+              (changed)="newBranch['description'] = $event"
+            >
+            </verticalai-textbox>
+          </div>
         </div>
       </div>
 
