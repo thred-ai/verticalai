@@ -463,7 +463,7 @@
 <mat-menu #rightMenu="matMenu" class="bg-theme">
   <ng-template matMenuContent let-item="item" let-step="step">
     <ng-container *ngIf="item.id != 'app' && item.id != 'main'">
-      <button mat-menu-item class="text-light">Edit Path</button>
+      <button mat-menu-item class="text-light" (click)="openBranchSettings(step, item)">Edit Path</button>
 
       <button mat-menu-item class="text-light" (click)="deleteBranch(step, item)">Delete</button>
     </ng-container>

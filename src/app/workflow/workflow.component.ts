@@ -490,7 +490,6 @@ export class WorkflowComponent implements OnInit {
       // }
       // this.loadService.loadedUser.next(dev);
       this.cdr.detectChanges();
-
     }
   }
 

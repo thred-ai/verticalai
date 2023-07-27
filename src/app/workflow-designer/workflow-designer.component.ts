@@ -41,6 +41,7 @@ import { WorkflowComponent } from '../workflow/workflow.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { TaskTree } from '../models/workflow/task-tree.model';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -621,8 +622,8 @@ export class WorkflowDesignerComponent
   }
 
   setBranchDescription(
-    step: BranchedStep,
     branchName: string,
+    step: BranchedStep,
     description: string
   ) {
     if (!step.properties['branches']) {
@@ -634,38 +635,64 @@ export class WorkflowDesignerComponent
     branches[branchName] = {
       description,
     };
-
-    this.saveLayout();
   }
 
-  shouldRefresh = false;
+  openBranchSettings(step: BranchedStep, branch?: string) {
+    let ref = this.dialog.open(SettingsComponent, {
+      width: 'calc(var(--vh, 1vh) * 70)',
+      maxWidth: '650px',
+      maxHeight: 'calc(var(--vh, 1vh) * 100)',
+      panelClass: 'app-full-bleed-dialog',
 
-  changeBranchName(newName: string, step: BranchedStep, i: number) {
+      data: {
+        step,
+        branch,
+        workflow: this.workflow,
+      },
+    });
+
+    ref.afterClosed().subscribe(async (val) => {
+      if (val && val != '' && val != '0') {
+        let description = val.description ?? '';
+        let title = val.title ?? '';
+
+        this.setBranchName(title, step, branch);
+
+        this.setBranchDescription(title, step, description);
+
+        this.shouldRefresh = true
+
+        this.saveLayout();
+      }
+    });
+  }
+
+  setBranchName(newName: string, step: BranchedStep, oldName: string = '') {
     const map1 = new Map();
     const map2 = new Map();
     const map3 = new Map();
 
-    Object.keys(step.branches).forEach((key, index) => {
-      var name = key;
-      if (index == i) {
-        name = newName;
-      }
-      map1.set(name, step.branches[key]);
-      map2.set(name, index);
-      map3.set(name, (step.properties['branches'] as Dict<any>)[key]);
-    });
+    let branches = Object.keys(step.branches);
+    let i = branches.indexOf(oldName);
 
-    step.branches = Object.fromEntries(map1);
-    step.properties['order'] = Object.fromEntries(map2);
-    step.properties['branches'] = Object.fromEntries(map3);
+    if (i > -1) {
+      branches.forEach((key, index) => {
+        var name = key;
+        if (index == i) {
+          name = newName;
+        }
+        map1.set(name, step.branches[key]);
+        map2.set(name, index);
+        map3.set(name, (step.properties['branches'] as Dict<any>)[key]);
+      });
 
-    // this.workflowComponent?.openStep.next(step)
-
-    // this.rerenderDesigner()
-    // this.saveLayout();
-    this.shouldRefresh = true;
-    this.saveLayout();
+      step.branches = Object.fromEntries(map1);
+      step.properties['order'] = Object.fromEntries(map2);
+      step.properties['branches'] = Object.fromEntries(map3);
+    }
   }
+
+  shouldRefresh = false;
 
   deleteBranch(step: BranchedStep, nameToRemove: string) {
     const map1 = new Map();
