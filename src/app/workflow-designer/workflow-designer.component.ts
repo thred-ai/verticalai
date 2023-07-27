@@ -669,7 +669,7 @@ export class WorkflowDesignerComponent
 
   placeholders: Dict<any> = {
     'gpt-LLM': 'ex. Speak with an energetic tone',
-    'switch': 'ex. '
+    'switch': 'ex. Choose "Option 1" if the sentiment is happy'
   }
 
   setBranchName(newName: string, step: BranchedStep, oldName: string = '') {
