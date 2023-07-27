@@ -88,9 +88,9 @@ export class WorkflowDesignerComponent
       steps: [
         {
           componentType: 'switch',
-          name: 'Branch',
+          name: 'Decision',
           properties: {
-            defaultName: 'Branch',
+            defaultName: 'Decision',
             order: {
               'Option 1': 0,
               'Option 2': 1,

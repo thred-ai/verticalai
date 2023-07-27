@@ -505,7 +505,8 @@ export class LoadService {
                   d.imgUrl,
                   d.type,
                   d.status,
-                  d.description
+                  d.description,
+                  d.variations
                 );
               });
               this.loadedModels.next(models);

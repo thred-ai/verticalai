@@ -65,7 +65,7 @@
                 [placeholder]="'ex. Speak with an energetic tone'"
                 (changed)="
                   selectedFile.properties['systemPrompt'] = $event; saveLayout()
-                "                
+                "
               >
               </verticalai-textbox>
 
@@ -92,6 +92,43 @@
                 "
               >
               </verticalai-layout-slider>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="selectedFile.type == 'dalle-TIM'">
+            <!-- <div class="w-100 pb-3">
+              <verticalai-layout-slider
+                [value]="selectedFile.properties['size'] ?? 0.5"
+                [title]="'Creativity Level'"
+                [lineFillColor]="'#0A99FF'"
+                (valueChange)="
+                  selectedFile.properties['temp'] = $event; saveLayout()
+                "
+              >
+              </verticalai-layout-slider>
+            </div> -->
+          </ng-container>
+
+          <ng-container
+            *ngIf="
+              (models[(selectedFile.type | split : '-')[1]] ?? { models: {} })
+                .models[selectedFile.type]?.variations as variations
+            "
+          >
+            <div class="w-100 pb-3" *ngIf="variations.length > 0">
+              <verticalai-select-field
+                [title]="'Type'"
+                [value]="
+                  selectedFile.properties['engine'] ?? variations[0]?.id ?? ''
+                "
+                [data]="variations"
+                [valueField]="'id'"
+                [displayField]="'name'"
+                (changed)="
+                  selectedFile.properties['engine'] = $event; saveLayout()
+                "
+              >
+              </verticalai-select-field>
             </div>
           </ng-container>
         </div>
@@ -153,105 +190,8 @@
             (onDefinitionChanged)="definitionChanged($event)"
           >
           </sqd-designer>
-          <!-- 
-        <div class="h-100 bg-dark" style="width: 250px; position: absolute; top: 0; right: 0">
-          
-        </div> -->
 
-          <ng-template #globalEditor let-editor>
-            <!-- <div
-            class="w-100 d-none"
-            [style.height.px]="parent.clientHeight"
-            style="overflow-y: scroll"
-          >
-            <ion-accordion-group
-              class="example-headers-align bg-transparent animate__animated animate__fadeIn"
-              [multiple]="true"
-              [value]="openLayouts"
-              (ionChange)="setOpenLayouts($event)"
-              *ngIf="workflow"
-              id="g-accordion"
-            >
-              <ion-accordion value="g-comp" class="bg-transparent">
-                <ion-item slot="header" class="text-light" [color]="theme">
-                  <ion-label>Components</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content" id="g-comp">
-                  <div
-                    class="w-100 h-100 d-flex flex-column justify-content-center align-items-center"
-                    id="compLoader"
-                  >
-                    <verticalai-loader
-                      [mode]="'light'"
-                      [text]=""
-                    ></verticalai-loader>
-                  </div>
-                </div>
-              </ion-accordion>
-              <ion-accordion class="bg-transparent" value="g-general">
-                <ion-item slot="header" class="text-light" [color]="theme">
-                  <ion-label>General</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                  <div class="wrap-input1 w-100 pt-3 px-0">
-                    <p class="w-100 mb-3 text-white">Project Icon</p>
-    
-                    <div
-                      class="w-auto rounded-icon shadow d-flex justify-content-center align-items-center mb-3"
-                      style="
-                        object-fit: contain;
-                        aspect-ratio: 1;
-                        height: 60px;
-                        overflow: hidden;
-                        background-color: #131313d4;
-                      "
-                    >
-                      <div
-                        class="m-auto position-relative img-input"
-                        style="height: 90%; width: 90%; overflow: hidden"
-                        role="button"
-                        (click)="appImgInput.click()"
-                      >
-                        <img
-                          class="w-100 h-100 position-absolute"
-                          style="z-index: 50; object-fit: cover"
-                          [src]="workflow.displayUrl"
-                          id="imgIcon"
-                        />
-                        <div
-                          class="w-100 h-100 position-absolute img-input-display bg-orange text-white"
-                          style="z-index: 51; opacity: 0.5"
-                        >
-                          <mat-icon class="m-auto">upload </mat-icon>
-                        </div>
-                        <input
-                          #appImgInput
-                          type="file"
-                          (change)="fileChangeEvent($event, 1)"
-                          style="display: none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-    
-                  <div class="w-100 mb-3">
-                    <verticalai-text-field
-                      [title]="'Project Name'"
-                      [bgColor]="'#1F1F1F'"
-                      [value]="workflow.name"
-                      [defaultValue]="workflow.name"
-                      [placeholder]="'Project Name'"
-                      (changed)="workflow.name = $event; saveLayout()"
-                    >
-                    </verticalai-text-field>
-                  </div>
-                </div>
-              </ion-accordion>
-            </ion-accordion-group>
-          
-          
-          </div> -->
-          </ng-template>
+          <ng-template #globalEditor let-editor> </ng-template>
 
           <ng-template #stepEditor stepEditor let-editor>
             <!-- <div
