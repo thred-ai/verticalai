@@ -667,6 +667,11 @@ export class WorkflowDesignerComponent
     });
   }
 
+  placeholders: Dict<any> = {
+    'gpt-LLM': 'ex. Speak with an energetic tone',
+    'switch': 'ex. '
+  }
+
   setBranchName(newName: string, step: BranchedStep, oldName: string = '') {
     const map1 = new Map();
     const map2 = new Map();

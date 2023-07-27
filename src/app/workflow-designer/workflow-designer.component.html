@@ -60,31 +60,25 @@
         </div>
 
         <div class="w-100 h-100 p-3" style="overflow-y: scroll">
-          <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
-            <div class="w-100 pb-3">
-              <verticalai-textbox
-                [title]="'Instructions'"
-                [value]="selectedFile.properties['systemPrompt']"
-                [placeholder]="'ex. Speak with an energetic tone'"
-                (changed)="
-                  selectedFile.properties['systemPrompt'] = $event; saveLayout()
-                "
-              >
-              </verticalai-textbox>
+          <div
+            class="w-100 pb-3"
+            *ngIf="
+              selectedFile.type == 'gpt-LLM' ||
+              selectedFile.type == 'switch'
+            "
+          >
+            <verticalai-textbox
+              [title]="'Instructions'"
+              [value]="selectedFile.properties['systemPrompt']"
+              [placeholder]="placeholders[selectedFile.type]"
+              (changed)="
+                selectedFile.properties['systemPrompt'] = $event; saveLayout()
+              "
+            >
+            </verticalai-textbox>
+          </div>
 
-              <!-- <ion-textarea
-                [style.max-height]="'500px'"
-                [style.overflow-y]="'scroll'"
-                fill="solid"
-                [value]="selectedFile.properties['systemPrompt']"
-                [autoGrow]="true"
-                [placeholder]="'ex. Speak with an energetic tone'"
-                [labelPlacement]="'stacked'"
-                (ionInput)="
-                  selectedFile.properties['systemPrompt'] = onInput($event)
-                "
-              ></ion-textarea> -->
-            </div>
+          <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
             <div class="w-100 pb-3">
               <verticalai-layout-slider
                 [value]="selectedFile.properties['temp'] ?? 0.5"
@@ -115,10 +109,11 @@
           <ng-container *ngIf="selectedFile.componentType == 'switch'">
             <ng-container
               *ngIf="selectedFile | cast : BranchedStep as branchStep"
-              ><div
+            >
+              <div
                 class="w-100 d-flex justify-content-between align-content-center pb-3 mb-3 mt-4 text-white border-table-bottom"
               >
-                <p class="w-100">Decision Paths</p>
+                <p class="w-100 fw-bold">Decision Paths</p>
                 <mat-icon
                   class="m-auto text-white"
                   role="button"
@@ -136,7 +131,7 @@
                   "
                   class="pb-4 d-flex justify-content-between align-items-center"
                 >
-                  <div class="text-white fw-bold">
+                  <div class="text-white">
                     {{ branch.name }}
                   </div>
                   <!-- 
@@ -463,9 +458,21 @@
 <mat-menu #rightMenu="matMenu" class="bg-theme">
   <ng-template matMenuContent let-item="item" let-step="step">
     <ng-container *ngIf="item.id != 'app' && item.id != 'main'">
-      <button mat-menu-item class="text-light" (click)="openBranchSettings(step, item)">Edit Path</button>
+      <button
+        mat-menu-item
+        class="text-light"
+        (click)="openBranchSettings(step, item)"
+      >
+        Edit Path
+      </button>
 
-      <button mat-menu-item class="text-light" (click)="deleteBranch(step, item)">Delete</button>
+      <button
+        mat-menu-item
+        class="text-light"
+        (click)="deleteBranch(step, item)"
+      >
+        Delete
+      </button>
     </ng-container>
   </ng-template>
 </mat-menu>
