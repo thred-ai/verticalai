@@ -14,7 +14,7 @@
     <div
       class="bg-theme h-100"
       style="width: 250px"
-      [hidden]="selectedFile && selectedFile.id != 'main'"
+      *ngIf="selectedFile && selectedFile.id == 'main'"
     >
       <!-- [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'" -->
 
@@ -68,7 +68,7 @@
             "
           >
             <verticalai-textbox
-              [title]="'Instructions'"
+              [title]="'Guidance'"
               [value]="selectedFile.properties['systemPrompt']"
               [placeholder]="placeholders[selectedFile.type]"
               (changed)="
@@ -106,7 +106,7 @@
             </div> -->
           </ng-container>
 
-          <ng-container *ngIf="selectedFile.componentType == 'switch'">
+          <ng-container *ngIf="selectedFile.type == 'switch'">
             <ng-container
               *ngIf="selectedFile | cast : BranchedStep as branchStep"
             >
@@ -192,6 +192,24 @@
                 </div>
               </div>
             </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="selectedFile.type == 'container'">
+            <div class="w-100 mb-3">
+              <verticalai-text-field
+                [title]="'Frequency'"
+                [value]="selectedFile.properties['frequency'] ?? 1"
+                [type]="'number'"
+                [defaultValue]="1"
+                [placeholder]="'ex. 2'"
+                [range]="{ min: 1, max: 5 }"
+                (changed)="
+                  selectedFile.properties['frequency'] = $event;
+                  saveLayout()
+                "
+              >
+              </verticalai-text-field>
+            </div>
           </ng-container>
 
           <ng-container
@@ -464,6 +482,24 @@
         (click)="openBranchSettings(step, item)"
       >
         Edit Path
+      </button>
+
+      <button
+        mat-menu-item
+        class="text-light"
+        *ngIf="!step.properties['default']"
+        (click)="step.properties['default'] = item; saveLayout()"
+      >
+        Make Default
+      </button>
+
+      <button
+        mat-menu-item
+        class="text-light"
+        *ngIf="step.properties['default']"
+        [disabled]="true"
+      >
+        Default
       </button>
 
       <button
