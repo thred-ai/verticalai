@@ -469,6 +469,24 @@
       <button
         mat-menu-item
         class="text-light"
+        *ngIf="!step.properties['default']"
+        (click)="step.properties['default'] = item; saveLayout()"
+      >
+        Make Default
+      </button>
+
+      <button
+        mat-menu-item
+        class="text-light"
+        *ngIf="step.properties['default']"
+        [disabled]="true"
+      >
+        Default
+      </button>
+
+      <button
+        mat-menu-item
+        class="text-light"
         (click)="deleteBranch(step, item)"
       >
         Delete

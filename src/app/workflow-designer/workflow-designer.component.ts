@@ -96,6 +96,7 @@ export class WorkflowDesignerComponent
           name: 'Decision',
           properties: {
             defaultName: 'Decision',
+            default: 'Option 1',
             order: {
               'Option 1': 0,
               'Option 2': 1,
@@ -660,7 +661,7 @@ export class WorkflowDesignerComponent
 
         this.setBranchDescription(title, step, description);
 
-        this.shouldRefresh = true
+        this.shouldRefresh = true;
 
         this.saveLayout();
       }
@@ -669,8 +670,8 @@ export class WorkflowDesignerComponent
 
   placeholders: Dict<any> = {
     'gpt-LLM': 'ex. Speak with an energetic tone',
-    'switch': 'ex. Choose "Option 1" if the sentiment is happy'
-  }
+    switch: 'ex. Choose "Option 1" if the sentiment is happy',
+  };
 
   setBranchName(newName: string, step: BranchedStep, oldName: string = '') {
     const map1 = new Map();
@@ -685,6 +686,9 @@ export class WorkflowDesignerComponent
         var name = key;
         if (index == i) {
           name = newName;
+          if (step.properties['default'] == oldName) {
+            step.properties['default'] = name;
+          }
         }
         map1.set(name, step.branches[key]);
         map2.set(name, index);
@@ -725,7 +729,12 @@ export class WorkflowDesignerComponent
     step.branches = Object.fromEntries(map1);
     step.properties['order'] = Object.fromEntries(map2);
     step.properties['branches'] = Object.fromEntries(map3);
-    let context = this.designer?.createStepEditorContext(step.id);
+
+    if (step.properties['default'] == nameToRemove) {
+      step.properties['default'] = Object.keys(
+        step.properties['order'] ?? {}
+      )[0] as string;
+    }
 
     this.shouldRefresh = true;
     this.saveLayout();
