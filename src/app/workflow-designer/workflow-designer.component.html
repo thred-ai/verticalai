@@ -106,7 +106,7 @@
             </div> -->
           </ng-container>
 
-          <ng-container *ngIf="selectedFile.componentType == 'switch'">
+          <ng-container *ngIf="selectedFile.type == 'switch'">
             <ng-container
               *ngIf="selectedFile | cast : BranchedStep as branchStep"
             >
@@ -192,6 +192,24 @@
                 </div>
               </div>
             </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="selectedFile.type == 'container'">
+            <div class="w-100 mb-3">
+              <verticalai-text-field
+                [title]="'Frequency'"
+                [value]="selectedFile.properties['frequency'] ?? 1"
+                [type]="'number'"
+                [defaultValue]="1"
+                [placeholder]="'ex. 2'"
+                [range]="{ min: 1, max: 5 }"
+                (changed)="
+                  selectedFile.properties['frequency'] = $event;
+                  saveLayout()
+                "
+              >
+              </verticalai-text-field>
+            </div>
           </ng-container>
 
           <ng-container
