@@ -487,7 +487,7 @@
       <button
         mat-menu-item
         class="text-light"
-        *ngIf="!step.properties['default']"
+        *ngIf="step.properties['default'] != item"
         (click)="step.properties['default'] = item; saveLayout()"
       >
         Make Default
@@ -496,7 +496,7 @@
       <button
         mat-menu-item
         class="text-light"
-        *ngIf="step.properties['default']"
+        *ngIf="step.properties['default'] == item"
         [disabled]="true"
       >
         Default
