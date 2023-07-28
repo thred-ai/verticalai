@@ -371,6 +371,7 @@ export class WorkflowDesignerComponent
 
         this.cdr.detectChanges();
         this.workflow = w;
+
       }
       this.shouldRefresh = false;
     });
@@ -442,6 +443,7 @@ export class WorkflowDesignerComponent
 
   rerenderDesigner() {
     window.dispatchEvent(new Event('resize'));
+    this.setToolbarLoc()
     this.cdr.detectChanges();
   }
 
