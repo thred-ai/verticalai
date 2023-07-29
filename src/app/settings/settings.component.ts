@@ -1,19 +1,13 @@
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Inject,
-  Input,
   OnInit,
-  Output,
 } from '@angular/core';
 import { Dict, LoadService } from '../load.service';
-import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { Executable } from '../models/workflow/executable.model';
 import { Key } from '../models/workflow/key.model';
-import { Trigger } from '../models/workflow/trigger.model';
-import { BranchedStep, Step } from 'vertical-ai-designer';
-import { WorkflowComponent } from '../workflow/workflow.component';
+import { Step } from 'vertical-ai-designer';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -78,7 +72,7 @@ export class SettingsComponent implements OnInit {
     // this.apiKeyChanged.emit(apiKey);
   }
 
-  async save() {
+  async save(action = 'save') {
     this.loading = true;
     if (this.newAPIKey && this.workflow) {
       await this.loadService.saveAPIKeys(
@@ -93,6 +87,7 @@ export class SettingsComponent implements OnInit {
       apiKey: this.newAPIKey,
       workflow: this.workflow,
       img: this.newImg,
+      action,
       ...this.newBranch,
     });
   }

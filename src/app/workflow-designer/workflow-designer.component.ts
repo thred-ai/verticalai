@@ -371,7 +371,6 @@ export class WorkflowDesignerComponent
 
         this.cdr.detectChanges();
         this.workflow = w;
-
       }
       this.shouldRefresh = false;
     });
@@ -443,7 +442,7 @@ export class WorkflowDesignerComponent
 
   rerenderDesigner() {
     window.dispatchEvent(new Event('resize'));
-    this.setToolbarLoc()
+    this.setToolbarLoc();
     this.cdr.detectChanges();
   }
 
@@ -671,8 +670,9 @@ export class WorkflowDesignerComponent
   }
 
   placeholders: Dict<any> = {
-    'gpt-LLM': 'ex. Speak with an energetic tone',
+    'gpt-LLM': 'ex. Keep answers short',
     switch: 'ex. Choose "Option 1" if the sentiment is happy',
+    'dalle-TIM': 'ex. High Definition, Hyper-Realistic',
   };
 
   setBranchName(newName: string, step: BranchedStep, oldName: string = '') {

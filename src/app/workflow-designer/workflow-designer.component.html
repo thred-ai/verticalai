@@ -60,25 +60,25 @@
         </div>
 
         <div class="w-100 h-100 p-3" style="overflow-y: scroll">
-          <div
-            class="w-100 pb-3"
+          <ng-container
             *ngIf="
               selectedFile.type == 'gpt-LLM' ||
-              selectedFile.type == 'switch'
+              selectedFile.type == 'switch' ||
+              selectedFile.type == 'dalle-TIM'
             "
           >
-            <verticalai-textbox
-              [title]="'Guidance'"
-              [value]="selectedFile.properties['systemPrompt']"
-              [placeholder]="placeholders[selectedFile.type]"
-              (changed)="
-                selectedFile.properties['systemPrompt'] = $event; saveLayout()
-              "
-            >
-            </verticalai-textbox>
-          </div>
+            <div class="w-100 pb-3">
+              <verticalai-textbox
+                [title]="'Guidance'"
+                [value]="selectedFile.properties['systemPrompt']"
+                [placeholder]="placeholders[selectedFile.type]"
+                (changed)="
+                  selectedFile.properties['systemPrompt'] = $event; saveLayout()
+                "
+              >
+              </verticalai-textbox>
+            </div>
 
-          <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
             <div class="w-100 pb-3">
               <verticalai-layout-slider
                 [value]="selectedFile.properties['temp'] ?? 0.5"
@@ -204,8 +204,7 @@
                 [placeholder]="'ex. 2'"
                 [range]="{ min: 1, max: 5 }"
                 (changed)="
-                  selectedFile.properties['frequency'] = $event;
-                  saveLayout()
+                  selectedFile.properties['frequency'] = $event; saveLayout()
                 "
               >
               </verticalai-text-field>
@@ -495,11 +494,12 @@
 
       <button
         mat-menu-item
-        class="text-light proj"
+        [disabled]="true"
+        class="text-secondary proj"
         *ngIf="step.properties['default'] == item"
         [disabled]="true"
       >
-        Default
+        Default Path
       </button>
 
       <button

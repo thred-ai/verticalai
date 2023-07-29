@@ -668,7 +668,7 @@ export class LoadService {
           if (fetchOnlyAvailableworkflows) {
             q = this.db.collection(`Workflows`, (ref) =>
               ref
-                .where('status', 'in', [0, 1])
+                .where('status', '==', 0)
                 .where('creatorId', '==', uid)
                 .orderBy('created', 'asc')
             );
@@ -686,7 +686,6 @@ export class LoadService {
             this.checkLoadedUser(developer);
 
             callback(developer);
-            sub2.unsubscribe();
           });
         } else {
           callback(developer);
@@ -1077,30 +1076,30 @@ export class LoadService {
   }
 
   updateView(uid: string, location: any, docId: string) {
-    const time = new Date();
+    // const time = new Date();
 
-    const docName =
-      String(time.getFullYear()) +
-      String(time.getMonth()) +
-      String(time.getDate()) +
-      String(time.getHours());
+    // const docName =
+    //   String(time.getFullYear()) +
+    //   String(time.getMonth()) +
+    //   String(time.getDate()) +
+    //   String(time.getHours());
 
-    return this.db
-      .collection('Users/' + uid + '/Daily_Info')
-      .doc(`V${docName}`)
-      .set(
-        {
-          time: firebase.firestore.FieldValue.arrayUnion({
-            time,
-            docId,
-            coords: location.coords,
-            address: location.address,
-          }),
-          timestamp: time,
-          type: 'VIEW',
-        },
-        { merge: true }
-      );
+    // return this.db
+    //   .collection('Users/' + uid + '/Daily_Info')
+    //   .doc(`V${docName}`)
+    //   .set(
+    //     {
+    //       time: firebase.firestore.FieldValue.arrayUnion({
+    //         time,
+    //         docId,
+    //         coords: location.coords,
+    //         address: location.address,
+    //       }),
+    //       timestamp: time,
+    //       type: 'VIEW',
+    //     },
+    //     { merge: true }
+    //   );
   }
 
   getMiscStats(
@@ -1109,50 +1108,50 @@ export class LoadService {
     date2: Date,
     callback: (views?: Dict<any>[]) => any
   ) {
-    var views: Dict<any>[] = [];
+    // var views: Dict<any>[] = [];
 
-    let sub = this.db
-      .collection('Users/' + uid + '/Daily_Info/', (ref) =>
-        ref
-          .where('timestamp', '>=', date1)
-          .where('timestamp', '<=', new Date(date2.setHours(23, 59, 59, 999)))
-      )
-      .valueChanges()
-      .subscribe((docDatas) => {
-        docDatas.forEach((doc, index) => {
-          const docData = doc as DocumentData;
-          if (docData) {
-            let time = docData['time'] as Array<any>;
-            let type = docData['type'] as string;
-            time.forEach((t) => {
-              let p =
-                t instanceof firebase.firestore.Timestamp
-                  ? (t as firebase.firestore.Timestamp).toDate()
-                  : (t.time as firebase.firestore.Timestamp).toDate();
-              let v =
-                t instanceof firebase.firestore.Timestamp
-                  ? this.defaultCoords.coords
-                  : t.coords;
-              let address =
-                t instanceof firebase.firestore.Timestamp
-                  ? this.defaultCoords.address
-                  : t.address;
-              let docId =
-                t instanceof firebase.firestore.Timestamp ? undefined : t.docId;
-              views?.push({
-                num: 1,
-                coords: v,
-                address,
-                docId,
-                type,
-                timestamp: p,
-              });
-            });
-          }
-        });
-        callback(views);
-        if (isPlatformBrowser(this.platformID)) sub.unsubscribe();
-      });
+    // let sub = this.db
+    //   .collection('Users/' + uid + '/Daily_Info/', (ref) =>
+    //     ref
+    //       .where('timestamp', '>=', date1)
+    //       .where('timestamp', '<=', new Date(date2.setHours(23, 59, 59, 999)))
+    //   )
+    //   .valueChanges()
+    //   .subscribe((docDatas) => {
+    //     docDatas.forEach((doc, index) => {
+    //       const docData = doc as DocumentData;
+    //       if (docData) {
+    //         let time = docData['time'] as Array<any>;
+    //         let type = docData['type'] as string;
+    //         time.forEach((t) => {
+    //           let p =
+    //             t instanceof firebase.firestore.Timestamp
+    //               ? (t as firebase.firestore.Timestamp).toDate()
+    //               : (t.time as firebase.firestore.Timestamp).toDate();
+    //           let v =
+    //             t instanceof firebase.firestore.Timestamp
+    //               ? this.defaultCoords.coords
+    //               : t.coords;
+    //           let address =
+    //             t instanceof firebase.firestore.Timestamp
+    //               ? this.defaultCoords.address
+    //               : t.address;
+    //           let docId =
+    //             t instanceof firebase.firestore.Timestamp ? undefined : t.docId;
+    //           views?.push({
+    //             num: 1,
+    //             coords: v,
+    //             address,
+    //             docId,
+    //             type,
+    //             timestamp: p,
+    //           });
+    //         });
+    //       }
+    //     });
+    //     callback(views);
+    //     if (isPlatformBrowser(this.platformID)) sub.unsubscribe();
+    //   });
   }
 
   async getCoords() {
