@@ -17,8 +17,6 @@ import {
   BranchedStep,
   Definition,
   Designer,
-  GlobalEditorContext,
-  Properties,
   Step,
   StepEditorContext,
   StepsConfiguration,
@@ -187,7 +185,7 @@ export class WorkflowDesignerComponent
   // @Output() apiRequestChanged = new EventEmitter<APIRequest>();
   @Output() selectedFileChanged = new EventEmitter<string>();
 
-  selectedFile!: Step;
+  selectedFile?: Step;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -269,21 +267,16 @@ export class WorkflowDesignerComponent
     groups: [],
   };
 
-  toolBar?: HTMLDivElement;
-
   setToolbarLoc() {
     setTimeout(() => {
-      var content =
-        this.toolBar ??
-        (document.getElementsByClassName('sqd-scrollbox')[0] as HTMLDivElement);
+      var content = document.getElementsByClassName(
+        'sqd-scrollbox'
+      )[0] as HTMLDivElement;
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
-
-      if (content && parent && parent.firstChild != content) {
-        let newElem = content.cloneNode(true);
-        console.log(newElem);
+      if (content && parent) {
+        // let newElem = content.cloneNode(true);
         parent.firstChild?.remove();
         parent.appendChild(content);
-        this.toolBar = content;
 
         window.dispatchEvent(new Event('resize'));
       }
@@ -370,7 +363,10 @@ export class WorkflowDesignerComponent
         this.designer = undefined;
 
         this.cdr.detectChanges();
+
         this.workflow = w;
+
+        this.rerenderDesigner();
       }
       this.shouldRefresh = false;
     });
@@ -434,8 +430,8 @@ export class WorkflowDesignerComponent
       this.workflowComponent.openStep.subscribe((step) => {
         if (step) {
           this.selectedFile = step;
-          this.rerenderDesigner();
         }
+        this.rerenderDesigner();
       });
     }
   }
@@ -449,8 +445,9 @@ export class WorkflowDesignerComponent
   public onDesignerReady(designer: Designer) {
     this.designer = designer;
 
+    this.rerenderDesigner();
+
     if (document.eventListeners) {
-      console.log(document.eventListeners('keyup'));
       let l = document.eventListeners('keyup')[0];
       document.removeEventListener('keyup', l);
     }
@@ -467,7 +464,6 @@ export class WorkflowDesignerComponent
 
     try {
       this.designer?.onSelectedStepIdChanged.subscribe((id) => {
-        console.log(id);
         setTimeout(() => {
           if (id) {
             this.selectedFileChanged.emit(id);
@@ -485,11 +481,9 @@ export class WorkflowDesignerComponent
         if (step) {
           if (step.id != 'main') {
             this.designer?.selectStepById(step.id);
-            console.log(this.stepContext);
           } else {
             this.designer?.clearSelectedStep();
           }
-          console.log(this.stepContext);
           this.rerenderDesigner();
         }
       });

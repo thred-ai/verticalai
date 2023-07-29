@@ -2,7 +2,7 @@
   class="w-100 h-100"
   [hasBackdrop]="false"
   (backdropClick)="nav.close()"
-  *ngIf="selectedFile"
+  *ngIf="selectedFile && this.workflow"
 >
   <mat-sidenav
     class="bg-theme border-0"
