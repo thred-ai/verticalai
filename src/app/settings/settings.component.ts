@@ -1,9 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { Dict, LoadService } from '../load.service';
 import { Executable } from '../models/workflow/executable.model';
 import { Key } from '../models/workflow/key.model';
@@ -80,6 +75,13 @@ export class SettingsComponent implements OnInit {
         this.workflow.creatorId,
         this.newAPIKey
       );
+    }
+    if (
+      this.selectedFile &&
+      (this.selectedFile['name'] ?? '').split(' ').join('') == ''
+    ) {
+      this.selectedFile['name'] =
+        (this.selectedFile.properties['defaultName'] as string) ?? 'Controller';
     }
     this.loading = false;
     this.dialogRef.close({

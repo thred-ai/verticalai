@@ -14,7 +14,7 @@ export class TextFieldComponent implements OnInit {
   @Input() placeholder: string = '';
   @Input() btn: boolean = false;
   @Input() btnIcon: string = 'close';
-  @Input() defaultValue: any = 'None';
+  @Input() defaultValue: any = '';
   @Input() simplify: boolean = false;
   @Input() type = 'text';
   @Input() range = { min: 0, max: 0 };
