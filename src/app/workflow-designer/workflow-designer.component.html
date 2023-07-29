@@ -478,7 +478,7 @@
     <ng-container *ngIf="item.id != 'app' && item.id != 'main'">
       <button
         mat-menu-item
-        class="text-light"
+        class="text-light proj"
         (click)="openBranchSettings(step, item)"
       >
         Edit Path
@@ -486,7 +486,7 @@
 
       <button
         mat-menu-item
-        class="text-light"
+        class="text-light proj"
         *ngIf="step.properties['default'] != item"
         (click)="step.properties['default'] = item; saveLayout()"
       >
@@ -495,7 +495,7 @@
 
       <button
         mat-menu-item
-        class="text-light"
+        class="text-light proj"
         *ngIf="step.properties['default'] == item"
         [disabled]="true"
       >
@@ -504,7 +504,7 @@
 
       <button
         mat-menu-item
-        class="text-light"
+        class="text-light proj"
         (click)="deleteBranch(step, item)"
       >
         Delete
