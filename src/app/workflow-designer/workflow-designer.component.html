@@ -63,7 +63,7 @@
           <div
             class="w-100 pb-3"
             *ngIf="
-              selectedFile.type == 'gpt-LLM' || selectedFile.type == 'switch'
+              selectedFile.type == 'gpt-LLM' || selectedFile.type == 'switch' || selectedFile.type == 'dalle-TIM'
             "
           >
             <verticalai-textbox
@@ -77,7 +77,7 @@
             </verticalai-textbox>
           </div>
 
-          <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
+          <ng-container *ngIf="selectedFile.type == 'gpt-LLM' || selectedFile.type == 'dalle-TIM'">
             <div class="w-100 pb-3">
               <verticalai-layout-slider
                 [value]="selectedFile.properties['temp'] ?? 0.5"
