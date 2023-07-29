@@ -273,6 +273,7 @@ export class WorkflowDesignerComponent
         'sqd-scrollbox'
       )[0] as HTMLDivElement;
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
+  
       if (content && parent) {
         // let newElem = content.cloneNode(true);
         parent.firstChild?.remove();
@@ -464,6 +465,7 @@ export class WorkflowDesignerComponent
 
     try {
       this.designer?.onSelectedStepIdChanged.subscribe((id) => {
+        
         setTimeout(() => {
           if (id) {
             this.selectedFileChanged.emit(id);
