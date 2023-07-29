@@ -60,24 +60,25 @@
         </div>
 
         <div class="w-100 h-100 p-3" style="overflow-y: scroll">
-          <div
-            class="w-100 pb-3"
+          <ng-container
             *ngIf="
-              selectedFile.type == 'gpt-LLM' || selectedFile.type == 'switch' || selectedFile.type == 'dalle-TIM'
+              selectedFile.type == 'gpt-LLM' ||
+              selectedFile.type == 'switch' ||
+              selectedFile.type == 'dalle-TIM'
             "
           >
-            <verticalai-textbox
-              [title]="'Guidance'"
-              [value]="selectedFile.properties['systemPrompt']"
-              [placeholder]="placeholders[selectedFile.type]"
-              (changed)="
-                selectedFile.properties['systemPrompt'] = $event; saveLayout()
-              "
-            >
-            </verticalai-textbox>
-          </div>
+            <div class="w-100 pb-3">
+              <verticalai-textbox
+                [title]="'Guidance'"
+                [value]="selectedFile.properties['systemPrompt']"
+                [placeholder]="placeholders[selectedFile.type]"
+                (changed)="
+                  selectedFile.properties['systemPrompt'] = $event; saveLayout()
+                "
+              >
+              </verticalai-textbox>
+            </div>
 
-          <ng-container *ngIf="selectedFile.type == 'gpt-LLM' || selectedFile.type == 'dalle-TIM'">
             <div class="w-100 pb-3">
               <verticalai-layout-slider
                 [value]="selectedFile.properties['temp'] ?? 0.5"
