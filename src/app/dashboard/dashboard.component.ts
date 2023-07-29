@@ -165,7 +165,7 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     this.loadService.getModels(async (models) => {
       this.getProfile();
-      this.loadStats((await this.loadService.currentUser)?.uid);
+      // this.loadStats((await this.loadService.currentUser)?.uid);
 
       this.loadService.loadedUser.subscribe((dev) => {
         this.dev = dev ?? undefined;

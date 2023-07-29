@@ -138,6 +138,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { DatabaseComponent } from './database/database.component';
 import { CollectionInfoComponent } from './collection-info/collection-info.component';
 import { TextAreaRenderPipe } from './text-area-render.pipe';
+import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -254,6 +255,7 @@ import { TextAreaRenderPipe } from './text-area-render.pipe';
     MdbValidationModule,
     MatDatepickerModule,
     MatPaginatorModule,
+    MatDividerModule,
     NgxDropzoneModule,
     DragDropModule,
     ColorPickerModule,

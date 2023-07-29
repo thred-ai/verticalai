@@ -18,7 +18,7 @@ import { TextAreaRenderPipe } from '../text-area-render.pipe';
   styleUrls: ['./database.component.scss'],
 })
 export class DatabaseComponent implements OnInit {
-  executable?: Executable;
+  executable?: Executable | null;
 
   items?: TaskTree[] = undefined;
 

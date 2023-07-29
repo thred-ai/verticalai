@@ -114,7 +114,10 @@
         </div>
       </div>
 
-      <div class="w-100 h-100" *ngIf="mode == 3 && newBranch['title'] && selectedFile">
+      <div
+        class="w-100 h-100"
+        *ngIf="mode == 3 && newBranch['title'] && selectedFile"
+      >
         <div class="w-100">
           <div matDialogTitle class="text-white">Path Settings</div>
 
@@ -145,7 +148,7 @@
       </div>
 
       <button
-        class="btn bg-theme border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
+        class="btn bg-theme border-0 rounded fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 my-4"
         (click)="save()"
       >
         <ng-container *ngIf="loading; else buttonTitles">
@@ -162,6 +165,18 @@
         <ng-template #buttonTitles>
           <ng-container> {{ "Done" }}</ng-container>
         </ng-template>
+      </button>
+
+      <div class="w-100 py-2 pt-5 d-flex flex-column justify-content-between align-items-center">
+        <i><span style="font-size: x-small;" class="text-light fw-bold">Danger Zone</span></i>
+        <mat-divider class="bg-light my-2 w-100"></mat-divider>
+      </div>
+
+      <button
+        class="btn bg-theme text-danger w-100 border-0 rounded fw-bold d-flex justify-content-center px-3 align-content-center py-2 mt-4"
+        (click)="save('delete')"
+      >
+        Delete
       </button>
     </div>
   </div>

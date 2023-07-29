@@ -164,8 +164,13 @@ export class WorkflowComponent implements OnInit {
           // same.layout.properties
           this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         }
+        else{
+          if (this.workflows) {
+            this.activeWorkflow = this.workflows[0];
+          }
+        }
       } else {
-        this.activeWorkflow = undefined;
+        this.activeWorkflow = undefined
       }
     }, 100);
 
@@ -255,7 +260,9 @@ export class WorkflowComponent implements OnInit {
           });
 
           this.workflow.subscribe(async (w) => {
-            this.initExecutable(w);
+            if (w) {
+              this.initExecutable(w);
+            }
           });
         }
       }
@@ -394,6 +401,10 @@ export class WorkflowComponent implements OnInit {
           if (url) {
             this.workflow.value.displayUrl = url;
           }
+        }
+
+        if (val.action == 'delete' && this.workflow.value) {
+          this.workflow.value.status = 1;
         }
 
         await this.save();
