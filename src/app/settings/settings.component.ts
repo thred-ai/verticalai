@@ -40,10 +40,10 @@ export class SettingsComponent implements OnInit {
     public dialogRef: MatDialogRef<SettingsComponent>,
     private loadService: LoadService
   ) {
-    dialogRef.disableClose = true;
+    // dialogRef.disableClose = true;
     this.apiKey = data.apiKey;
-    this.selectedFile = data.step;
-    this.workflow = data.workflow;
+    this.selectedFile = JSON.parse(JSON.stringify(data.step));
+    this.workflow = JSON.parse(JSON.stringify(data.workflow))
     this.newBranch['title'] = data.branch;
 
     if (

@@ -389,23 +389,37 @@ export class WorkflowComponent implements OnInit {
     });
 
     ref.afterClosed().subscribe(async (val) => {
-      if (val && val != '' && val != '0') {
+      if (val && val != '' && val != '0' && val.workflow) {
         let img = val.img as File;
+
+        let workflow = val.workflow as Executable
+
 
         if (img && this.workflow.value) {
           let url = await this.loadService.uploadImg(
             img,
-            this.workflow.value.id
+            workflow.id
           );
 
           if (url) {
-            this.workflow.value.displayUrl = url;
+            workflow.displayUrl = url;
           }
         }
 
-        if (val.action == 'delete' && this.workflow.value) {
-          this.workflow.value.status = 1;
+        if (val.action == 'delete') {
+          workflow.status = 1;
         }
+
+        if (val.file){
+          let file = val.file as Step
+          var step = this.findStep(file.id, workflow.layout.sequence)
+
+          if (step){
+            step.name = file.name
+          }
+        }
+
+        this.workflow.next(workflow)
 
         await this.save();
 
