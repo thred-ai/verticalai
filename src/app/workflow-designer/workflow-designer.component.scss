@@ -185,9 +185,9 @@
 
 
 .proj:hover{
-  background-color: #2e2e2e5f;
+  background-color: var(--secondarySectionHoverColor);
 }
 
 .proj-select{
-  background-color: #1E293B;
+  background-color: var(--primarySectionHoverColor);
 }
