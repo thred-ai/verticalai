@@ -42,7 +42,7 @@
     <div
       class="primary-background h-100"
       style="width: 350px"
-      *ngIf="selectedFile && selectedFile.id == 'main'"
+      [hidden]="selectedFile && selectedFile.id == 'main'"
     >
       <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
 
@@ -210,7 +210,7 @@
               </verticalai-text-field>
             </div>
           </ng-container>
-<!-- 
+
           <ng-container
             *ngIf="
               (models[(selectedFile.type | split : '-')[1]] ?? { models: {} })
@@ -232,7 +232,7 @@
               >
               </verticalai-select-field>
             </div>
-          </ng-container> -->
+          </ng-container>
         </div>
       </div>
     </div>
