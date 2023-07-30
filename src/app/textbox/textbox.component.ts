@@ -13,8 +13,8 @@ export class TextboxComponent implements OnInit {
   @Input() simplify: boolean = false;
   @Input() type: string = 'text';
   @Input() borderColor: string = 'transparent';
-  @Input() textColor: string = '#ffffff';
-  @Input() bgColor: string = '#131313d4';
+  @Input() textColor: string = 'var(--primaryTextColor)';
+  @Input() bgColor: string = 'var(--secondaryBackgroundColor)';
   @Input() disabled: boolean = false;
   @Input() corners: string = 'rounded';
   @Input() animation: string = 'none';

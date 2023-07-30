@@ -65,7 +65,7 @@
   height: calc(calc(var(--vh, 1vh) * 100) - 100px) !important;
 }
 .sqd-scrollbox-body {
-  width: 100%;  
+  width: 100%;
 }
 
 .sqd-toolbox-filter {
@@ -103,20 +103,29 @@
   font-size: 13px;
   // height: 40px;
   width: 100%; //
+  background: var(--secondarySectionHoverColor);
+  color: var(--primaryTextColor);
 }
 
+// .sqd-toolbox-item {
+//   color: #ffffff;
+//   background: #3e3e3e5f;
+// }
+.sqd-toolbox-item:hover {
+  background: var(--sectionBackgroundColor);
+}
 
 .sqd-toolbox-item-icon {
   width: 30px;
   height: 30px;
   border-radius: 50% !important;
+  border: var(--primarySectionHoverColor) solid 2px;
 }
 .sqd-toolbox-item-icon.sqd-no-icon {
   border-radius: 4px;
 }
 
 rect {
-  
   rx: 5;
   ry: 5;
 }
@@ -175,12 +184,16 @@ rect.sqd-input {
   border-radius: 5px;
   margin-right: 14px;
   cursor: pointer;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+    
 }
 .sqd-control-bar-button-icon {
   width: 24px;
   height: 24px;
   margin: 3px 0 0 3px;
-  fill: #fff;
+  fill: var(--primaryTextColor);
 }
 .sqd-control-bar-button.sqd-disabled .sqd-control-bar-button-icon {
   opacity: 0.2;
@@ -237,7 +250,7 @@ rect.sqd-input {
   width: 300px;
 }
 .sqd-layout-desktop .sqd-smart-editor-toggle {
-  right:300px;
+  right: 300px;
 }
 .sqd-layout-desktop .sqd-smart-editor-toggle.sqd-collapsed {
   right: 0;

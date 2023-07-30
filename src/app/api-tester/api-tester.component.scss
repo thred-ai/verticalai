@@ -17,10 +17,10 @@
 
 :host ::ng-deep .horizontal-terminal {
   .as-split-gutter-icon {
-    color: #000000 !important;
-    background-color: #000000 !important;
+    color: var(--primaryBackgroundColor) !important;
+    background-color: var(--primaryBackgroundColor) !important;
     // border-right: 1px solid #7f7f7f !important;
-    border-top: 1px solid #7f7f7f !important;
+    border-top: 1px solid var(--primarySectionHoverColor) !important;
     border-bottom: 0px !important;
   }
 }

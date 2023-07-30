@@ -1,8 +1,7 @@
 <div
-  class="w-100"
+  class="w-100 bg-dark"
   style="
-    height: calc(calc(var(--vh, 1vh) * 100) - 70px);
-    
+    height: calc(calc(var(--vh, 1vh) * 100));
   "
 >
   <div
@@ -10,7 +9,7 @@
   >
   
     <div
-      class="positiion-absolute w-100 h-100 d-flex justify-content-center align-items-center px-3 py-2 py-md-0"
+      class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center px-3 py-2 py-md-0"
     >
       <div
         class="position-relative w-100 h-100 d-flex justify-content-center align-items-center px-3 py-2 py-md-0"
@@ -40,8 +39,8 @@
             "
           >
             <div
-              class="big-design-card rounded shadow h-100 w-100 border-table animate__animated animate__fadeIn"
-              style="z-index: 50; background-color: #13131369"
+              class="big-design-card rounded shadow h-100 w-100 animate__animated animate__fadeIn"
+              style="z-index: 50;"
             >
               <ng-container *ngIf="mode == 0">
                 <div
@@ -49,9 +48,11 @@
                   style="overflow-y: scroll"
                 >
                   <div class="w-100 big-design-header">
-                    <h4 class="w-100 text-center text-white">
+                    <h4 class="w-100 text-center text-dark">
                       Create an account
                     </h4>
+
+                    
                   </div>
 
                   <div class="w-100 py-4">
@@ -61,7 +62,8 @@
                         [value]="signUpForm.controls['email'].value"
                         [type]="'email'"
                         [defaultValue]="''"
-                        [bgColor]="'#131313'"
+                        [bgColor]="'#e9eff4'"
+                        [textColor]="'#4f5a63'"
                         [placeholder]="'Ex. john@hello.com'"
                         (changed)="
                           signUpForm.controls['email'].setValue($event)
@@ -74,8 +76,8 @@
                       <verticalai-text-field
                         [title]="'Password'"
                         [value]="signUpForm.controls['password'].value"
-                        [defaultValue]="''"
-                        [bgColor]="'#131313'"
+                        [bgColor]="'#e9eff4'"
+                        [textColor]="'#4f5a63'"
                         [placeholder]="'Secure Password'"
                         [type]="viewPass ? 'text' : 'password'"
                         [btn]="true"
@@ -92,8 +94,8 @@
                       <verticalai-text-field
                         [title]="'Confirm Password'"
                         [value]="signUpForm.controls['confirmPass'].value"
-                        [defaultValue]="''"
-                        [bgColor]="'#131313'"
+                        [bgColor]="'#e9eff4'"
+                        [textColor]="'#4f5a63'"
                         [placeholder]="'Confirm Password'"
                         [type]="viewPass ? 'text' : 'password'"
                         [btn]="true"
@@ -109,7 +111,7 @@
 
                     <div class="w-100 py-1 mt-2 px-2" *ngIf="!err">
                       <p
-                        class="w-100 text-center animate__animated animate__fadeIn text-light"
+                        class="w-100 text-center animate__animated animate__fadeIn text-dark  "
                         style="font-size: small"
                         role="button"
                         (click)="
@@ -117,9 +119,9 @@
                         "
                       >
                         By joining
-                        <b class="fw-bold text-white">Vertical AI</b>, you agree
+                        <b class="fw-bold text-dark">Vertical AI</b>, you agree
                         to our
-                        <b class="text-white" role="button">Terms of Service</b
+                        <b class="text-dark" role="button">Terms of Service</b
                         >.
                       </p>
                     </div>
@@ -133,7 +135,7 @@
                     </div>
                     <div class="w-100 py-1 mt-3">
                       <button
-                        class="btn bg-theme rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
+                        class="btn bg-orange rounded-15 text-white  px-5 py-3 fw-bold w-100 mt-1"
                         (click)="continue()"
                         id="continue"
                       >
@@ -149,13 +151,13 @@
 
                     <div class="w-100 py-1 mt-3 px-2">
                       <p
-                        class="w-100 text-center text-light"
+                        class="w-100 text-center text-dark  "
                         style="font-size: small"
                         role="button"
                         (click)="mode = 1"
                       >
                         Already have an account?
-                        <b role="button" class="fw-bold text-white">Sign in</b>.
+                        <b role="button" class="fw-bold text-dark">Sign in</b>.
                       </p>
                     </div>
                   </div>
@@ -167,7 +169,7 @@
                   style="overflow-y: scroll"
                 >
                   <div class="w-100 big-design-header">
-                    <h4 class="w-100 text-center text-light">
+                    <h4 class="w-100 text-center text-dark  ">
                       Sign in to your account
                     </h4>
                   </div>
@@ -177,8 +179,8 @@
                         [title]="'Email'"
                         [value]="signInForm.controls['email'].value"
                         [type]="'email'"
-                        [defaultValue]="''"
-                        [bgColor]="'#1f1f1f'"
+                        [bgColor]="'#e9eff4'"
+                        [textColor]="'#4f5a63'"
                         [placeholder]="'Ex. john@hello.com'"
                         (changed)="
                           signInForm.controls['email'].setValue($event)
@@ -191,8 +193,8 @@
                       <verticalai-text-field
                         [title]="'Password'"
                         [value]="signInForm.controls['password'].value"
-                        [defaultValue]="''"
-                        [bgColor]="'#1f1f1f'"
+                        [bgColor]="'#e9eff4'"
+                        [textColor]="'#4f5a63'"
                         [placeholder]="'Secure Password'"
                         [type]="viewPass ? 'text' : 'password'"
                         [btn]="true"
@@ -209,7 +211,7 @@
                       <p class="w-100 text-center" style="font-size: small">
                         <b
                           role="button"
-                          class="fw-bold text-white animate__animated animate__fadeIn"
+                          class="fw-bold text-dark  animate__animated animate__fadeIn"
                         >
                           I forgot my password
                         </b>
@@ -225,7 +227,7 @@
                     </div>
                     <div class="w-100 py-1 mt-3">
                       <button
-                        class="btn bg-theme rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
+                        class="btn bg-orange rounded-15 text-white px-5 py-3 fw-bold w-100 mt-1"
                         (click)="continue()"
                         id="continue"
                       >
@@ -241,13 +243,13 @@
 
                     <div class="w-100 py-1 mt-3 px-2">
                       <p
-                        class="w-100 text-center text-light"
+                        class="w-100 text-center text-dark  "
                         style="font-size: small"
                         role="button"
                         (click)="mode = 0"
                       >
                         Don't have an account?
-                        <b role="button" class="fw-bold text-white">Sign Up</b>.
+                        <b role="button" class="fw-bold text-dark">Sign Up</b>.
                       </p>
                     </div>
                   </div>
@@ -257,6 +259,14 @@
           </form>
         </div>
       </div>
+    </div>
+
+    <div class="rounded-circle icons position-absolute" style="aspect-ratio: 1; height: 80px; bottom: 10px; left: 10px;">
+      <img
+        class="px-2 h-100 logo"
+        style="object-fit: contain"
+        [src]="'assets/verticalai_short.png'"
+      />
     </div>
   </div>
 </div>

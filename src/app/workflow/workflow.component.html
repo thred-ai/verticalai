@@ -1,5 +1,5 @@
 <div
-  class="layout-container-full bg-dark my-0 d-flex justify-content-between align-content-center flex-column"
+  class="layout-container-full secondary-background my-0 d-flex justify-content-between align-content-center flex-column"
 >
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
@@ -16,6 +16,7 @@
         [position]="'start'"
         [fixedInViewport]="false"
         [opened]="true"
+        [disableClose]="true"
       >
         <div
           class="h-100 d-flex justify-content-between align-content-start sidebar"
@@ -72,9 +73,8 @@
                   </ng-container>
 
                   <div
-                    class="w-100 h-100"
+                    class="w-100 h-100 section-background"
                     [hidden]="selectedIcon != 'run'"
-                    style="background-color: #131313"
                   >
                     <app-terminal [model]="workflow.value"></app-terminal>
                   </div>
@@ -105,7 +105,7 @@
                   </ng-container> -->
 
                   <div
-                    class="w-100 h-100 bg-theme"
+                    class="w-100 h-100 section-background"
                     [hidden]="selectedIcon != 'database'"
                   >
                     <app-database></app-database>
@@ -124,7 +124,7 @@
       class="layout-container h-100 d-flex flex-column justify-content-center align-items-center"
     >
       <verticalai-loader
-        [mode]="'light'"
+        [mode]="theme"
         [text]="'Loading...'"
       ></verticalai-loader>
     </div>

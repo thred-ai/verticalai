@@ -21,8 +21,8 @@ export class TextFieldComponent implements OnInit {
   @Input() disabled: boolean = false;
   @Input() btnColor: string = '#a9a9a9';
   @Input() borderColor: string = 'transparent';
-  @Input() textColor: string = '#ffffff';
-  @Input() bgColor: string = '#131313d4';
+  @Input() textColor: string = 'var(--primaryTextColor)';
+  @Input() bgColor: string = 'var(--secondaryBackgroundColor)';
   @Input() clickable: boolean = false;
 
   @Output() changed = new EventEmitter<any>();

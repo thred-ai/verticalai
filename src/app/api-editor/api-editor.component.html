@@ -1,21 +1,21 @@
 <div
-  class="w-100 h-100 d-flex justify-content-between flex-column align-content-center bg-theme-2"
+  class="w-100 h-100 d-flex justify-content-between flex-column align-content-center secondary-background "
   style="overflow: hidden"
 >
   <div
-    class="px-2 w-100 d-flex justify-content-between align-items-center bg-theme-2"
+    class="px-2 w-100 d-flex justify-content-between align-items-center secondary-background "
     style="height: 70px; border-bottom: #7f7f7f solid 0.5px"
   >
     <div class="d-flex justify-content-center align-items-center my-auto">
       <p
-        class="btn bg-transparent rounded-pill fw-bold text-white border-0 d-flex justify-content-between align-content-center px-2 py-2 my-auto"
+        class="btn bg-transparent rounded-pill fw-bold primary-text  border-0 d-flex justify-content-between align-content-center px-2 py-2 my-auto"
         (click)="close()"
       >
         <mat-icon class="me-0" style="aspect-ratio: 1"> close </mat-icon>
       </p>
     </div>
     <button
-      class="btn bg-orange border-0 rounded fw-bold text-white d-flex justify-content-between align-content-center px-3 py-2 my-auto"
+      class="btn bg-orange border-0 rounded fw-bold primary-text  d-flex justify-content-between align-content-center px-3 py-2 my-auto"
       (click)="save(); dialogRef.close(api)"
     >
       <!-- (click)="edited ? save() : publish(workflow)"
@@ -83,7 +83,7 @@
             >
               <mat-tab class="tab">
                 <ng-template mat-tab-label>
-                  <span class="text-light"> Fields </span>
+                  <span class="primary-text  "> Fields </span>
                 </ng-template>
                 <ng-template matTabContent>
                   <ng-container *ngTemplateOutlet="bodyFields"></ng-container>
@@ -92,7 +92,7 @@
 
               <mat-tab class="tab">
                 <ng-template mat-tab-label>
-                  <span class="text-light"> Raw Data </span>
+                  <span class="primary-text  "> Raw Data </span>
                 </ng-template>
 
                 <ng-template matTabContent>
@@ -108,7 +108,7 @@
                         [expanded]="true"
                       >
                         <mat-expansion-panel-header>
-                          <mat-panel-title class="text-light">
+                          <mat-panel-title class="primary-text  ">
                             {{ same.name }}
                           </mat-panel-title>
                         </mat-expansion-panel-header>
@@ -159,7 +159,7 @@
           </ng-template>
         </ng-container>
 
-        <div class="w-100 pt-3 pb-2 text-light text-center fw-bold">
+        <div class="w-100 pt-3 pb-2 primary-text  text-center fw-bold">
           <i><span style="font-size: small">General</span></i>
         </div>
       </div>
@@ -192,7 +192,7 @@
           >
           </verticalai-text-field>
         </div>
-        <div class="w-100 pt-3 pb-2 text-light text-center fw-bold">
+        <div class="w-100 pt-3 pb-2 primary-text  text-center fw-bold">
           <i><span style="font-size: small">Advanced</span></i>
         </div>
       </div>
@@ -212,7 +212,7 @@
         *ngIf="sameRequest(field.id, request.name) as same"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title class="text-light">
+          <mat-panel-title class="primary-text  ">
             {{ same.name }}
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -303,7 +303,7 @@
 
             <div class="ps-3 d-flex justify-content-end align-content-center">
               <mat-icon
-                class="rounded-circle my-auto text-secondary"
+                class="rounded-circle my-auto secondary-text"
                 style="aspect-ratio: 1 !important"
                 role="button"
                 (click)="removeDetail(id, detail.name)"

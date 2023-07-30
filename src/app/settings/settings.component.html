@@ -1,21 +1,20 @@
 <div
-  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column bg-theme-2 p-3 pb-4"
+  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column primary-background p-3 pb-4"
 >
   <div class="w-100 h-100 d-flex justify-content-center align-items-center">
     <div
-      class="bg-theme-2 w-100 h-100 m-auto"
+      class="primary-background w-100 h-100 m-auto"
       style="max-width: 600px"
       *ngIf="workflow"
     >
       <div class="w-100 h-100" *ngIf="mode == 1 && selectedFile">
         <div class="w-100">
-          <div matDialogTitle class="text-white">Configure Controller</div>
+          <div matDialogTitle class="primary-text">Configure Controller</div>
         </div>
         <div class="w-100 pb-3">
           <verticalai-text-field
             [title]="'Name'"
             [value]="selectedFile.name"
-            [bgColor]="'#1F1F1F'"
             [placeholder]="'Controller Name'"
             (changed)="selectedFile.name = $event"
           >
@@ -56,19 +55,18 @@
 
       <div class="w-100 h-100" *ngIf="mode == 2">
         <div class="w-100">
-          <div matDialogTitle class="text-white">Project Settings</div>
+          <div matDialogTitle class="primary-text">Project Settings</div>
 
           <div class="wrap-input1 w-100 py-3 px-0">
-            <p class="w-100 mb-3 text-white">Project Icon</p>
+            <p class="w-100 mb-3 primary-text fw-bold">Project Icon</p>
 
             <div
-              class="w-auto rounded-icon border-table shadow d-flex justify-content-center align-items-center"
+              class="w-auto rounded-icon border-table shadow d-flex justify-content-center align-items-center section-background"
               style="
                 object-fit: contain;
                 aspect-ratio: 1;
                 height: 60px;
                 overflow: hidden;
-                background-color: #131313d4;
               "
             >
               <div
@@ -84,7 +82,7 @@
                   id="imgIcon"
                 />
                 <!-- <div
-                  class="w-100 h-100 position-absolute img-input-display bg-orange text-white"
+                  class="w-100 h-100 position-absolute img-input-display bg-orange primary-text"
                   style="z-index: 51; opacity: 0.5"
                 >
                   <mat-icon class="m-auto">upload </mat-icon>
@@ -102,7 +100,6 @@
           <div class="wrap-input1 w-100 pb-3">
             <verticalai-text-field
               [title]="'Project Name'"
-              [bgColor]="'#1F1F1F'"
               [value]="workflow.name"
               [defaultValue]="workflow.name"
               [placeholder]="'Project Name'"
@@ -113,17 +110,85 @@
         </div>
       </div>
 
+      <div class="w-100 h-100" *ngIf="mode == 4 && dev">
+        <div class="w-100">
+          <div matDialogTitle class="primary-text">Settings</div>
+
+          <div class="wrap-input1 w-100 py-3 px-0">
+            <p class="w-100 mb-3 primary-text fw-bold">Profile Image</p>
+
+            <div
+              class="w-auto rounded-icon border-table shadow d-flex justify-content-center align-items-center section-background"
+              style="
+                object-fit: contain;
+                aspect-ratio: 1;
+                height: 60px;
+                overflow: hidden;
+              "
+            >
+              <div
+                class="m-auto position-relative img-input"
+                style="height: 90%; width: 90%; overflow: hidden"
+                role="button"
+                (click)="appImgInput.click()"
+              >
+                <img
+                  class="w-100 h-100 position-absolute"
+                  style="z-index: 50; object-fit: cover"
+                  [src]="dev.url"
+                  id="imgIcon"
+                />
+                <!-- <div
+                  class="w-100 h-100 position-absolute img-input-display bg-orange primary-text"
+                  style="z-index: 51; opacity: 0.5"
+                >
+                  <mat-icon class="m-auto">upload </mat-icon>
+                </div> -->
+                <input
+                  #appImgInput
+                  type="file"
+                  (change)="fileChangeEvent($event, 1)"
+                  style="display: none"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="wrap-input1 w-100 pb-3">
+            <verticalai-text-field
+              [title]="'Name'"
+              [value]="dev.name"
+              [defaultValue]="dev.name"
+              [placeholder]="'Name'"
+              (changed)="dev.name = $event"
+            >
+            </verticalai-text-field>
+          </div>
+
+          <div class="w-100 pb-3">
+            <verticalai-select-field
+              [title]="'Workspace Theme'"
+              [value]="dev.theme"
+              [valueField]="'id'"
+              [displayField]="'name'"
+              [data]="themes"
+              (changed)="dev.theme = $event"
+            >
+            </verticalai-select-field>
+          </div>
+        </div>
+      </div>
+
       <div
         class="w-100 h-100"
         *ngIf="mode == 3 && newBranch['title'] && selectedFile"
       >
         <div class="w-100">
-          <div matDialogTitle class="text-white">Path Settings</div>
+          <div matDialogTitle class="primary-text">Path Settings</div>
 
           <div class="wrap-input1 w-100 pb-3">
             <verticalai-text-field
               [title]="'Path Name'"
-              [bgColor]="'#1F1F1F'"
               [value]="newBranch['title']"
               [defaultValue]="newBranch['title']"
               [placeholder]="'Path Name'"
@@ -135,7 +200,6 @@
           <div class="wrap-input1 w-100 pb-3">
             <verticalai-textbox
               [title]="'Description'"
-              [bgColor]="'#1F1F1F'"
               [value]="newBranch['description']"
               [corners]="'rounded-10'"
               [placeholder]="'Description (Required)'"
@@ -147,7 +211,7 @@
       </div>
 
       <button
-        class="btn bg-theme border-0 rounded fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
+        class="btn bg-orange border-0 rounded fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
         (click)="save()"
       >
         <ng-container *ngIf="loading; else buttonTitles">
@@ -167,11 +231,17 @@
       </button>
 
       <ng-container *ngIf="mode == 2">
-        <div class="w-100 py-2 pt-5 d-flex flex-column justify-content-between align-items-center mt-4">
-          <i><span style="font-size: x-small;" class="text-light fw-bold">Danger Zone</span></i>
+        <div
+          class="w-100 py-2 pt-5 d-flex flex-column justify-content-between align-items-center mt-4"
+        >
+          <i
+            ><span style="font-size: x-small" class="primary-text fw-bold"
+              >Danger Zone</span
+            ></i
+          >
           <mat-divider class="bg-light my-2 w-100"></mat-divider>
         </div>
-  
+
         <button
           class="btn bg-transparent shadow-0 text-danger w-100 border-0 rounded fw-bold d-flex justify-content-center px-3 align-content-center py-2 mt-4"
           (click)="save('delete')"
@@ -179,7 +249,6 @@
           Delete Project
         </button>
       </ng-container>
-
     </div>
   </div>
 </div>

@@ -163,14 +163,13 @@ export class WorkflowComponent implements OnInit {
           this.activeWorkflow = same;
           // same.layout.properties
           this.selectFile(fileId, this.selectedIcon ?? 'controllers');
-        }
-        else{
+        } else {
           if (this.workflows) {
             this.activeWorkflow = this.workflows[0];
           }
         }
       } else {
-        this.activeWorkflow = undefined
+        this.activeWorkflow = undefined;
       }
     }, 100);
 
@@ -367,6 +366,34 @@ export class WorkflowComponent implements OnInit {
     return exec;
   }
 
+  openProfileSettings(dev: Developer) {
+    let ref = this.dialog.open(SettingsComponent, {
+      width: 'calc(var(--vh, 1vh) * 70)',
+      maxWidth: '650px',
+      maxHeight: 'calc(var(--vh, 1vh) * 100)',
+      panelClass: 'app-full-bleed-dialog',
+
+      data: {
+        dev,
+        workflow: this.workflow.value
+      },
+    });
+
+    ref.afterClosed().subscribe(async (val) => {
+      if (val && val != '' && val != '0' && val.dev) {
+        let img = val.img as File;
+
+        await this.loadService.saveUserInfo(
+          val.dev,
+          img,
+          img != undefined,
+          (result) => {}
+        );
+
+      }
+    });
+  }
+
   openControllerSettings(controllerId: string = 'main') {
     console.log(controllerId);
     let ref = this.dialog.open(SettingsComponent, {
@@ -392,14 +419,10 @@ export class WorkflowComponent implements OnInit {
       if (val && val != '' && val != '0' && val.workflow) {
         let img = val.img as File;
 
-        let workflow = val.workflow as Executable
-
+        let workflow = val.workflow as Executable;
 
         if (img && this.workflow.value) {
-          let url = await this.loadService.uploadImg(
-            img,
-            workflow.id
-          );
+          let url = await this.loadService.uploadImg(img, workflow.id);
 
           if (url) {
             workflow.displayUrl = url;
@@ -410,16 +433,16 @@ export class WorkflowComponent implements OnInit {
           workflow.status = 1;
         }
 
-        if (val.file){
-          let file = val.file as Step
-          var step = this.findStep(file.id, workflow.layout.sequence)
+        if (val.file) {
+          let file = val.file as Step;
+          var step = this.findStep(file.id, workflow.layout.sequence);
 
-          if (step){
-            step.name = file.name
+          if (step) {
+            step.name = file.name;
           }
         }
 
-        this.workflow.next(workflow)
+        this.workflow.next(workflow);
 
         await this.save();
 

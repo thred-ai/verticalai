@@ -5,14 +5,14 @@
   *ngIf="selectedFile && this.workflow"
 >
   <mat-sidenav
-    class="bg-theme border-0"
+    class="primary-background border-0"
     #nav
     [position]="'end'"
     [opened]="true"
     (openedChange)="resize()"
   >
     <div
-      class="bg-theme h-100"
+      class="primary-background h-100"
       style="width: 250px"
       [hidden]="selectedFile && selectedFile.id != 'main'"
     >
@@ -24,7 +24,7 @@
         <div
           class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
         >
-          <span class="fw-bold text-light">
+          <span class="fw-bold primary-text">
             Controllers <br /><span class="fw-normal" style="font-size: x-small"
               >Drag and drop</span
             ></span
@@ -40,7 +40,7 @@
     </div>
 
     <div
-      class="bg-theme h-100"
+      class="primary-background h-100"
       style="width: 350px"
       [hidden]="selectedFile && selectedFile.id == 'main'"
     >
@@ -52,7 +52,7 @@
         <div
           class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
         >
-          <span class="fw-bold text-light">
+          <span class="fw-bold primary-text">
             Controller <br /><span class="fw-normal" style="font-size: x-small"
               >Settings</span
             ></span
@@ -111,7 +111,7 @@
               *ngIf="selectedFile | cast : BranchedStep as branchStep"
             >
               <div
-                class="w-100 d-flex justify-content-between align-content-center pb-3 mb-3 mt-4 text-white border-table-bottom"
+                class="w-100 d-flex justify-content-between align-content-center pb-3 mb-3 mt-4 primary-text border-table-bottom"
               >
                 <p class="w-100 fw-bold">Decision Paths</p>
                 <mat-icon
@@ -131,18 +131,18 @@
                   "
                   class="pb-4 d-flex justify-content-between align-items-center"
                 >
-                  <div class="text-white">
+                  <div class="primary-text">
                     {{ branch.name }}
                   </div>
                   <!-- 
                   <div
-                    class="btn bg-orange text-white fw-bold rounded-10"
+                    class="btn bg-orange primary-text   fw-bold rounded-10"
                   >
                     Edit 
                   </div> -->
 
                   <div
-                    class="btn bg-orange text-white fw-bold rounded-10 d-flex p-2 justify-content-center align-items-center"
+                    class="btn bg-orange shadow-0 text-white fw-bold rounded d-flex p-1 justify-content-center align-items-center"
                     (click)="onRightClick($event, branch.name, branchStep)"
                   >
                     <ion-icon
@@ -237,7 +237,7 @@
       </div>
     </div>
   </mat-sidenav>
-  <mat-sidenav-content class="bg-theme-2">
+  <mat-sidenav-content class="secondary-background">
     <div
       class="w-100 h-100"
       id="container"
@@ -251,7 +251,7 @@
           style="z-index: 55; right: 0; top: 0"
         >
           <a
-            class="btn bg-theme rounded-10 border-0 fw-bold text-white d-flex justify-content-center p-1 align-content-center"
+            class="btn primary-background rounded-10 border-0 fw-bold primary-text d-flex justify-content-center p-1 align-content-center"
             (click)="nav.toggle(); setToolbarLoc()"
             [matTooltip]="'Toggle Controller Menu'"
             [matTooltipPosition]="'left'"
@@ -266,10 +266,10 @@
           class="position-absolute d-flex justify-content-between align-items-center m-3"
           style="z-index: 55; left: 0; bottom: 0"
         >
-          <div class="bg-theme rounded-10 px-2 py-1">
+          <div class="primary-background btn-shadow rounded-10 px-2 py-1">
             <mat-slide-toggle
               #gridModeSwitch
-              class="text-light"
+              class="primary-text"
               [ngModel]="showingGrid"
               (ngModelChange)="showGrid = $event"
               [matTooltip]="'Toggle Grid'"
@@ -279,7 +279,7 @@
 
         <ng-container *ngIf="workflow">
           <sqd-designer
-            [theme]="'dark'"
+            [theme]="theme"
             [undoStackSize]="0"
             [definition]="workflow.layout"
             [toolboxConfiguration]="toolboxConfiguration"
@@ -310,7 +310,7 @@
               id="accordion"
             >
               <ion-accordion class="bg-transparent" value="general">
-                <ion-item slot="header" class="text-light" [color]="theme">
+                <ion-item slot="header" class="primary-text   " [color]="theme">
                   <ion-label>General</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
@@ -337,7 +337,7 @@
                   class="bg-transparent"
                   *ngIf="editor.step.properties.type != 'model'"
                 >
-                  <ion-item slot="header" class="text-light" [color]="theme">
+                  <ion-item slot="header" class="primary-text   " [color]="theme">
                     <ion-label>Configuration</ion-label>
                   </ion-item>
                   <div class="ion-padding" slot="content">
@@ -413,7 +413,7 @@
                 </ion-accordion>
     
                 <ion-accordion value="advanced" class="bg-transparent">
-                  <ion-item slot="header" class="text-light" [color]="theme">
+                  <ion-item slot="header" class="primary-text   " [color]="theme">
                     <ion-label>Advanced</ion-label>
                   </ion-item>
                   <div class="ion-padding" slot="content">
@@ -477,7 +477,7 @@
     <ng-container *ngIf="item.id != 'app' && item.id != 'main'">
       <button
         mat-menu-item
-        class="text-light proj"
+        class="primary-text proj"
         (click)="openBranchSettings(step, item)"
       >
         Edit Path
@@ -485,7 +485,7 @@
 
       <button
         mat-menu-item
-        class="text-light proj"
+        class="primary-text proj"
         *ngIf="step.properties['default'] != item"
         (click)="step.properties['default'] = item; saveLayout()"
       >
@@ -495,7 +495,7 @@
       <button
         mat-menu-item
         [disabled]="true"
-        class="text-secondary proj"
+        class="secondary-text proj"
         *ngIf="step.properties['default'] == item"
         [disabled]="true"
       >
@@ -504,7 +504,7 @@
 
       <button
         mat-menu-item
-        class="text-light proj"
+        class="primary-text proj"
         (click)="deleteBranch(step, item)"
       >
         Delete

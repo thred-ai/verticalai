@@ -1,5 +1,5 @@
 <div
-  class="bg-theme h-100 d-flex flex-column justify-content-between align-items-center"
+  class="primary-background h-100 d-flex flex-column justify-content-between align-items-center"
   style="width: 250px !important; min-width: 250px !important"
 >
   <!-- [value]="openLayouts"
@@ -14,7 +14,7 @@
       [matTooltip]="'Save \' ' + (executable?.name ?? 'Project') + ' \''"
     >
       <button
-        class="btn bg-theme rounded-10 shadow-0 fw-bold text-white d-flex justify-content-start px-0 align-content-center py-2"
+        class="btn primary-background rounded-10 shadow-0 fw-bold primary-text d-flex justify-content-start px-0 align-content-center py-2"
         (click)="saveLayout()"
       >
         <!-- (click)="edited ? save() : publish(workflow)"
@@ -40,7 +40,7 @@
     </div>
     <div class="ms-2 my-auto" [matTooltip]="'Browse Projects'">
       <button
-        class="btn bg-theme shadow-0 rounded-10 fw-bold text-white d-flex justify-content-center py-2 px-0 align-content-center"
+        class="btn primary-background shadow-0 rounded-10 fw-bold primary-text d-flex justify-content-center py-2 px-0 align-content-center"
         [mdbPopover]="template2"
         placement="bottom"
         [trigger]="'click'"
@@ -53,11 +53,11 @@
 
   <ng-container *ngIf="executable">
     <div
-      class="w-100 text-light p-3 d-flex justify-content-between align-items-center mb-2"
+      class="w-100 primary-text p-3 d-flex justify-content-between align-items-center mb-2"
     >
       <span class="text-start h6 my-auto"> Project</span>
       <ion-icon
-        class="text-light my-auto"
+        class="primary-text my-auto"
         style="font-size: 20px; cursor: pointer"
         [name]="'settings-outline'"
         slot="end"
@@ -83,9 +83,9 @@
           [value]="['code']"
         >
           <ion-accordion class="bg-transparent" [value]="'code'">
-            <ion-item slot="header" class="text-light no-padding">
+            <ion-item slot="header" class="primary-text no-padding">
               <ion-thumbnail slot="start" [style.--border-radius]="'6px'">
-                <img [src]="item.metadata.img ?? ''" />
+                <img class="border-table p-0" [src]="item.metadata.img ?? ''" />
               </ion-thumbnail>
 
               <ion-label
@@ -97,7 +97,7 @@
               >
             </ion-item>
 
-            <div class="ion-padding text-light" slot="content">
+            <div class="ion-padding primary-text" slot="content">
               <ng-container *ngIf="item.categoryTask as catTask">
                 <ng-container
                   *ngTemplateOutlet="modelItem; context: { $implicit: catTask }"
@@ -124,13 +124,13 @@
   <ng-template #modelItem let-item>
     <ion-item
       slot="header"
-      class="text-light w-100 border-0 file-item {{
+      class="primary-text w-100 border-0 file-item {{
         selectedFile == item.id ? 'selected' : ''
       }}"
       role="button"
       (click)="selectedFile = item.id; selectedFileChanged.emit(item.id)"
     >
-      <ng-container *ngIf="editingTask?.id != item.id">
+      <ng-container>
         <!-- <ion-icon
             *ngIf="item.id == 'main'"
             class="text-orange me-3"
@@ -140,7 +140,7 @@
         <!-- --border-radius: 50%; -->
 
         <ion-thumbnail slot="start" [style.--border-radius]="'50%'">
-          <img [src]="item.metadata.img ?? ''" />
+          <img class="border-table p-0" [src]="item.metadata.img ?? ''" />
         </ion-thumbnail>
         <ion-label
           style="font-size: small"
@@ -151,7 +151,7 @@
         >
         <ion-icon
           *ngIf="item.id != 'main'"
-          class="text-secondary my-auto"
+          class="secondary-text my-auto"
           style="font-size: 15px; cursor: pointer"
           [name]="'ellipsis-vertical'"
           slot="end"
@@ -160,7 +160,7 @@
           (click)="onRightClick($event, item)"
         ></ion-icon>
       </ng-container>
-      <ng-container *ngIf="editingTask?.id == item.id">
+      <!-- <ng-container *ngIf="editingTask?.id == item.id">
         <ion-input #selectedName type="text" [value]="editingTask?.name">
         </ion-input>
         <ion-icon
@@ -169,7 +169,7 @@
           slot="end"
           (click)="saveFieldName(editingTask!, selectedName.value)"
         ></ion-icon>
-      </ng-container>
+      </ng-container> -->
     </ion-item>
   </ng-template>
 </div>
@@ -183,27 +183,27 @@
 ></div>
 
 <!-- standard material menu -->
-<mat-menu #rightMenu="matMenu" class="bg-theme">
+<mat-menu #rightMenu="matMenu" class="primary-background">
   <ng-template matMenuContent let-item="item">
     <ng-container
       *ngIf="item.id != 'app' && item.id != 'main'; else appSettings"
     >
       <button
         mat-menu-item
-        class="text-light"
+        class="primary-text"
         (click)="openControllerSettings(item.id)"
       >
         Configure
       </button>
 
-      <button mat-menu-item class="text-light" (click)="removeFile(item.id)">
+      <button mat-menu-item class="primary-text" (click)="removeFile(item.id)">
         Delete
       </button>
     </ng-container>
     <ng-template #appSettings>
       <button
         mat-menu-item
-        class="text-light"
+        class="primary-text"
         (click)="openControllerSettings('main')"
       >
         Project Settings
@@ -215,15 +215,15 @@
 <ng-template #template2>
   <ng-container *ngIf="loadedUser && loadedUser.utils">
     <div
-      class="bg-theme-2 text-start rounded d-flex justify-content-center align-items-center flex-column"
+      class="secondary-background text-start rounded d-flex justify-content-center align-items-center flex-column"
       id="profile-menu"
       style="min-width: 350px; max-height: 700px"
       (clickOutside)="folderToggle.click()"
     >
       <div class="big-design-header p-3 pb-3">
-        <b class="fw-bold text-light">Projects</b>
+        <b class="fw-bold primary-text">Projects</b>
         <p
-          class="rounded-circle fw-bold text-white d-flex justify-content-center align-content-center"
+          class="rounded-circle fw-bold primary-text d-flex justify-content-center align-content-center"
           style="aspect-ratio: 1"
           role="button"
           (click)="openProj.emit()"
@@ -262,18 +262,18 @@
               />
             </div>
             <div class="text-start w-100 ms-2">
-              <div class="w-100 ps-2 text-light text-start fw-normal">
+              <div class="w-100 ps-2 primary-text text-start fw-normal">
                 {{ n.name }}
               </div>
               <div
-                class="w-100 ps-2 text-light text-start fw-normal"
+                class="w-100 ps-2 primary-text text-start fw-normal"
                 style="font-size: 10px"
               >
                 {{ n.created | date }}
               </div>
             </div>
           </div>
-          <mat-icon class="text-secondary"> chevron_right </mat-icon>
+          <mat-icon class="secondary-text"> chevron_right </mat-icon>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <div class="w-100 h-100 d-flex justify-content-center align-items-center p-4">
   <div
-    class="bg-theme-2 border-table rounded w-100 h-100 d-flex justify-content-center align-items-center flex-column p-3"
+    class="primary-background border-table shadow rounded w-100 h-100 d-flex justify-content-center align-items-center flex-column p-3"
     style="
       max-width: 1200px !important;
       max-height: 700px !important;
@@ -12,11 +12,11 @@
 
     <ng-container *ngIf="executable && selectedFile">
       <div
-        class="w-100 text-light p-3 d-flex justify-content-between align-items-center"
+        class="w-100 primary-text  p-3 d-flex justify-content-between align-items-center"
       >
         <span class="text-start h5 fw-bold">Document Database</span>
         <button
-          class="btn bg-transparent shadow-0 border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-0 align-content-center"
+          class="btn bg-transparent shadow-0 border-0 rounded-10 fw-bold primary-text  d-flex justify-content-center px-0 align-content-center"
           (click)="newCollection()"
         >
           Add
@@ -44,10 +44,10 @@
                   id="accordion"
                 >
                   <ion-accordion class="bg-transparent" [value]="item.id">
-                    <ion-item slot="header" class="text-light no-padding">
+                    <ion-item slot="header" class="primary-text  no-padding">
                       <ion-label class="fw-bold">{{ item.name }}</ion-label>
                       <ion-icon
-                        class="text-secondary"
+                        class="secondary-text"
                         [name]="'ellipsis-vertical'"
                         slot="end"
                         role="button"
@@ -55,14 +55,14 @@
                       ></ion-icon>
                     </ion-item>
 
-                    <div class="ion-padding text-light" slot="content">
+                    <div class="ion-padding primary-text  " slot="content">
                       <ion-item
                         slot="header"
-                        class="text-light border-0 add-item"
+                        class="primary-text  border-0 add-item"
                         role="button"
                       >
                         <ion-icon
-                          class="text-white"
+                          class="primary-text"
                           [name]="'add'"
                           slot="end"
                           role="button"
@@ -98,7 +98,7 @@
                             class="w-100 d-flex justify-content-center align-items-center"
                             style="height: 250px"
                           >
-                            <span class="text-light text-center">
+                            <span class="primary-text  text-center">
                               No documents in this collection
                             </span>
                           </div>
@@ -121,7 +121,7 @@
           <div
             class="w-100 h-100 d-flex justify-content-center align-items-center"
           >
-            <span class="text-light text-center">
+            <span class="primary-text  text-center">
               No collections to show
             </span>
           </div>
@@ -130,7 +130,7 @@
         <ng-template #modelItem let-item>
           <ion-item
             slot="header"
-            class="text-light w-100 border-0 file-item py-2"
+            class="primary-text  w-100 border-0 file-item py-2"
             role="button"
           >
             <ng-container>
@@ -143,7 +143,7 @@
                 id="textArea"
               >
                 <div
-                  class="text-secondary text-start"
+                  class="secondary-text text-start"
                   style="font-size: small"
                   slot="label"
                 >
@@ -155,7 +155,7 @@
               </ion-textarea>
             </ng-container>
             <ion-icon
-              class="text-white p-0"
+              class="primary-text  p-0"
               *ngIf="editingDocs[item.id]"
               [name]="'checkmark-circle'"
               slot="end"
@@ -163,7 +163,7 @@
               (click)="updateDoc(item)"
             ></ion-icon>
             <ion-icon
-              class="text-secondary"
+              class="secondary-text"
               [name]="'ellipsis-vertical'"
               slot="end"
               role="button"
@@ -194,17 +194,17 @@
   [matMenuTriggerFor]="rightMenu"
 ></div>
 
-<mat-menu #rightMenu="matMenu" class="bg-theme border-table">
+<mat-menu #rightMenu="matMenu" class="primary-background border-table">
   <ng-template matMenuContent let-item="item">
     <ng-container *ngIf="item.type == 'category'; else docSettings">
-      <button mat-menu-item class="text-light" (click)="deleteCollection(item)">
+      <button mat-menu-item class="primary-text  " (click)="deleteCollection(item)">
         Delete Collection
       </button>
     </ng-container>
     <ng-template #docSettings>
       <button
         mat-menu-item
-        class="text-light"
+        class="primary-text  "
         (click)="deleteCollectionDoc(item)"
       >
         Delete Document

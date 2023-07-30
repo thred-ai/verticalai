@@ -1,6 +1,6 @@
 <ng-container *ngIf="'light' as mode">
-  <div
-    class="w-100 border-table-bottom bg-theme-2"
+  <!-- <div
+    class="w-100 border-table-bottom secondary-background "
     style="height: 70px; position: fixed; z-index: 50; top: 0"
     id="top-bar"
     *ngIf="!(location.path() | isRoute : ['dashboard'])"
@@ -88,13 +88,13 @@
 
                 <ng-template #template>
                   <div
-                    class="popover-body-padding bg-theme border-table text-center px-3"
+                    class="popover-body-padding primary-background border-table text-center px-3"
                     id="profile-menu"
                     style="min-width: 250px"
                   >
                     <div class="big-design-header" style="height: 40px">
                       <mat-icon
-                        class="fw-bold text-light"
+                        class="fw-bold primary-text  "
                         role="button"
                         (click)="profileToggle.click()"
                       >
@@ -132,7 +132,7 @@
                       }}
                     </span>
                     <b
-                      class="fw-bold mb-4 text-light text-center"
+                      class="fw-bold mb-4 primary-text  text-center"
                       style="font-size: small"
                       >{{
                         localStorage!["email"] != null
@@ -144,24 +144,16 @@
                     <div class="w-100 text-start mt-3">
                       <a
                         role="button"
-                        class="w-100 btn text-light bg-secondary px-1 py-2 fw-bold rounded"
+                        class="w-100 btn primary-text  secondary-background px-1 py-2 fw-bold rounded"
                         style="font-size: small"
                         (click)="editProfile()"
                         *ngIf="localStorage!['email'] != null"
                       >
                         Edit Profile
                       </a>
-                      <!-- <a
-                        role="button"
-                        class="w-100 btn text-light bg-secondary px-1 py-2 mt-2 fw-bold rounded"
-                        style="font-size: small"
-                        (click)="editBilling()"
-                      >
-                        View Billing
-                      </a> -->
                       <a
                         role="button"
-                        class="w-100 btn bg-black text-white px-1 py-2 mt-2 fw-bold rounded"
+                        class="w-100 btn primary-background primary-text  px-1 py-2 mt-2 fw-bold rounded"
                         style="font-size: small"
                         (click)="signOut()"
                         *ngIf="localStorage!['email'] != null"
@@ -177,12 +169,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div
     class="w-100 bar-{{ mode }} layout-container-grow-{{
       (location.path() | isRoute : ['dashboard']) ? 'full' : ''
     }}"
-    [style.margin-top.px]="(location.path() | isRoute : ['dashboard']) ? 0 : 70"
   >
     <router-outlet (activate)="onActivate($event)"></router-outlet>
   </div>

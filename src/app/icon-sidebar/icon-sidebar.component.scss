@@ -21,9 +21,15 @@
 
 
 .proj:hover{
-  background-color: #2e2e2e5f;
+  background-color: var(--primarySectionHoverColor);
 }
 
 .proj-select{
-  background-color: #1E293B;
+  background-color: var(--primarySectionHoverColor);
+}
+
+
+.logo{
+  -webkit-filter: drop-shadow(1px 1px 1px #222);
+  filter: drop-shadow(1px 1px 1px #222);
 }
