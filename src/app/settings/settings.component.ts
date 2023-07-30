@@ -4,6 +4,7 @@ import { Executable } from '../models/workflow/executable.model';
 import { Key } from '../models/workflow/key.model';
 import { Step } from 'vertical-ai-designer';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Developer } from '../models/user/developer.model';
 
 @Component({
   selector: 'app-settings',
@@ -25,11 +26,18 @@ export class SettingsComponent implements OnInit {
 
   loading = false;
 
+  themes = [
+    { name: 'Light', id: 'light' },
+    { name: 'Dark', id: 'dark' },
+    { name: 'Auto', id: 'auto' },
+  ];
+
   // @Output() detailsChanged = new EventEmitter<Executable>();
   // @Output() iconChanged = new EventEmitter<File>();
   // @Output() apiKeyChanged = new EventEmitter<Key>();
 
   selectedFile?: Step;
+  dev?: Developer;
   newImg?: File;
 
   any!: any;
@@ -40,10 +48,15 @@ export class SettingsComponent implements OnInit {
     public dialogRef: MatDialogRef<SettingsComponent>,
     private loadService: LoadService
   ) {
-    dialogRef.disableClose = true;
+    // dialogRef.disableClose = true;
     this.apiKey = data.apiKey;
-    this.selectedFile = data.step;
-    this.workflow = data.workflow;
+    this.selectedFile = data.step
+      ? JSON.parse(JSON.stringify(data.step))
+      : undefined;
+    this.workflow = data.workflow
+      ? JSON.parse(JSON.stringify(data.workflow))
+      : undefined;
+    this.dev = data.dev ? JSON.parse(JSON.stringify(data.dev)) : undefined;
     this.newBranch['title'] = data.branch;
 
     if (
@@ -57,7 +70,13 @@ export class SettingsComponent implements OnInit {
         ]?.description ?? '';
     }
 
-    this.mode = this.selectedFile ? (this.newBranch['title'] ? 3 : 1) : 2;
+    this.mode = this.selectedFile
+      ? this.newBranch['title']
+        ? 3
+        : 1
+      : this.dev
+      ? 4
+      : 2;
   }
 
   ngOnInit(): void {}
@@ -90,6 +109,7 @@ export class SettingsComponent implements OnInit {
       workflow: this.workflow,
       img: this.newImg,
       action,
+      dev: this.dev,
       ...this.newBranch,
     });
   }

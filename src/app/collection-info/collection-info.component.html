@@ -1,9 +1,9 @@
 <div
-  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column bg-theme-2 p-3 pb-4"
+  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column secondary-background  p-3 pb-4"
 >
   <div class="w-100 h-100 d-flex justify-content-center align-items-center">
     <div
-      class="bg-theme-2 w-100 h-100 m-auto"
+      class="secondary-background  w-100 h-100 m-auto"
       style="max-width: 600px"
       *ngIf="collection"
     >
@@ -31,7 +31,7 @@
         </div>
       </div>
       <button
-        class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
+        class="btn bg-orange border-0 rounded-10 fw-bold primary-text  d-flex justify-content-center px-3 align-content-center py-2 mt-4"
         (click)="save()"
       >
         <!-- (click)="edited ? save() : publish(workflow)"

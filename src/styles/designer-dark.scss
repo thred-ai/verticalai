@@ -1,10 +1,4 @@
 /********* dark *********/
-:root {
-  --primaryColor: #fe6f42;
-  --primaryHoverColor: #f5601d;
-
-  --gridColor: #242424;
-}
 
 .sqd-theme-dark.sqd-designer {
   background: #1c1c1c;
@@ -28,20 +22,11 @@
   background: transparent;
   color: #fff;
 }
-.sqd-toolbox-item {
-  color: #ffffff;
-  background: #3e3e3e5f;
-}
-.sqd-toolbox-item:hover {
-  background: #b2b2b25f;
-}
+
 .sqd-toolbox-item-icon.sqd-no-icon {
   background: #c6c6c6;
 }
 
-.sqd-toolbox-item-icon {
-  border: #7f7f7f solid 2px;
-}
 
 .sqd-control-bar-button.sqd-delete .sqd-icon-path {
   fill: #ffffff;

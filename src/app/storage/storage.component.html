@@ -1,5 +1,5 @@
 <div
-  class="bg-theme-2 h-100 border-table-right d-flex justify-content-start align-content-center flex-column"
+  class="secondary-background  h-100 border-table-right d-flex justify-content-start align-content-center flex-column"
   style="
     width: 250px !important;
     min-width: 250px !important;
@@ -11,7 +11,7 @@
 
   <div class="w-100 p-3">
     <button
-      class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex w-100 justify-content-center px-3 align-content-center py-2 my-auto"
+      class="btn bg-orange border-0 rounded-10 fw-bold primary-text  d-flex w-100 justify-content-center px-3 align-content-center py-2 my-auto"
       (click)="saveLayout()"
     >
       <!-- (click)="edited ? save() : publish(workflow)"
@@ -57,9 +57,9 @@
 ></div>
 
 <!-- standard material menu -->
-<mat-menu #rightMenu="matMenu" class="bg-theme border-table">
+<mat-menu #rightMenu="matMenu" class="primary-background border-table">
   <ng-template matMenuContent let-item="item">
-    <button mat-menu-item class="text-light">Rename</button>
-    <button mat-menu-item class="text-light">Delete</button>
+    <button mat-menu-item class="primary-text  ">Rename</button>
+    <button mat-menu-item class="primary-text  ">Delete</button>
   </ng-template>
 </mat-menu>

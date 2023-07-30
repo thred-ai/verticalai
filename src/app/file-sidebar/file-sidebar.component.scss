@@ -1,13 +1,13 @@
 ion-accordion.accordion-collapsing > ion-item[slot="header"],
 ion-accordion.accordion-collapsed > ion-item[slot="header"] {
   --background: transparent;
-  --color: white;
+  --color: var(--primaryTextColor);
 }
 
 ion-accordion.accordion-expanding > ion-item[slot="header"],
 ion-accordion.accordion-expanded > ion-item[slot="header"] {
   --background: transparent;
-  --color: white;
+  --color: var(--primaryTextColor);
   //border-bottom: 1px solid #6c757d;
 
   //   --border-color: #6c757d;
@@ -26,7 +26,7 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
 
 :host::ng-deep .ion-accordion-toggle-icon {
   font-size: small;
-  color: #6c757d;
+  color: var(--secondaryTextColor)
 }
 
 // :host ::ng-deep .item-native{
@@ -44,12 +44,14 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
 }
 
 .file-item.selected {
-  --background: #2e2e2e5f !important;
+  --background:  var(--secondarySectionHoverColor) !important;
 }
 
 .file-item:not(.selected):hover {
-  --background: #2e2e2e5f !important;
+  --background:  var(--secondarySectionHoverColor) !important;
+  
 }
+
 
 // .sqd-theme-dark .sqd-toolbox-item {
 
@@ -74,9 +76,9 @@ ion-icon {
 }
 
 .proj:hover{
-  background-color: #2e2e2e5f;
+  background-color: var(--secondarySectionHoverColor);
 }
 
 .proj-select{
-  background-color: #1E293B;
+  background-color: var(--primarySectionHoverColor);
 }

@@ -1,6 +1,5 @@
 <div
-  class="layout-container-full animate__animated animate__fadeIn"
-  style="background-color: #111111"
+  class="layout-container-full animate__animated animate__fadeIn primary-background"
 >
 
   <div id="content" class="tab">
@@ -39,7 +38,7 @@
             </p>
 
             <button
-              class="d-none d-md-flex justify-content-center align-items-center btn bg-orange text-light rounded-pill py-2 px-3"
+              class="d-none d-md-flex justify-content-center align-items-center btn bg-orange primary-text  rounded-pill py-2 px-3"
               role="button"
               (click)="picker.open()"
               [mdbPopover]="template"
@@ -149,14 +148,14 @@
             >
               <div class="p-0 h-100 w-100">
                 <div
-                  class="h-100 w-100 big-design-card p-0 bg-black rounded-15"
+                  class="h-100 w-100 big-design-card p-0 primary-background rounded-15"
                   style="overflow: hidden"
                 >
                   <div
-                    class="big-design-body position-relative h-100 w-100 bg-black rounded-15"
+                    class="big-design-body position-relative h-100 w-100 primary-background rounded-15"
                   >
                     <img
-                      class="w-100 h-100 position-absolute bg-black animate__animated animate__fadeIn rounded-15"
+                      class="w-100 h-100 position-absolute primary-background animate__animated animate__fadeIn rounded-15"
                       style="object-fit: cover"
                       [src]="
                         'https://storage.googleapis.com/thred-protocol.appspot.com/resources/space.png'
@@ -254,7 +253,7 @@
             style="width: 100%"
           >
             <p
-              class="big-design-title text-light"
+              class="big-design-title primary-text  "
               style="
                 font-weight: lighter;
                 font-size: 2rem;
@@ -265,14 +264,14 @@
               AI Systems
             </p>
             <p
-              class="btn rounded-10 fw-bold bg-orange text-white d-none d-md-flex justify-content-between align-content-center px-3 py-2"
+              class="btn rounded-10 fw-bold bg-orange primary-text  d-none d-md-flex justify-content-between align-content-center px-3 py-2"
               (click)="openUtil()"
             >
               <mat-icon class="me-1" style="aspect-ratio: 1"> add </mat-icon>
               Add new
             </p>
             <p
-              class="btn rounded-circle fw-bold bg-orange text-white d-flex justify-content-center align-content-center d-md-none p-2"
+              class="btn rounded-circle fw-bold bg-orange primary-text  d-flex justify-content-center align-content-center d-md-none p-2"
               style="aspect-ratio: 1"
               (click)="openUtil()"
             >
@@ -306,7 +305,7 @@
         class="w-100 d-flex flex-column justify-content-center align-items-center layout-container-full"
       >
         <verticalai-loader
-          [mode]="'light'"
+          [mode]="theme"
           [text]="'Loading...'"
         ></verticalai-loader>
       </div>

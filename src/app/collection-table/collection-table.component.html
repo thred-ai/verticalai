@@ -15,7 +15,7 @@
         <th
           mat-header-cell
           *matHeaderCellDef
-          class="big-design-body text-light border-table-top border-table-bottom"
+          class="big-design-body primary-text  border-table-top border-table-bottom"
         >
           Requests
         </th>
@@ -34,7 +34,7 @@
         <th
           mat-header-cell
           *matHeaderCellDef
-          class="big-design-body text-light px-3 border-table-top border-table-bottom"
+          class="big-design-body primary-text  px-3 border-table-top border-table-bottom"
         >
           Models
         </th>
@@ -70,7 +70,7 @@
                   *ngIf="models[0] else emptyModel"
                 >
                   <div
-                    class="m-auto rounded-circle bg-black d-flex justify-content-center align-content-center"
+                    class="m-auto rounded-circle primary-background d-flex justify-content-center align-content-center"
                     style="height: 85%; width: 85%; overflow: hidden"
                   >
                     <img
@@ -153,7 +153,7 @@
 
               <ng-template #template>
                 <div class="popover-body-padding bg-theme" *ngIf="models.length > 0">
-                  <b class="fw-normal mb-4 text-light">Models</b>
+                  <b class="fw-normal mb-4 primary-text  ">Models</b>
                   <br />
                   <div
                     *ngFor="let n of models ?? []"
@@ -174,7 +174,7 @@
                         [src]="n.model.imgUrl"
                       />
                     </div>
-                    <span class="w-100 ps-2 text-light fw-normal">
+                    <span class="w-100 ps-2 primary-text  fw-normal">
                       {{ n.model.name }}
                       <span class="ms-1" style="color: rgb(179, 179, 179)">
                         [{{ n.count }}]</span
@@ -208,7 +208,7 @@
         <th
           mat-header-cell
           *matHeaderCellDef
-          class="big-design-body text-light px-3 border-table-top border-table-bottom"
+          class="big-design-body primary-text  px-3 border-table-top border-table-bottom"
         >
           Plan
         </th>
@@ -232,7 +232,7 @@
         <th
           mat-header-cell
           *matHeaderCellDef
-          class="big-design-body text-light text-end border-table-top border-table-bottom"
+          class="big-design-body primary-text  text-end border-table-top border-table-bottom"
         >
       Details</th>
         <td
@@ -242,7 +242,7 @@
           (click)="open(element, 1)"
         >
           <a
-            class="big-design-button border-0 text-secondary p-2 rounded-circle fw-normal"
+            class="big-design-button border-0 secondary-text p-2 rounded-circle fw-normal"
             role="button"
           >
             <mat-icon> more_horiz </mat-icon>
@@ -254,7 +254,7 @@
         <th
           mat-header-cell
           *matHeaderCellDef
-          class="big-design-body text-light border-table-top border-table-bottom"
+          class="big-design-body primary-text  border-table-top border-table-bottom"
         >
           Name
         </th>

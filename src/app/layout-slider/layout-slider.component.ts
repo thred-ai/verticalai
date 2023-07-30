@@ -21,11 +21,11 @@ export class LayoutSliderComponent implements OnInit {
   @Input() min: number = 0
   @Input() max: number = 100
   @Input() title: string = 'Slider'
-  @Input() textColor: string = '#ffffff';
-  @Input() lineColor: string = '#131313d4';
-  @Input() lineFillColor: string = '#ffffff';
-  @Input() knobColor: string = '#ffffff';
-  @Input() knobTextColor: string = '#131313d4';
+  @Input() textColor: string = 'var(--primaryTextColor)';
+  @Input() lineColor: string = 'var(--secondaryBackgroundColor)';
+  @Input() lineFillColor: string = 'var(--primaryColor)';
+  @Input() knobColor: string = 'var(--primaryColor)';
+  @Input() knobTextColor: string = '#ffffff';
 
   @Input() simplify: boolean = false;
 

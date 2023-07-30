@@ -4,6 +4,7 @@ import { LoadService, Dict } from '../load.service';
 import { APIRequest } from '../models/workflow/api-request.model';
 import { Executable } from '../models/workflow/executable.model';
 import { Developer } from '../models/user/developer.model';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-api-tester',
@@ -21,7 +22,7 @@ export class ApiTesterComponent implements OnInit {
 
   @Input() model?: Executable;
   user?: Developer;
-  constructor(private loadService: LoadService) {}
+  constructor(private loadService: LoadService, private clipboard: Clipboard) {}
 
   ngOnInit(): void {
     this.loadService.loadedUser.subscribe((l) => {
@@ -29,6 +30,10 @@ export class ApiTesterComponent implements OnInit {
         this.user = l;
       }
     });
+  }
+
+  copy(data: string){
+    this.clipboard.copy(data)
   }
 
   async run() {

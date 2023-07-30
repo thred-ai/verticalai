@@ -71,21 +71,41 @@ export class LoadService {
   themes = {
     dark: {
       primaryColor: '#0A99FF',
+      secondaryColor: '#0A99FF',
+      primaryTextColor: '#ffffff',
+      secondaryTextColor: '#6c757d',
       primaryHoverColor: '#34aafe',
+      sectionBackgroundColor: '#151515',
+      primarySectionHoverColor: '#1E293B',
+      secondarySectionHoverColor: '#2e2e2e5f',
       gridColor: '#242424',
-      backgroundPrimaryColor: '#',
-      backgroundSecondaryColor: '#F4F5F8',
+      primaryBackgroundColor: '#1F1F1F',
+      secondaryBackgroundColor: '#151515',
     },
     light: {
-      primaryColor: '#1F6EF6',
-      primaryHoverColor: '#1F6EF6',
-      gridColor: '#dadada',
-      backgroundPrimaryColor: '#fffff',
-      backgroundSecondaryColor: '#F4F5F8',
+      primaryColor: '#0A99FF',
+      secondaryColor: '#F8F9FA',
+      primaryTextColor: '#4f5a63',
+      secondaryTextColor: '#bbbfc4',
+      primaryHoverColor: '#34aafe',
+      sectionBackgroundColor: '#e9eff4',
+      primarySectionHoverColor: '#dee6ed',
+      secondarySectionHoverColor: '#f2f2f2',
+      gridColor: '#e6e6e6',
+      primaryBackgroundColor: '#f8f9fa',
+      secondaryBackgroundColor: '#f1f1f1',
     },
   };
 
-  confirmDelete(){
+  // .bg-theme{
+  //   background-color: #1F1F1F;
+  // }
+
+  // .secondary-background {
+  //   background-color: #151515;
+  // }
+
+  confirmDelete() {
     return confirm('Are you sure you want to delete this controller?');
   }
 
@@ -94,9 +114,49 @@ export class LoadService {
       '--primaryColor',
       `${this.themes[value].primaryColor}`
     );
+
+    document.documentElement.style.setProperty(
+      '--secondaryColor',
+      `${this.themes[value].secondaryColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--primaryTextColor',
+      `${this.themes[value].primaryTextColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--secondaryTextColor',
+      `${this.themes[value].secondaryTextColor}`
+    );
     document.documentElement.style.setProperty(
       '--primaryHoverColor',
       `${this.themes[value].primaryHoverColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--sectionBackgroundColor',
+      `${this.themes[value].sectionBackgroundColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--primarySectionHoverColor',
+      `${this.themes[value].primarySectionHoverColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--secondarySectionHoverColor',
+      `${this.themes[value].secondarySectionHoverColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--primaryBackgroundColor',
+      `${this.themes[value].primaryBackgroundColor}`
+    );
+
+    document.documentElement.style.setProperty(
+      '--secondaryBackgroundColor',
+      `${this.themes[value].secondaryBackgroundColor}`
     );
 
     if (
@@ -309,17 +369,21 @@ export class LoadService {
     uploadImage: boolean,
     callback: (result?: Developer) => any
   ) {
+    var dev = data;
+
     let uid = data.id;
     let url = data.url;
     let name = data.name;
     let email = data.email;
+    let theme = data.theme;
+
     let search_name = name?.toLowerCase();
 
     if (uploadImage) {
       try {
         let ref = this.storage.ref(`users/${uid}/profile.png`);
         await ref.put(imgFile, { cacheControl: 'no-cache' });
-        url = await ref.getDownloadURL().toPromise();
+        dev.url = await ref.getDownloadURL().toPromise();
       } catch (error) {
         callback(undefined);
       }
@@ -327,10 +391,11 @@ export class LoadService {
 
     let userInfo = {
       uid,
-      url,
+      url: dev.url,
       name,
       email,
       search_name,
+      theme
     };
 
     try {
@@ -340,7 +405,9 @@ export class LoadService {
       localStorage['name'] = name;
       localStorage['email'] = email;
 
-      callback(new Developer(name, uid, 0, url, email));
+      this.loadedUser.next(dev);
+
+      callback(dev);
     } catch (error) {
       callback(undefined);
     }
@@ -1077,13 +1144,11 @@ export class LoadService {
 
   updateView(uid: string, location: any, docId: string) {
     // const time = new Date();
-
     // const docName =
     //   String(time.getFullYear()) +
     //   String(time.getMonth()) +
     //   String(time.getDate()) +
     //   String(time.getHours());
-
     // return this.db
     //   .collection('Users/' + uid + '/Daily_Info')
     //   .doc(`V${docName}`)
@@ -1109,7 +1174,6 @@ export class LoadService {
     callback: (views?: Dict<any>[]) => any
   ) {
     // var views: Dict<any>[] = [];
-
     // let sub = this.db
     //   .collection('Users/' + uid + '/Daily_Info/', (ref) =>
     //     ref

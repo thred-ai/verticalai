@@ -37,6 +37,8 @@ export class DashboardComponent implements OnInit {
     this.dateRange.controls['end'].value
   );
 
+  theme: 'light' | 'dark' = 'light';
+
   viewMapping: { [k: string]: string } = {
     '=0': 'No Active Users',
     '=1': '1 View',
@@ -168,12 +170,41 @@ export class DashboardComponent implements OnInit {
       // this.loadStats((await this.loadService.currentUser)?.uid);
 
       this.loadService.loadedUser.subscribe((dev) => {
-        this.dev = dev ?? undefined;
+        if (dev) {
+          if (dev?.theme == 'auto') {
+            if (
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches
+            ) {
+              // dark mode
+              this.loadService.activeTheme = 'dark';
+            } else {
+              this.loadService.activeTheme = 'light';
+            }
+          } else {
+            this.loadService.activeTheme = dev.theme;
+          }
+
+          this.dev = dev ?? undefined;
+        }
       });
+    });
+
+    this.loadService.theme.subscribe((theme) => {
+      this.theme = theme;
     });
 
     this.loadService.getPlans(async (_) => {});
     this.loadService.getTriggers(async (_) => {});
+
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', (e) => {
+        const newColorScheme = e.matches ? 'dark' : 'light';
+        if (this.dev?.theme == 'auto') {
+          this.loadService.activeTheme = newColorScheme;
+        }
+      });
   }
 
   loadStats(uid?: string) {
@@ -420,4 +451,3 @@ export class DashboardComponent implements OnInit {
 
     `;
 }
-

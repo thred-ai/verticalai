@@ -7970,7 +7970,7 @@ mat-sidenav {
   color: #0d6efd !important;
 }
 
-.text-secondary {
+.secondary-text {
   color: #6c757d !important;
 }
 
@@ -12023,7 +12023,7 @@ mat-calendar.no-header {
   background-color: #1F1F1F;
 }
 
-.bg-theme-2{
+.secondary-background{
   background-color: #151515;
 }
 
@@ -12238,12 +12238,12 @@ ion-select {
 }
 
 .custom-popover ion-select-popover ion-list {
-  background: #212529;
+  background: var(--primaryBackgroundColor);
 }
 
 .custom-popover ion-select-popover ion-item {
-  --background: #212529;
-  --color: #f8f9fa;
+  --background: var(--primaryBackgroundColor);
+  --color: var(--primaryTextColor);
   --inner-border-width: 0;
 }
 
@@ -12286,26 +12286,56 @@ ion-select {
 }
 
 .border-table{
-  border: 1px solid #7F7F7F !important;
+  border: 1.5px solid var(--primarySectionHoverColor) !important;
 }
 
 .border-table-left{
-  border-left: 1px solid #7F7F7F !important;
+  border-left: 1.5px solid var(--primarySectionHoverColor) !important;
 }
 
 .border-table-right{
-  border-right: 1px solid #7F7F7F !important;
+  border-right: 1.5px solid var(--primarySectionHoverColor) !important;
 }
 
 .border-table-top{
-  border-top: 1px solid #7F7F7F !important;
+  border-top: 1.5px solid var(--primarySectionHoverColor) !important;
 }
 
 .border-table-bottom{
-  border-bottom: 1px solid #7F7F7F !important;
+  border-bottom: 1.5px solid var(--primarySectionHoverColor) !important;
 }
 
 .CodeMirror {
   height: 100%;
   width: 100%;
+}
+
+.primary-text{
+  color: var(--primaryTextColor) !important;
+}
+
+.secondary-text {
+  color: var(--secondaryTextColor) !important;
+}
+
+.primary-background{
+  background-color: var(--primaryBackgroundColor) !important;
+}
+
+.secondary-background{
+  background-color: var(--secondaryBackgroundColor) !important;
+}
+
+.section-background{
+  background-color: var(--sectionBackgroundColor) !important;
+}
+
+// primaryColor: '#0A99FF',
+//       primaryHoverColor: '#34aafe',
+
+
+.btn-shadow{
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
 }
