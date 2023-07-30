@@ -42,7 +42,7 @@
     <div
       class="primary-background h-100"
       style="width: 350px"
-      [hidden]="selectedFile && selectedFile.id == 'main'"
+      *ngIf="selectedFile && selectedFile.id == 'main'"
     >
       <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
 
@@ -73,19 +73,19 @@
                 [value]="selectedFile.properties['systemPrompt']"
                 [placeholder]="placeholders[selectedFile.type]"
                 (changed)="
-                  selectedFile.properties['systemPrompt'] = $event; saveLayout()
+                  selectedFile.properties['systemPrompt'] = $event; saveLayout(); logEvent($event)
                 "
               >
               </verticalai-textbox>
             </div>
 
-            <div class="w-100 pb-3">
+            <div class="w-100 pb-3" *ngIf="selectedFile.type != 'switch'">
               <verticalai-layout-slider
                 [value]="selectedFile.properties['temp'] ?? 0.5"
                 [title]="'Creativity Level'"
                 [lineFillColor]="'#0A99FF'"
                 (valueChange)="
-                  selectedFile.properties['temp'] = $event; saveLayout()
+                  selectedFile.properties['temp'] = $event; saveLayout(); logEvent($event)
                 "
               >
               </verticalai-layout-slider>
@@ -99,7 +99,7 @@
                 [title]="'Creativity Level'"
                 [lineFillColor]="'#0A99FF'"
                 (valueChange)="
-                  selectedFile.properties['temp'] = $event; saveLayout()
+                  selectedFile.properties['temp'] = $event; saveLayout(); logEvent($event)
                 "
               >
               </verticalai-layout-slider>
@@ -204,13 +204,13 @@
                 [placeholder]="'ex. 2'"
                 [range]="{ min: 1, max: 5 }"
                 (changed)="
-                  selectedFile.properties['frequency'] = $event; saveLayout()
+                  selectedFile.properties['frequency'] = $event; saveLayout(); logEvent($event)
                 "
               >
               </verticalai-text-field>
             </div>
           </ng-container>
-
+<!-- 
           <ng-container
             *ngIf="
               (models[(selectedFile.type | split : '-')[1]] ?? { models: {} })
@@ -227,15 +227,17 @@
                 [valueField]="'id'"
                 [displayField]="'name'"
                 (changed)="
-                  selectedFile.properties['engine'] = $event; saveLayout()
+                  selectedFile.properties['engine'] = $event; saveLayout(); logEvent($event)
                 "
               >
               </verticalai-select-field>
             </div>
-          </ng-container>
+          </ng-container> -->
         </div>
       </div>
     </div>
+
+    
   </mat-sidenav>
   <mat-sidenav-content class="secondary-background">
     <div
@@ -402,7 +404,7 @@
                           (changed)="
                             editor.step.properties['frequency'] = $event;
                             editor.context.notifyPropertiesChanged();
-                            saveLayout()
+                            saveLayout(); logEvent($event)
                           "
                           (refresh)="refreshStepEditor(editor.step)"
                         >
@@ -487,7 +489,7 @@
         mat-menu-item
         class="primary-text proj"
         *ngIf="step.properties['default'] != item"
-        (click)="step.properties['default'] = item; saveLayout()"
+        (click)="step.properties['default'] = item; saveLayout(); logEvent($event)"
       >
         Make Default
       </button>

@@ -29,7 +29,6 @@ export class WorkflowCodeComponent implements OnInit {
 
     setTimeout(() => {
       const editor = this.codeEditor?.codeMirror;
-      console.log(this.codeEditor)
       const doc = editor?.getDoc();
     }, 2000);
 
