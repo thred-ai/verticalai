@@ -705,7 +705,7 @@ export class LoadService {
       ref.where(firebase.firestore.FieldPath.documentId(), '==', uid)
     );
 
-    let sub = query.valueChanges().subscribe(async (docs) => {
+    query.valueChanges().subscribe(async (docs) => {
       let doc = docs[0] as DocumentData;
 
       if (doc) {
@@ -737,7 +737,7 @@ export class LoadService {
             );
           }
 
-          let sub2 = q.valueChanges().subscribe((docs2) => {
+          q.valueChanges().subscribe((docs2) => {
 
             if (this.loadedUser.value){
               developer = this.loadedUser.value
@@ -760,7 +760,6 @@ export class LoadService {
         this.checkLoadedUser(null);
         callback(undefined);
       }
-      sub.unsubscribe();
     });
   }
 
