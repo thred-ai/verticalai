@@ -7,13 +7,13 @@
       [style.color]="textColor"
     >
       <ion-select
-        (ionChange)="change($event)"
+        (ngModelChange)="change($event)"
         (ionDismiss)="refresh.emit()"
         fill="solid"
         interface="popover"
         [placeholder]="placeholder"
         [interfaceOptions]="{ cssClass: 'custom-popover' }"
-        [value]="value"
+        [ngModel]="value"
       >
         <ion-select-option
           *ngFor="let option of data ?? []"

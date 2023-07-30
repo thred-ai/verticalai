@@ -18,13 +18,11 @@ export class SelectFieldComponent implements OnInit {
   @Output() refresh = new EventEmitter<any>();
 
   change(event: any){
-    let val = event.detail.value as string
-    this.changed.emit(val)
+    this.changed.emit(event)
   }
 
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.data)
   }
 }

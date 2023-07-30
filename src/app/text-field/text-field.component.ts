@@ -29,8 +29,9 @@ export class TextFieldComponent implements OnInit {
   @Output() btnClicked = new EventEmitter<any>();
   @Output() refresh = new EventEmitter<any>();
 
-  onInput(ev: any) {
-    var value = ev.target!.value;
+  onInput(vals: string | number) {
+
+    var value = vals
 
     if (value == '') {
       value = this.defaultValue;

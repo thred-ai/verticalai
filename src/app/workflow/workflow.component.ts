@@ -69,7 +69,6 @@ export class WorkflowComponent implements OnInit {
 
   onKeyDown($event: KeyboardEvent): void {
     // Detect platform
-    console.log($event);
     if (navigator.platform.match('Mac')) {
       this.handleMacKeyEvents($event);
     } else {
@@ -80,7 +79,6 @@ export class WorkflowComponent implements OnInit {
   async handleMacKeyEvents($event: any) {
     // MetaKey documentation
     // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/metaKey
-    console.log($event);
     let charCode = String.fromCharCode($event.which).toLowerCase();
     if ($event.metaKey && charCode === 's') {
       $event.preventDefault();
@@ -100,7 +98,6 @@ export class WorkflowComponent implements OnInit {
 
   set activeWorkflow(app: Executable | undefined) {
     var workflow!: Executable;
-    console.log(app);
 
     if (app) {
       this.newWorkflow = false;
@@ -166,12 +163,10 @@ export class WorkflowComponent implements OnInit {
           this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         } else {
           if (this.workflows) {
-            console.log('NEW 2');
             this.activeWorkflow = this.workflows[0];
           }
         }
       } else {
-        console.log('NEW');
         this.activeWorkflow = undefined;
       }
     }, 100);
@@ -227,7 +222,6 @@ export class WorkflowComponent implements OnInit {
 
       if (this.workflows) {
         if (!this.openStep.value && this.workflows) {
-          console.log(this.workflows);
 
           if (this.workflows[0]) {
             this.activeWorkflow =
@@ -333,7 +327,6 @@ export class WorkflowComponent implements OnInit {
   async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
 
-    console.log(this.isValid);
 
     if (workflow && this.isValid) {
       try {
@@ -354,7 +347,6 @@ export class WorkflowComponent implements OnInit {
         console.log(error);
       }
     } else {
-      console.log('masuk');
     }
   }
 
@@ -407,7 +399,6 @@ export class WorkflowComponent implements OnInit {
   }
 
   openControllerSettings(controllerId: string = 'main') {
-    console.log(controllerId);
     let ref = this.dialog.open(SettingsComponent, {
       width: 'calc(var(--vh, 1vh) * 70)',
       maxWidth: '650px',
@@ -795,7 +786,6 @@ export class WorkflowComponent implements OnInit {
   }
 
   defaultCode(type: string) {
-    console.log(this.classes);
     switch (type) {
       // case 'switch':
       //   return this.classes['branch'].text;

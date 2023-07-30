@@ -145,8 +145,6 @@ export class FileSidebarComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log(task);
-
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';
     this.menuTopLeftPosition.y = event.clientY + 'px';
@@ -160,7 +158,6 @@ export class FileSidebarComponent implements OnInit {
   }
 
   openControllerSettings(id: string) {
-    console.log(id);
     this.workflowComponent.openControllerSettings(id);
   }
 }

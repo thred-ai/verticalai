@@ -309,9 +309,6 @@ export class LoadService {
   async uploadImg(file: File, id: string) {
     this.loading.next(true);
 
-    console.log(id);
-    console.log(file);
-
     try {
       let ref = this.storage.ref(`workflows/${id}/icon-${id}.png`);
       await ref.put(file, { cacheControl: 'no-cache' });
@@ -340,8 +337,6 @@ export class LoadService {
       if (uploadData.downloads > 0) {
         delete uploadData.downloads;
       }
-
-      console.log("man")
 
       try {
         await this.db
@@ -407,7 +402,6 @@ export class LoadService {
       localStorage['name'] = name;
       localStorage['email'] = email;
 
-      console.log("boink")
       this.loadedUser.next(dev);
 
       callback(dev);
@@ -711,8 +705,6 @@ export class LoadService {
       ref.where(firebase.firestore.FieldPath.documentId(), '==', uid)
     );
 
-    console.log('GETTING USER');
-
     let sub = query.valueChanges().subscribe(async (docs) => {
       let doc = docs[0] as DocumentData;
 
@@ -745,8 +737,6 @@ export class LoadService {
             );
           }
 
-          console.log('GETTING PRJECT');
-
           let sub2 = q.valueChanges().subscribe((docs2) => {
 
             if (this.loadedUser.value){
@@ -759,7 +749,6 @@ export class LoadService {
 
             developer.utils = docs_2;
             
-            console.log(developer)
             this.checkLoadedUser(developer);
 
             callback(developer);
@@ -972,8 +961,6 @@ export class LoadService {
   async saveAPIKeys(workflowId: string, uid: string, data: Key) {
     this.loading.next(true);
 
-    console.log(data);
-
     var uploadData = JSON.parse(JSON.stringify(data));
     if (uploadData.key == 'None') {
       uploadData.key = '';
@@ -1051,8 +1038,6 @@ export class LoadService {
     //   .collection(`Users/${uid}/workflows/${id}/source`)
     //   .doc(codeId)
     //   .set(file.agents[codeId]);
-
-    console.log('save!');
 
     this.loading.next(false);
   }
