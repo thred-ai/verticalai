@@ -42,8 +42,12 @@ export class SettingsComponent implements OnInit {
   ) {
     // dialogRef.disableClose = true;
     this.apiKey = data.apiKey;
-    this.selectedFile = JSON.parse(JSON.stringify(data.step));
-    this.workflow = JSON.parse(JSON.stringify(data.workflow))
+    this.selectedFile = data.step
+      ? JSON.parse(JSON.stringify(data.step))
+      : undefined;
+    this.workflow = data.workflow
+      ? JSON.parse(JSON.stringify(data.workflow))
+      : undefined;
     this.newBranch['title'] = data.branch;
 
     if (
