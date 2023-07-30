@@ -85,7 +85,6 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxDefaultImageModule } from 'ngx-default-image';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import { ProfileComponent } from './profile/profile.component';
 // import {BUTTONS, NgxWigModule} from 'ngx-wig';
 import { MergeObjPipe } from './merge-obj.pipe';
 import { CastPipe } from './cast.pipe';
@@ -154,7 +153,6 @@ import {MatDividerModule} from '@angular/material/divider';
     safeHtmlPipe,
     SafeUrlPipe,
     SafeTextRowsPipe,
-    ProfileComponent,
     SharedDialogComponent,
     SliderValuePipe,
     CastPipe,

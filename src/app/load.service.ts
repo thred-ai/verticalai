@@ -65,7 +65,7 @@ export class LoadService {
     private titleService: Title,
     private requestService: RequestService
   ) {
-    this.activeTheme = 'dark';
+    this.activeTheme = 'light';
   }
 
   themes = {
@@ -395,7 +395,7 @@ export class LoadService {
       name,
       email,
       search_name,
-      theme
+      theme,
     };
 
     try {
@@ -719,15 +719,16 @@ export class LoadService {
         let joined = doc['joined'] as number;
         let uid = doc['uid'] as string;
         let url = doc['url'] as string;
+        let theme = doc['theme'] as 'light' | 'dark' | 'auto' | undefined;
         let myUID = (await this.currentUser)?.uid;
         if (isPlatformBrowser(this.platformID) && uid == myUID) {
           localStorage['url'] = url;
           localStorage['name'] = name;
           localStorage['email'] = email;
         }
-        let developer = new Developer(name, uid, joined, url, email);
+        let developer = new Developer(name, uid, joined, url, email, [], theme);
 
-        this.checkLoadedUser(developer);
+        // this.checkLoadedUser(developer);
 
         if (fetchworkflows) {
           let q = this.db.collection(`Workflows`);

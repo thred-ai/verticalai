@@ -13,7 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { LoadService } from './load.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { ProfileComponent } from './profile/profile.component';
 import { Developer } from './models/user/developer.model';
 import { SharedDialogComponent } from './shared-dialog/shared-dialog.component';
 
@@ -73,29 +72,6 @@ export class AppComponent {
     });
   }
 
-  editProfile() {
-    this.loadService.currentUser.then((user) => {
-      if (user) {
-        let uid = user.uid;
-        let email = user.email ?? '';
-        let url = localStorage['url'] ?? '';
-        let name = localStorage['name'];
-
-        let dev = new Developer(name, uid, 0, url, email);
-
-        const modalRef = this.dialog.open(ProfileComponent, {
-          width: '750px',
-          maxHeight: '80vh',
-          maxWidth: '100vw',
-          panelClass: 'app-full-bleed-sm-dialog',
-
-          data: {
-            dev,
-          },
-        });
-      }
-    });
-  }
 
   @ViewChild('drawer') public sidenav?: MatSidenav;
 

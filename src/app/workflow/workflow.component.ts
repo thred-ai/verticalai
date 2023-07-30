@@ -100,6 +100,7 @@ export class WorkflowComponent implements OnInit {
 
   set activeWorkflow(app: Executable | undefined) {
     var workflow!: Executable;
+    console.log(app);
 
     if (app) {
       this.newWorkflow = false;
@@ -165,10 +166,12 @@ export class WorkflowComponent implements OnInit {
           this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         } else {
           if (this.workflows) {
+            console.log('NEW 2');
             this.activeWorkflow = this.workflows[0];
           }
         }
       } else {
+        console.log('NEW');
         this.activeWorkflow = undefined;
       }
     }, 100);
@@ -223,19 +226,27 @@ export class WorkflowComponent implements OnInit {
       let selectedModule = params['module'] ?? 'controllers';
 
       if (this.workflows) {
-        if (!this.openStep.value && this.workflow) {
-          this.activeWorkflow =
-            this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
+        if (!this.openStep.value && this.workflows) {
+          console.log(this.workflows);
 
-          this.selectFile(
-            file ?? 'main',
-            selectedModule,
-            this.activeWorkflow,
-            false
-          );
+          if (this.workflows[0]) {
+            this.activeWorkflow =
+              this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
+            this.selectFile(
+              file ?? 'main',
+              selectedModule,
+              this.activeWorkflow,
+              false
+            );
 
-          if (!this.openStep.value) {
-            this.selectFile('main', selectedModule, this.activeWorkflow, true);
+            if (!this.openStep.value) {
+              this.selectFile(
+                'main',
+                selectedModule,
+                this.activeWorkflow,
+                true
+              );
+            }
           }
 
           this.loadService.loadedModels.subscribe((models) => {
@@ -375,7 +386,7 @@ export class WorkflowComponent implements OnInit {
 
       data: {
         dev,
-        workflow: this.workflow.value
+        workflow: this.workflow.value,
       },
     });
 
@@ -389,7 +400,6 @@ export class WorkflowComponent implements OnInit {
           img != undefined,
           (result) => {}
         );
-
       }
     });
   }
