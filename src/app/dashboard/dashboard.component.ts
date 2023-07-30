@@ -185,6 +185,8 @@ export class DashboardComponent implements OnInit {
             this.loadService.activeTheme = dev.theme;
           }
 
+          console.log(dev)
+
           this.dev = dev ?? undefined;
         }
       });

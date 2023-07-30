@@ -341,6 +341,8 @@ export class LoadService {
         delete uploadData.downloads;
       }
 
+      console.log("man")
+
       try {
         await this.db
           .collection(`Workflows`)
@@ -405,6 +407,7 @@ export class LoadService {
       localStorage['name'] = name;
       localStorage['email'] = email;
 
+      console.log("boink")
       this.loadedUser.next(dev);
 
       callback(dev);
@@ -745,12 +748,18 @@ export class LoadService {
           console.log('GETTING PRJECT');
 
           let sub2 = q.valueChanges().subscribe((docs2) => {
+
+            if (this.loadedUser.value){
+              developer = this.loadedUser.value
+            }
             let docs_2 = (docs2 as Executable[]).map((workflow) => {
               // workflow.layout = this.sampleFlow
               return this.syncWorkflow(workflow);
             });
 
             developer.utils = docs_2;
+            
+            console.log(developer)
             this.checkLoadedUser(developer);
 
             callback(developer);
