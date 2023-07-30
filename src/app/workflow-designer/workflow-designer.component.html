@@ -47,7 +47,7 @@
       <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
 
       <div
-        class="h-100 d-flex justify-content-center align-items-center flex-column"
+        class="h-100 d-flex justify-content-center align-items-center flex-column position-relative"
       >
         <div
           class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
@@ -73,87 +73,84 @@
                 [value]="selectedFile.properties['systemPrompt']"
                 [placeholder]="placeholders[selectedFile.type]"
                 (changed)="
-                  selectedFile.properties['systemPrompt'] = $event; saveLayout(); logEvent($event)
+                  selectedFile.properties['systemPrompt'] = $event;
+                  saveLayout();
+                  logEvent($event)
                 "
               >
               </verticalai-textbox>
             </div>
 
-            <div class="w-100 pb-3" *ngIf="selectedFile.type != 'switch'">
+            <div
+              class="w-100 pb-3"
+              *ngIf="
+                selectedFile.type == 'gpt-LLM' ||
+                selectedFile.type == 'dalle-TIM'
+              "
+            >
               <verticalai-layout-slider
                 [value]="selectedFile.properties['temp'] ?? 0.5"
                 [title]="'Creativity Level'"
                 [lineFillColor]="'#0A99FF'"
                 (valueChange)="
-                  selectedFile.properties['temp'] = $event; saveLayout(); logEvent($event)
+                  selectedFile.properties['temp'] = $event;
+                  saveLayout();
+                  logEvent($event)
                 "
               >
               </verticalai-layout-slider>
             </div>
-          </ng-container>
 
-          <ng-container *ngIf="selectedFile.type == 'dalle-TIM'">
-            <!-- <div class="w-100 pb-3">
-              <verticalai-layout-slider
-                [value]="selectedFile.properties['size'] ?? 0.5"
-                [title]="'Creativity Level'"
-                [lineFillColor]="'#0A99FF'"
-                (valueChange)="
-                  selectedFile.properties['temp'] = $event; saveLayout(); logEvent($event)
-                "
+            
+
+            <ng-container *ngIf="selectedFile.type == 'switch'">
+              <ng-container
+                *ngIf="selectedFile | cast : BranchedStep as branchStep"
               >
-              </verticalai-layout-slider>
-            </div> -->
-          </ng-container>
-
-          <ng-container *ngIf="selectedFile.type == 'switch'">
-            <ng-container
-              *ngIf="selectedFile | cast : BranchedStep as branchStep"
-            >
-              <div
-                class="w-100 d-flex justify-content-between align-content-center pb-3 mb-3 mt-4 primary-text border-table-bottom"
-              >
-                <p class="w-100 fw-bold">Decision Paths</p>
-                <mat-icon
-                  class="m-auto text-white"
-                  role="button"
-                  (click)="newBranch(branchStep)"
-                >
-                  add
-                </mat-icon>
-              </div>
-
-              <div class="w-100">
                 <div
-                  *ngFor="
-                    let branch of (branchStep.branches | dictToArr) ?? [];
-                    index as i
-                  "
-                  class="pb-4 d-flex justify-content-between align-items-center"
+                  class="w-100 d-flex justify-content-between align-content-center pb-3 mb-3 mt-4 primary-text border-table-bottom"
                 >
-                  <div class="primary-text">
-                    {{ branch.name }}
-                  </div>
-                  <!-- 
+                  <p class="w-100 fw-bold">Decision Paths</p>
+                  <mat-icon
+                    class="m-auto primary-text"
+                    role="button"
+                    (click)="newBranch(branchStep)"
+                  >
+                    add
+                  </mat-icon>
+                </div>
+
+                <div class="w-100">
+                  <div
+                    *ngFor="
+                      let branch of (branchStep.branches | dictToArr) ?? [];
+                      index as i
+                    "
+                    class="pb-4 d-flex justify-content-between align-items-center"
+                  >
+                    <div class="primary-text">
+                      {{ branch.name }}
+                    </div>
+                    <!-- 
                   <div
                     class="btn bg-orange primary-text   fw-bold rounded-10"
                   >
                     Edit 
                   </div> -->
 
-                  <div
-                    class="btn bg-orange shadow-0 text-white fw-bold rounded d-flex p-1 justify-content-center align-items-center"
-                    (click)="onRightClick($event, branch.name, branchStep)"
-                  >
-                    <ion-icon
-                      class="m-auto"
-                      [name]="'settings-outline'"
-                      slot="end"
-                      role="button"
-                      [matTooltip]="'Actions'"
-                    ></ion-icon>
-                  </div>
-                  <!-- <div class="w-100 mb-2">
+                    <div
+                      class="btn bg-orange shadow-0 text-white fw-bold rounded d-flex p-1 justify-content-center align-items-center"
+                      (click)="onRightClick($event, branch.name, branchStep)"
+                    >
+                      <ion-icon
+                        class="m-auto"
+                        [name]="'settings-outline'"
+                        slot="end"
+                        role="button"
+                        [matTooltip]="'Actions'"
+                      ></ion-icon>
+                    </div>
+                    <!-- <div class="w-100 mb-2">
                     <verticalai-text-field
                       [value]="branch.name"
                       [defaultValue]="'Option ' + (i + 1)"
@@ -172,7 +169,7 @@
                     </verticalai-text-field>
                   </div> -->
 
-                  <!-- <div class="w-100 pb-3">
+                    <!-- <div class="w-100 pb-3">
                     <verticalai-textbox
                       [title]="'Description'"
                       [simplify]="true"
@@ -189,8 +186,9 @@
                     >
                     </verticalai-textbox>
                   </div> -->
+                  </div>
                 </div>
-              </div>
+              </ng-container>
             </ng-container>
           </ng-container>
 
@@ -204,7 +202,9 @@
                 [placeholder]="'ex. 2'"
                 [range]="{ min: 1, max: 5 }"
                 (changed)="
-                  selectedFile.properties['frequency'] = $event; saveLayout(); logEvent($event)
+                  selectedFile.properties['frequency'] = $event;
+                  saveLayout();
+                  logEvent($event)
                 "
               >
               </verticalai-text-field>
@@ -227,17 +227,25 @@
                 [valueField]="'id'"
                 [displayField]="'name'"
                 (changed)="
-                  selectedFile.properties['engine'] = $event; saveLayout(); logEvent($event)
+                  selectedFile.properties['engine'] = $event;
+                  saveLayout();
+                  logEvent($event)
                 "
               >
               </verticalai-select-field>
             </div>
           </ng-container>
+
+          <div class="w-100 pb-3 mt-4" *ngIf="selectedFile.type == 'gpt-LLM'">
+            <div class="btn bg-orange text-white fw-bold" (click)="openDatabase(selectedFile)">
+              Edit Training Data
+            </div>
+          </div>
+          
         </div>
+       
       </div>
     </div>
-
-    
   </mat-sidenav>
   <mat-sidenav-content class="secondary-background">
     <div
@@ -489,7 +497,9 @@
         mat-menu-item
         class="primary-text proj"
         *ngIf="step.properties['default'] != item"
-        (click)="step.properties['default'] = item; saveLayout(); logEvent($event)"
+        (click)="
+          step.properties['default'] = item; saveLayout(); logEvent($event)
+        "
       >
         Make Default
       </button>

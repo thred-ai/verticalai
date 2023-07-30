@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Executable } from '../models/workflow/executable.model';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { TaskTree } from '../models/workflow/task-tree.model';
@@ -8,7 +8,7 @@ import { Step } from 'vertical-ai-designer';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Document } from '../models/workflow/document.model';
 import { Collection } from '../models/workflow/collection.model';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CollectionInfoComponent } from '../collection-info/collection-info.component';
 import { TextAreaRenderPipe } from '../text-area-render.pipe';
 
@@ -30,40 +30,50 @@ export class DatabaseComponent implements OnInit {
   editingDocs: Dict<string> = {};
 
   constructor(
-    private workflowComponent: WorkflowComponent,
     private loadService: LoadService,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<DatabaseComponent>,
+  ) {
+    this.selectedFile = data.step
+    this.executable = data.workflow
+  }
 
   ngOnInit(): void {
     this.loading = true;
 
-    this.workflowComponent.openStep.subscribe((step) => {
-      if (step) {
-        this.selectedFile = step;
+    // this.workflowComponent.openStep.subscribe((step) => {
+    //   if (step) {
+    //     this.selectedFile = step;
 
-        this.workflowComponent.workflow.subscribe((w) => {
-          this.executable = w;
+    //     this.workflowComponent.workflow.subscribe((w) => {
+    //       this.executable = w;
 
-          if (w && this.selectedFile) {
-            this.loadService.getDatabaseInfo(
-              w.id,
-              this.selectedFile.id,
-              (docs) => {
-                this.items = Object.values(docs).map((col) => {
-                  let task = this.colToTaskTree(col);
+    //       if (w && this.selectedFile) {
+            
+    //       }
+    //     });
+    //   }
+    // });
 
-                  return task;
-                });
+    if (this.executable && this.selectedFile){
+      this.loadService.getDatabaseInfo(
+        this.executable.id,
+        this.selectedFile.id,
+        (docs) => {
+          this.items = Object.values(docs).map((col) => {
+            let task = this.colToTaskTree(col);
+  
+            return task;
+          });
+  
+          this.loading = false;
+        }
+      );
+    }
 
-                this.loading = false;
-              }
-            );
-          }
-        });
-      }
-    });
+    
   }
 
   accordionOpened(event: any, item: TaskTree) {

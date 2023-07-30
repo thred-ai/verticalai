@@ -42,8 +42,7 @@ export class WorkflowComponent implements OnInit {
   edited = false;
   newWorkflow = true;
 
-  @Input() workflows?: Executable[];
-
+  dev?: Developer;
   models: Dict<AIModelType> = {};
   triggers: Dict<Trigger> = {};
   trainingData: Dict<TrainingData> = {};
@@ -154,17 +153,15 @@ export class WorkflowComponent implements OnInit {
     this.cdr.detectChanges();
 
     setTimeout(() => {
-      if (id) {
-        let same = this.workflows?.find((w) => w.id == id);
+      if (id && this.dev) {
+        let same = this.dev.utils?.find((w) => w.id == id);
 
         if (same) {
           this.activeWorkflow = same;
           // same.layout.properties
           this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         } else {
-          if (this.workflows) {
-            this.activeWorkflow = this.workflows[0];
-          }
+          this.activeWorkflow = this.dev.utils[0];
         }
       } else {
         this.activeWorkflow = undefined;
@@ -215,60 +212,66 @@ export class WorkflowComponent implements OnInit {
       })
     );
 
-    this.route.queryParams.subscribe((params) => {
-      let proj = params['project'];
-      let file = params['file'] ?? 'main';
-      let selectedModule = params['module'] ?? 'controllers';
+    this.loadService.loadedUser.subscribe((user) => {
+      if (user) {
 
-      if (this.workflows) {
-        if (!this.openStep.value && this.workflows) {
+        this.dev = user;
 
-          if (this.workflows[0]) {
-            this.activeWorkflow =
-              this.workflows?.find((f) => f.id == proj) ?? this.workflows[0];
-            this.selectFile(
-              file ?? 'main',
-              selectedModule,
-              this.activeWorkflow,
-              false
-            );
+        this.route.queryParams.subscribe((params) => {
+          let proj = params['project'];
+          let file = params['file'] ?? 'main';
+          let selectedModule = params['module'] ?? 'controllers';
 
-            if (!this.openStep.value) {
-              this.selectFile(
-                'main',
-                selectedModule,
-                this.activeWorkflow,
-                true
-              );
-            }
+          if (this.dev && this.dev.utils) {
+              if (this.dev.utils[0]) {
+
+                this.activeWorkflow =
+                  this.dev.utils.find((f) => f.id == proj) ?? this.dev.utils[0];
+
+                this.selectFile(
+                  file ?? 'main',
+                  selectedModule,
+                  this.activeWorkflow,
+                  false
+                );
+
+                if (!this.openStep.value) {
+                  this.selectFile(
+                    'main',
+                    selectedModule,
+                    this.activeWorkflow,
+                    true
+                  );
+                }
+              }
+
+              this.loadService.loadedModels.subscribe((models) => {
+                this.models = models;
+              });
+
+              this.loadService.theme.subscribe((theme) => {
+                this.theme = theme;
+              });
+
+              this.loadService.loadedTriggers.subscribe((triggers) => {
+                this.triggers = triggers;
+              });
+
+              this.loadService.loadedKeys.subscribe((data) => {
+                this.apiKeys = data;
+              });
+
+              this.loadService.loading.subscribe((l) => {
+                this.loading = l;
+              });
+
+              this.workflow.subscribe(async (w) => {
+                if (w) {
+                  this.initExecutable(w);
+                }
+              });
           }
-
-          this.loadService.loadedModels.subscribe((models) => {
-            this.models = models;
-          });
-
-          this.loadService.theme.subscribe((theme) => {
-            this.theme = theme;
-          });
-
-          this.loadService.loadedTriggers.subscribe((triggers) => {
-            this.triggers = triggers;
-          });
-
-          this.loadService.loadedKeys.subscribe((data) => {
-            this.apiKeys = data;
-          });
-
-          this.loadService.loading.subscribe((l) => {
-            this.loading = l;
-          });
-
-          this.workflow.subscribe(async (w) => {
-            if (w) {
-              this.initExecutable(w);
-            }
-          });
-        }
+        });
       }
     });
   }
@@ -326,7 +329,6 @@ export class WorkflowComponent implements OnInit {
 
   async save(mode = 1, update = false) {
     let workflow = this.workflow.value;
-
 
     if (workflow && this.isValid) {
       try {
@@ -392,8 +394,6 @@ export class WorkflowComponent implements OnInit {
           img != undefined,
           (result) => {}
         );
-
-        
       }
     });
   }

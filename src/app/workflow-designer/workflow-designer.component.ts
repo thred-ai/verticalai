@@ -40,6 +40,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import { SettingsComponent } from '../settings/settings.component';
+import { DatabaseComponent } from '../database/database.component';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -357,9 +358,8 @@ export class WorkflowDesignerComponent
   openPathSettings() {}
 
   public ngOnInit() {
-    this.shouldRefresh = true;
     this.workflowComponent.workflow.subscribe((w) => {
-      if (w && this.shouldRefresh) {
+      if (w) {
         this.workflow = undefined;
         this.designer = undefined;
 
@@ -369,7 +369,6 @@ export class WorkflowDesignerComponent
 
         this.rerenderDesigner();
       }
-      this.shouldRefresh = false;
     });
 
     this.done = true;
@@ -519,6 +518,37 @@ export class WorkflowDesignerComponent
     context.notifyNameChanged();
   }
 
+  openDatabase(step: Step){
+    let ref = this.dialog.open(DatabaseComponent, {
+      width: '70vw',
+      maxWidth: '800px',
+      height: '500px',
+      minHeight: '500px',
+      maxHeight: 'calc(var(--vh, 1vh) * 100)',
+      panelClass: 'app-full-bleed-dialog',
+
+      data: {
+        step,
+        workflow: this.workflow,
+      },
+    });
+
+    ref.afterClosed().subscribe(async (val) => {
+      if (val && val != '' && val != '0') {
+        // let description = val.description ?? '';
+        // let title = val.title ?? '';
+
+        // this.setBranchName(title, step, branch);
+
+        // this.setBranchDescription(title, step, description);
+
+        // this.shouldRefresh = true;
+
+        // this.saveLayout();
+      }
+    });
+  }
+
   onInput(ev: any) {
     var value = ev.target!.value;
 
@@ -620,7 +650,6 @@ export class WorkflowDesignerComponent
     step.properties['order'] = Object.fromEntries(map2);
     step.properties['branches'] = Object.fromEntries(map3);
 
-    this.shouldRefresh = true;
     this.saveLayout();
   }
 
@@ -663,7 +692,6 @@ export class WorkflowDesignerComponent
 
         this.setBranchDescription(title, step, description);
 
-        this.shouldRefresh = true;
 
         this.saveLayout();
       }
@@ -704,7 +732,6 @@ export class WorkflowDesignerComponent
     }
   }
 
-  shouldRefresh = false;
 
   deleteBranch(step: BranchedStep, nameToRemove: string) {
     const map1 = new Map();
@@ -739,7 +766,6 @@ export class WorkflowDesignerComponent
       )[0] as string;
     }
 
-    this.shouldRefresh = true;
     this.saveLayout();
   }
 

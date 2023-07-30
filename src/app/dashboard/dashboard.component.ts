@@ -170,6 +170,7 @@ export class DashboardComponent implements OnInit {
       // this.loadStats((await this.loadService.currentUser)?.uid);
 
       this.loadService.loadedUser.subscribe((dev) => {
+
         if (dev) {
           if (dev?.theme == 'auto') {
             if (
