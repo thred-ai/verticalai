@@ -30,9 +30,8 @@ export class LayoutSliderComponent implements OnInit {
   @Input() simplify: boolean = false;
 
 
-  sliderVal(event: Event){
-    console.log((event as RangeCustomEvent).detail.value)
-    let val = (event as RangeCustomEvent).detail.value as number
+  sliderVal(event: number){
+    let val = event
     if (val < this.min){
       val = this.min
     }

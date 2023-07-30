@@ -21,7 +21,7 @@
     [pin]="true"
     [min]="min"
     [max]="max"
-    [value]="value"
-    (ionChange)="valueChange.emit(sliderVal($event))"
+    [ngModel]="value"
+    (ngModelChange)="valueChange.emit(sliderVal($event))"
   ></ion-range>
 </ng-template>

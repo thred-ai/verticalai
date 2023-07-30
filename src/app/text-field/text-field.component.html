@@ -28,24 +28,24 @@
       class="text-truncate"
       *ngIf="type == 'number'; else textField"
       fill="solid"
-      [value]="value"
+      [ngModel]="value"
       [type]="type"
       [min]="range.min"
       [max]="range.max"
       [placeholder]="placeholder"
       [name]="'timeInput'"
-      (ionInput)="onInput($event)"
+      (ngModelChange)="onInput($event)"
     ></ion-input>
 
     <ng-template #textField>
       <ion-input
         class="text-truncate"
         fill="solid"
-        [value]="value"
+        [ngModel]="value"
         [type]="type"
         [placeholder]="placeholder"
         [disabled]="disabled"
-        (ionInput)="onInput($event)"
+        (ngModelChange)="onInput($event)"
       ></ion-input>
     </ng-template>
 

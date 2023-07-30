@@ -502,6 +502,11 @@ export class WorkflowDesignerComponent
 
   stepContext?: StepEditorContext;
 
+  logEvent(event: any){
+    console.log('hey')
+    console.log(event)
+  }
+
   public saveLayout() {
     // this.definition = definition;
 

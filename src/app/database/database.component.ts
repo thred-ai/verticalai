@@ -39,9 +39,7 @@ export class DatabaseComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
-    console.log('oi');
     this.workflowComponent.openStep.subscribe((step) => {
-      console.log(step);
       if (step) {
         this.selectedFile = step;
 
@@ -69,7 +67,6 @@ export class DatabaseComponent implements OnInit {
   }
 
   accordionOpened(event: any, item: TaskTree) {
-    console.log(event);
     if (event.srcElement.id == 'accordion') {
       let ids = event.detail.value as string[];
       if (ids && ids.includes(item.id)) {
@@ -81,7 +78,6 @@ export class DatabaseComponent implements OnInit {
   openMenu($event: Event) {
     $event.stopPropagation();
     $event.preventDefault();
-    console.log('meu');
   }
 
   openCollection(collection: TaskTree) {
@@ -126,8 +122,6 @@ export class DatabaseComponent implements OnInit {
     // preventDefault avoids to show the visualization of the right-click menu of the browser
     event.stopPropagation();
     event.preventDefault();
-
-    console.log(task);
 
     // we record the mouse position in our object
     this.menuTopLeftPosition.x = event.clientX + 'px';
