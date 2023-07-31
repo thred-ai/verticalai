@@ -768,6 +768,8 @@ export class WorkflowDesignerComponent
       )[0] as string;
     }
 
+    this.shouldRefresh = true
+
     this.saveLayout();
   }
 
