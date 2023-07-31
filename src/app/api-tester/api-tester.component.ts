@@ -11,6 +11,7 @@ import { APIRequest } from '../models/workflow/api-request.model';
 import { Executable } from '../models/workflow/executable.model';
 import { Developer } from '../models/user/developer.model';
 import { Clipboard } from '@angular/cdk/clipboard';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-api-tester',
@@ -25,6 +26,7 @@ export class ApiTesterComponent implements OnInit {
   request = '';
 
   currentStep?: string;
+  sessionId: string
 
   chats: { type: string; msg: string }[] = [];
 
@@ -34,7 +36,9 @@ export class ApiTesterComponent implements OnInit {
     private loadService: LoadService,
     private clipboard: Clipboard,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.sessionId = uuid.v4()
+  }
 
   ngOnInit(): void {
     if (this.model) {
@@ -75,6 +79,7 @@ export class ApiTesterComponent implements OnInit {
           this.model.id,
           this.currentStep,
           this.request,
+          this.sessionId,
           async (result) => {
             if (this.loadingMode == 2) {
               console.log(result);
