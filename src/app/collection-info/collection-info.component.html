@@ -1,37 +1,32 @@
 <div
-  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column secondary-background  p-3 pb-4"
+  class="w-100 h-100 d-flex justify-content-between align-items-center flex-column primary-background p-3 pb-4"
 >
   <div class="w-100 h-100 d-flex justify-content-center align-items-center">
     <div
-      class="secondary-background  w-100 h-100 m-auto"
+      class="primary-background w-100 h-100 m-auto"
       style="max-width: 600px"
       *ngIf="collection"
     >
-
       <div class="w-100 h-100">
         <div class="w-100">
-          <div matDialogTitle class="text-white">New Collection</div>
-   
+          <div matDialogTitle class="primary-text">New Collection</div>
+
           <div class="wrap-input1 w-100 pb-3">
             <verticalai-text-field
-            [title]="'Collection ID'"
-            [bgColor]="'#1F1F1F'"
-            [value]="collection.id"
-            [placeholder]="'Collection ID'"
-            (changed)="collection.id = $event"
-            [btn]="true"
-            [btnColor]="'#fff'"
-            [btnIcon]="'add-circle'"
-            (btnClicked)="autoId()"
-          >
-          </verticalai-text-field>
-
+              [title]="'Collection ID'"
+              [value]="collection.id"
+              [placeholder]="'Collection ID'"
+              (changed)="collection.id = $event"
+              [btn]="true"
+              [btnIcon]="'add-circle'"
+              (btnClicked)="autoId()"
+            >
+            </verticalai-text-field>
           </div>
-        
         </div>
       </div>
       <button
-        class="btn bg-orange border-0 rounded-10 fw-bold primary-text  d-flex justify-content-center px-3 align-content-center py-2 mt-4"
+        class="btn bg-orange border-0 rounded-10 fw-bold text-white d-flex justify-content-center px-3 align-content-center py-2 mt-4"
         (click)="save()"
       >
         <!-- (click)="edited ? save() : publish(workflow)"
@@ -47,9 +42,7 @@
           </span>
         </ng-container>
 
-        <ng-template #buttonTitles>
-          Create
-        </ng-template>
+        <ng-template #buttonTitles> Create </ng-template>
       </button>
     </div>
   </div>
