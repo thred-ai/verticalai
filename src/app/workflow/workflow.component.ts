@@ -223,11 +223,13 @@ export class WorkflowComponent implements OnInit {
           let selectedModule = params['module'] ?? 'controllers';
 
           if (this.dev && this.dev.utils) {
-              if (this.dev.utils[0]) {
+              
 
                 if (!this.workflow.value || this.workflow.value.id != proj){
                   this.activeWorkflow =
                   this.dev.utils.find((f) => f.id == proj) ?? this.dev.utils[0];
+
+                  console.log(this.workflow.value)
                 }
 
                 this.selectFile(
@@ -245,7 +247,7 @@ export class WorkflowComponent implements OnInit {
                     true
                   );
                 }
-              }
+              
 
               this.loadService.loadedModels.subscribe((models) => {
                 this.models = models;
