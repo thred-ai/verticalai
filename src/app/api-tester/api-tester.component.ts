@@ -1,4 +1,10 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoadService, Dict } from '../load.service';
 import { APIRequest } from '../models/workflow/api-request.model';
@@ -18,13 +24,22 @@ export class ApiTesterComponent implements OnInit {
   image?: string;
   request = '';
 
+  currentStep?: string;
+
   chats: { type: string; msg: string }[] = [];
 
   @Input() model?: Executable;
   user?: Developer;
-  constructor(private loadService: LoadService, private clipboard: Clipboard) {}
+  constructor(
+    private loadService: LoadService,
+    private clipboard: Clipboard,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    if (this.model) {
+      this.currentStep = this.model.layout.sequence[0].id;
+    }
     this.loadService.loadedUser.subscribe((l) => {
       if (l) {
         this.user = l;
@@ -32,34 +47,43 @@ export class ApiTesterComponent implements OnInit {
     });
   }
 
-  copy(data: string){
-    this.clipboard.copy(data)
+  copy(data: string) {
+    this.clipboard.copy(data);
   }
 
   async run() {
-    if (this.request && this.request.trim() != '' && this.model) {
+    if (
+      this.request &&
+      this.request.trim() != '' &&
+      this.model &&
+      this.currentStep
+    ) {
       this.loadingMode = 1;
 
-      let url = await this.loadService.uploadExecutable(
-        this.model!.id,
-        this.model!
-      );
+      // let url = await this.loadService.uploadExecutable(
+      //   this.model!.id,
+      //   this.model!
+      // );
 
-      this.chats = [];
       this.chats.push({ type: 'user', msg: this.request });
+      this.loadingMode = 2;
 
-      setTimeout(async () => {
-        this.loadingMode = 2;
+      this.cdr.detectChanges();
 
-        if (url) {
-          this.loadService.testAPI(url, this.request, async (result) => {
+      if (this.model) {
+        this.loadService.testAPI(
+          this.model.id,
+          this.currentStep,
+          this.request,
+          async (result) => {
             if (this.loadingMode == 2) {
               console.log(result);
               this.image = undefined;
-
-              if (result.data) {
-                if (typeof result.data == 'string') {
-                  let str = result.data as string;
+              if (result.result && result.nextId) {
+                this.currentStep =
+                  result.nextId != 'none' ? result.nextId : result.stepId ?? this.currentStep;
+                if (typeof result.result == 'string') {
+                  let str = result.result as string;
                   let match = str.match(/^https?:\/\/.+\/.+$/) != null;
                   if (match) {
                     const doesImageExist = (url: string) => {
@@ -83,20 +107,18 @@ export class ApiTesterComponent implements OnInit {
                 }
               }
 
-              this.response = JSON.stringify(result ?? '');
-              this.prettyResponse = result.data ?? '';
+              this.response = JSON.stringify(result.result ?? '');
+              this.prettyResponse = result.result ?? '';
               this.chats.push({ type: 'system', msg: this.prettyResponse });
               this.loadingMode = 0;
             }
-          });
-        } else {
-          this.loadingMode = 0;
-        }
+          }
+        );
+      } else {
+        this.loadingMode = 0;
+      }
 
-        this.request = '';
-      }, 500);
-
-      this.loadingMode = 0;
+      this.request = '';
     }
   }
 

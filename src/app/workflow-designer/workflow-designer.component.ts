@@ -63,6 +63,8 @@ export class WorkflowDesignerComponent
     | ElementRef
     | undefined;
 
+  shouldRefresh = false;
+
   //
   @Input() models: Dict<AIModelType> = {};
   flowModels: Dict<AIModelType> = {};
@@ -274,7 +276,7 @@ export class WorkflowDesignerComponent
         'sqd-scrollbox'
       )[0] as HTMLDivElement;
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
-  
+
       if (content && parent) {
         // let newElem = content.cloneNode(true);
         parent.firstChild?.remove();
@@ -358,8 +360,9 @@ export class WorkflowDesignerComponent
   openPathSettings() {}
 
   public ngOnInit() {
+    this.shouldRefresh = true;
     this.workflowComponent.workflow.subscribe((w) => {
-      if (w) {
+      if (w && this.shouldRefresh) {
         this.workflow = undefined;
         this.designer = undefined;
 
@@ -368,6 +371,8 @@ export class WorkflowDesignerComponent
         this.workflow = w;
 
         this.rerenderDesigner();
+
+        this.shouldRefresh = false;
       }
     });
 
@@ -464,7 +469,6 @@ export class WorkflowDesignerComponent
 
     try {
       this.designer?.onSelectedStepIdChanged.subscribe((id) => {
-        
         setTimeout(() => {
           if (id) {
             this.selectedFileChanged.emit(id);
@@ -501,9 +505,9 @@ export class WorkflowDesignerComponent
 
   stepContext?: StepEditorContext;
 
-  logEvent(event: any){
-    console.log('hey')
-    console.log(event)
+  logEvent(event: any) {
+    console.log('hey');
+    console.log(event);
   }
 
   public saveLayout() {
@@ -518,7 +522,7 @@ export class WorkflowDesignerComponent
     context.notifyNameChanged();
   }
 
-  openDatabase(step: Step){
+  openDatabase(step: Step) {
     let ref = this.dialog.open(DatabaseComponent, {
       width: '70vw',
       maxWidth: '800px',
@@ -537,13 +541,9 @@ export class WorkflowDesignerComponent
       if (val && val != '' && val != '0') {
         // let description = val.description ?? '';
         // let title = val.title ?? '';
-
         // this.setBranchName(title, step, branch);
-
         // this.setBranchDescription(title, step, description);
-
         // this.shouldRefresh = true;
-
         // this.saveLayout();
       }
     });
@@ -650,6 +650,8 @@ export class WorkflowDesignerComponent
     step.properties['order'] = Object.fromEntries(map2);
     step.properties['branches'] = Object.fromEntries(map3);
 
+    this.shouldRefresh = true;
+
     this.saveLayout();
   }
 
@@ -692,6 +694,7 @@ export class WorkflowDesignerComponent
 
         this.setBranchDescription(title, step, description);
 
+        this.shouldRefresh = true;
 
         this.saveLayout();
       }
@@ -731,7 +734,6 @@ export class WorkflowDesignerComponent
       step.properties['branches'] = Object.fromEntries(map3);
     }
   }
-
 
   deleteBranch(step: BranchedStep, nameToRemove: string) {
     const map1 = new Map();
