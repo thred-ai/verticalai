@@ -225,8 +225,10 @@ export class WorkflowComponent implements OnInit {
           if (this.dev && this.dev.utils) {
               if (this.dev.utils[0]) {
 
-                this.activeWorkflow =
+                if (!this.workflow.value || this.workflow.value.id != proj){
+                  this.activeWorkflow =
                   this.dev.utils.find((f) => f.id == proj) ?? this.dev.utils[0];
+                }
 
                 this.selectFile(
                   file ?? 'main',
