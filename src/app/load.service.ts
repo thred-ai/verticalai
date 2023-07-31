@@ -1106,9 +1106,9 @@ export class LoadService {
       );
   }
 
-  testAPI(id: string, stepId: string, input: any, callback: (data: any) => any) {
+  testAPI(id: string, stepId: string, input: any, sessionId: string, callback: (data: any) => any) {
     this.functions
-      .httpsCallable('apiTest')({ id, input, stepId })
+      .httpsCallable('apiTest')({ id, input, stepId, sessionId })
       .pipe(first())
       .subscribe(
         async (resp) => {
