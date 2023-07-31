@@ -116,26 +116,26 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'container',
-          name: 'Repeat',
+          name: 'Sequence',
           properties: {
-            defaultName: 'Repeat',
+            defaultName: 'Sequence',
             frequency: 1,
           },
           type: 'container',
           id: 'loop',
           sequence: [],
         } as Step,
-        {
-          componentType: 'task',
-          name: 'Break',
-          properties: {
-            defaultName: 'Break',
-            type: 'break',
-          },
-          type: 'break',
-          id: 'break',
-          sequence: [],
-        } as Step,
+        // {
+        //   componentType: 'task',
+        //   name: 'Break',
+        //   properties: {
+        //     defaultName: 'Break',
+        //     type: 'break',
+        //   },
+        //   type: 'break',
+        //   id: 'break',
+        //   sequence: [],
+        // } as Step,
       ],
     };
   }
@@ -767,6 +767,8 @@ export class WorkflowDesignerComponent
         step.properties['order'] ?? {}
       )[0] as string;
     }
+
+    this.shouldRefresh = true
 
     this.saveLayout();
   }
