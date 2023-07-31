@@ -101,7 +101,36 @@
               </verticalai-layout-slider>
             </div>
 
-            
+            <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
+              <div class="w-100 pb-3">
+                <verticalai-select-field
+                  [title]="'Training'"
+                  [value]="
+                    selectedFile.properties['training'] ?? trainingTypes[0].id
+                  "
+                  [data]="trainingTypes"
+                  [valueField]="'id'"
+                  [displayField]="'name'"
+                  (changed)="
+                    selectedFile.properties['training'] = $event;
+                    saveLayout();
+                    logEvent($event)
+                  "
+                >
+                </verticalai-select-field>
+              </div>
+              <div
+                class="w-100 pb-5 mt-2"
+                *ngIf="selectedFile.properties['training'] != 'none'"
+              >
+                <div
+                  class="btn bg-orange text-white fw-bold"
+                  (click)="openDatabase(selectedFile)"
+                >
+                  Edit Training Data
+                </div>
+              </div>
+            </ng-container>
 
             <ng-container *ngIf="selectedFile.type == 'switch'">
               <ng-container
@@ -236,14 +265,8 @@
             </div>
           </ng-container>
 
-          <div class="w-100 pb-3 mt-4" *ngIf="selectedFile.type == 'gpt-LLM'">
-            <div class="btn bg-orange text-white fw-bold" (click)="openDatabase(selectedFile)">
-              Edit Training Data
-            </div>
-          </div>
-          
+ 
         </div>
-       
       </div>
     </div>
   </mat-sidenav>

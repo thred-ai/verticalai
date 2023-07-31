@@ -69,6 +69,21 @@ export class WorkflowDesignerComponent
   @Input() models: Dict<AIModelType> = {};
   flowModels: Dict<AIModelType> = {};
 
+  trainingTypes = [
+    {
+      name: 'Auto',
+      id: 'auto'
+    },
+    {
+      name: "Manual",
+      id: 'manual'
+    },
+    {
+      name: "None",
+      id: 'none'
+    }
+  ]
+
   // @Input() apiRequests: Dict<APIRequest> = {};
   @Input() theme: 'light' | 'dark' = 'light';
 
