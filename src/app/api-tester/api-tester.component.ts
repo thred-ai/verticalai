@@ -12,6 +12,7 @@ import { Executable } from '../models/workflow/executable.model';
 import { Developer } from '../models/user/developer.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import * as uuid from 'uuid';
+import { WorkflowComponent } from '../workflow/workflow.component';
 
 @Component({
   selector: 'app-api-tester',
@@ -30,20 +31,28 @@ export class ApiTesterComponent implements OnInit {
 
   chats: { type: string; msg: string }[] = [];
 
-  @Input() model?: Executable;
+  model?: Executable;
   user?: Developer;
   constructor(
     private loadService: LoadService,
     private clipboard: Clipboard,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private workflowComponent: WorkflowComponent
   ) {
     this.sessionId = uuid.v4()
   }
 
   ngOnInit(): void {
-    if (this.model) {
-      this.currentStep = this.model.layout.sequence[0].id;
-    }
+
+    this.workflowComponent.workflow.subscribe(w => {
+      this.model = w
+
+      if (this.model && this.model.layout.sequence[0] && !this.currentStep){
+        this.currentStep = this.model.layout.sequence[0].id;
+      }
+    })
+
+
     this.loadService.loadedUser.subscribe((l) => {
       if (l) {
         this.user = l;
