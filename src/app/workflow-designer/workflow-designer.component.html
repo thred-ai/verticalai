@@ -73,9 +73,7 @@
                 [value]="selectedFile.properties['systemPrompt']"
                 [placeholder]="placeholders[selectedFile.type]"
                 (changed)="
-                  selectedFile.properties['systemPrompt'] = $event;
-                  saveLayout();
-                  logEvent($event)
+                  selectedFile.properties['systemPrompt'] = $event; saveLayout()
                 "
               >
               </verticalai-textbox>
@@ -93,44 +91,11 @@
                 [title]="'Creativity Level'"
                 [lineFillColor]="'#0A99FF'"
                 (valueChange)="
-                  selectedFile.properties['temp'] = $event;
-                  saveLayout();
-                  logEvent($event)
+                  selectedFile.properties['temp'] = $event; saveLayout()
                 "
               >
               </verticalai-layout-slider>
             </div>
-
-            <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
-              <div class="w-100 pb-3">
-                <verticalai-select-field
-                  [title]="'Training'"
-                  [value]="
-                    selectedFile.properties['training'] ?? trainingTypes[0].id
-                  "
-                  [data]="trainingTypes"
-                  [valueField]="'id'"
-                  [displayField]="'name'"
-                  (changed)="
-                    selectedFile.properties['training'] = $event;
-                    saveLayout();
-                    logEvent($event)
-                  "
-                >
-                </verticalai-select-field>
-              </div>
-              <div
-                class="w-100 pb-4 mt-2"
-                *ngIf="selectedFile.properties['training'] != 'none'"
-              >
-                <div
-                  class="btn bg-orange text-white fw-bold"
-                  (click)="openDatabase(selectedFile)"
-                >
-                  Edit Training Data
-                </div>
-              </div>
-            </ng-container>
 
             <ng-container *ngIf="selectedFile.type == 'switch'">
               <ng-container
@@ -231,9 +196,7 @@
                 [placeholder]="'ex. 2'"
                 [range]="{ min: 1, max: 5 }"
                 (changed)="
-                  selectedFile.properties['frequency'] = $event;
-                  saveLayout();
-                  logEvent($event)
+                  selectedFile.properties['frequency'] = $event; saveLayout()
                 "
               >
               </verticalai-text-field>
@@ -256,16 +219,71 @@
                 [valueField]="'id'"
                 [displayField]="'name'"
                 (changed)="
-                  selectedFile.properties['engine'] = $event;
-                  saveLayout();
-                  logEvent($event)
+                  selectedFile.properties['engine'] = $event; saveLayout()
                 "
               >
               </verticalai-select-field>
             </div>
           </ng-container>
 
- 
+          <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
+            <div class="w-100 pb-3 pt-2">
+              <verticalai-select-field
+                *ngIf="
+                  loadedDocs &&
+                    loadedDocs.id == selectedFile.id &&
+                    loadedDocs.docs.length > 0;
+                  else empty
+                "
+                [title]="'Training Data'"
+                [value]="
+                  selectedFile.properties['autoId'] ?? loadedDocs.docs[0]
+                "
+                [data]="loadedDocs.docs"
+                (changed)="
+                  selectedFile.properties['autoId'] = $event; saveLayout()
+                "
+              >
+              </verticalai-select-field>
+
+              <ng-template #empty>
+                <verticalai-select-field
+                  [title]="'Training Data'"
+                  [value]="'No Data'"
+                  [data]="['No Data']"
+                >
+                </verticalai-select-field>
+              </ng-template>
+            </div>
+
+            <!-- <div class="w-100 pb-0">
+              <verticalai-select-field
+                [title]="'Training'"
+                [value]="
+                  selectedFile.properties['training'] ?? trainingTypes[0].id
+                "
+                [data]="trainingTypes"
+                [valueField]="'id'"
+                [displayField]="'name'"
+                (changed)="
+                  selectedFile.properties['training'] = $event; saveLayout()
+                "
+              >
+              </verticalai-select-field>
+            </div> -->
+
+            <div
+              class="w-100 pb-4 mt-2"
+              *ngIf="selectedFile.properties['training'] != 'none'"
+            >
+              <div
+                class="btn bg-orange text-white fw-bold"
+                (click)="openDatabase(selectedFile)"
+              >
+                Edit Training Data
+              </div>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -435,7 +453,7 @@
                           (changed)="
                             editor.step.properties['frequency'] = $event;
                             editor.context.notifyPropertiesChanged();
-                            saveLayout(); logEvent($event)
+                            saveLayout(); 
                           "
                           (refresh)="refreshStepEditor(editor.step)"
                         >
@@ -520,9 +538,7 @@
         mat-menu-item
         class="primary-text proj"
         *ngIf="step.properties['default'] != item"
-        (click)="
-          step.properties['default'] = item; saveLayout(); logEvent($event)
-        "
+        (click)="step.properties['default'] = item; saveLayout()"
       >
         Make Default
       </button>
