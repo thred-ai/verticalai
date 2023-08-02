@@ -536,6 +536,12 @@ export class WorkflowDesignerComponent
             id: this.selectedFile?.id,
             docs: Object.keys(docs),
           };
+          if (this.selectedFile && !this.selectedFile.properties['autoId'] && this.loadedDocs.docs[0]){
+            console.log(this.loadedDocs.docs[0])
+            this.selectedFile.properties['autoId'] = this.loadedDocs.docs[0]
+            this.selectedFileChanged.emit(this.selectedFile.id)
+            this.saveLayout()
+          }
         }
       );
     }
