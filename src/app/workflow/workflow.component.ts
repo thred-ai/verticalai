@@ -83,16 +83,16 @@ export class WorkflowComponent implements OnInit {
       // Action on Cmd + S
       await this.save(1, true);
     }
-    if ($event.metaKey && charCode === 'c') {
-      $event.preventDefault();
-      // Action on Cmd + S
-      // await this.save(1, true);
-    }
-    if ($event.metaKey && charCode === 'v') {
-      $event.preventDefault();
-      // Action on Cmd + S
-      // await this.save(1, true);
-    }
+    // if ($event.metaKey && charCode === 'c') {
+    //   $event.preventDefault();
+    //   // Action on Cmd + S
+    //   // await this.save(1, true);
+    // }
+    // if ($event.metaKey && charCode === 'v') {
+    //   $event.preventDefault();
+    //   // Action on Cmd + S
+    //   // await this.save(1, true);
+    // }
   }
 
   async handleWindowsKeyEvents($event: any) {
@@ -102,16 +102,16 @@ export class WorkflowComponent implements OnInit {
       // Action on Ctrl + S
       await this.save(1, true);
     }
-    if ($event.ctrlKey && charCode === 'c') {
-      $event.preventDefault();
-      // Action on Ctrl + S
-      // await this.save(1, true);
-    }
-    if ($event.ctrlKey && charCode === 'v') {
-      $event.preventDefault();
-      // Action on Ctrl + S
-      // await this.save(1, true);
-    }
+    // if ($event.ctrlKey && charCode === 'c') {
+    //   $event.preventDefault();
+    //   // Action on Ctrl + S
+    //   // await this.save(1, true);
+    // }
+    // if ($event.ctrlKey && charCode === 'v') {
+    //   $event.preventDefault();
+    //   // Action on Ctrl + S
+    //   // await this.save(1, true);
+    // }
   }
 
   set activeWorkflow(app: Executable | undefined) {

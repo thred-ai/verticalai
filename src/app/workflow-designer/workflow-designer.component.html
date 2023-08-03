@@ -192,46 +192,58 @@
                   </ng-container>
 
                   <ng-container *ngIf="selectedFile.type == 'gpt-LLM'">
-                    <div class="w-100 pb-3">
-                      <verticalai-select-field
-                        *ngIf="loadedDocs && loadedDocs.length > 0; else empty"
-                        [title]="'Training Data'"
-                        [value]="
-                          selectedFile.properties['autoId'] ?? loadedDocs[0]
-                        "
-                        [data]="loadedDocs"
-                        (changed)="
-                          selectedFile.properties['autoId'] = $event;
-                          saveLayout()
-                        "
-                      >
-                      </verticalai-select-field>
-
-                      <ng-template #empty>
+                    <ng-container
+                      *ngIf="
+                        selectedFile.properties['training'] ??
+                        'none' as training
+                      "
+                    >
+                      <div class="w-100 pb-0">
                         <verticalai-select-field
-                          [title]="'Training Data'"
-                          [value]="'No Data'"
-                          [data]="['No Data']"
+                          [title]="'Training'"
+                          [value]="
+                            training ??
+                            trainingTypes[0].id
+                          "
+                          [data]="trainingTypes"
+                          [valueField]="'id'"
+                          [displayField]="'name'"
+                          (changed)="
+                            selectedFile.properties['training'] = $event;
+                            saveLayout()
+                          "
                         >
                         </verticalai-select-field>
-                      </ng-template>
-                    </div>
+                      </div>
 
-                    <!-- <div class="w-100 pb-0">
-                <verticalai-select-field
-                  [title]="'Training'"
-                  [value]="
-                    selectedFile.properties['training'] ?? trainingTypes[0].id
-                  "
-                  [data]="trainingTypes"
-                  [valueField]="'id'"
-                  [displayField]="'name'"
-                  (changed)="
-                    selectedFile.properties['training'] = $event; saveLayout()
-                  "
-                >
-                </verticalai-select-field>
-              </div> -->
+                      <div class="w-100 pb-3" *ngIf="training != 'none'">
+                        <verticalai-select-field
+                          *ngIf="
+                            loadedDocs && loadedDocs.length > 0;
+                            else empty
+                          "
+                          [title]="'Training Data'"
+                          [value]="
+                            selectedFile.properties['autoId'] ?? loadedDocs[0]
+                          "
+                          [data]="loadedDocs"
+                          (changed)="
+                            selectedFile.properties['autoId'] = $event;
+                            saveLayout()
+                          "
+                        >
+                        </verticalai-select-field>
+
+                        <ng-template #empty>
+                          <verticalai-select-field
+                            [title]="'Training Data'"
+                            [value]="'No Data'"
+                            [data]="['No Data']"
+                          >
+                          </verticalai-select-field>
+                        </ng-template>
+                      </div>
+                    </ng-container>
                   </ng-container>
                 </ng-container>
 
