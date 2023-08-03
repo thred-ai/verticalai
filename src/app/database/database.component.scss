@@ -41,6 +41,17 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
   cursor: pointer;
 }
 
+.header-button-item{
+  --background: transparent !important;
+  --border-color: transparent;
+
+}
+
+.header-button{
+  --background: var(--primaryColor) !important;
+  --border-color: transparent;
+}
+
 .add-item {
   --border-color: transparent;
   color: #ffffff;
