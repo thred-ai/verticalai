@@ -24,6 +24,7 @@
         >
           <app-icon-sidebar
             [selectedIcon]="selectedIcon"
+            [theme]="theme"
             (selectedIconChanged)="selectFile(openStep.value.id, $event)"
           ></app-icon-sidebar>
           <app-file-sidebar

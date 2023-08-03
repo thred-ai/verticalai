@@ -18,6 +18,7 @@ export class IconSidebarComponent implements OnInit {
 
   @Input() selectedIcon: string = 'settings'
   @Output() selectedIconChanged = new EventEmitter<string>();
+  @Input() theme: 'light' | 'dark' = 'light';
 
   expandedProjects = true
 
