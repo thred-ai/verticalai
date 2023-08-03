@@ -61,8 +61,6 @@
             <div
               class="h-100 d-flex justify-content-center align-items-center flex-column position-relative"
             >
-              
-
               <div class="w-100 h-100 p-3" style="overflow-y: scroll">
                 <ng-container
                   *ngIf="
@@ -306,6 +304,7 @@
                     [value]="selectedFile.properties['notes']"
                     [placeholder]="'Type something...'"
                     [minHeight]="200"
+                    [maxHeight]="800"
                     (changed)="
                       selectedFile.properties['notes'] = $event; saveLayout()
                     "
