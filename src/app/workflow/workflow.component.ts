@@ -184,7 +184,7 @@ export class WorkflowComponent implements OnInit {
       } else {
         this.activeWorkflow = undefined;
       }
-      await this.selectFile(fileId, this.selectedIcon ?? 'controllers');
+      await this.selectFile(fileId, this.selectedIcon ?? 'design');
     }, 100);
 
     // if (val){
@@ -238,7 +238,7 @@ export class WorkflowComponent implements OnInit {
         this.route.queryParams.subscribe(async (params) => {
           let proj = params['project'];
           let file = params['file'] ?? 'main';
-          let selectedModule = params['module'] ?? 'controllers';
+          let selectedModule = params['module'] ?? 'design';
 
           if (this.dev && this.dev.utils) {
             if (!this.workflow.value || this.workflow.value.id != proj) {

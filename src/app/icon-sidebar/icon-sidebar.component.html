@@ -224,11 +224,11 @@
 
     <div
       class="w-100 proj{{
-        selectedIcon == 'run' ? '-select' : ''
+        selectedIcon == 'prototype' ? '-select' : ''
       }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
       role="button"
-      (click)="selectedIconChanged.emit('run')"
+      (click)="selectedIconChanged.emit('prototype')"
       [matTooltip]="'Prototype'"
       [matTooltipPosition]="'right'"
     >
@@ -244,11 +244,11 @@
 
     <div
       class="w-100 proj{{
-        selectedIcon == 'controllers' ? '-select' : ''
+        selectedIcon == 'design' ? '-select' : ''
       }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
       role="button"
-      (click)="selectedIconChanged.emit('controllers')"
+      (click)="selectedIconChanged.emit('design')"
       [matTooltip]="'Design'"
       [matTooltipPosition]="'right'"
     >

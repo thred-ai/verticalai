@@ -56,7 +56,7 @@
             <as-split-area class="horizontal" [size]="70">
               <as-split class="w-100 h-100" direction="horizontal">
                 <as-split-area [size]="60">
-                  <ng-container *ngIf="selectedIcon == 'controllers'">
+                  <ng-container *ngIf="selectedIcon == 'design'">
                     <verticalai-workflow-designer
                       #designer
                       [models]="models"
@@ -75,7 +75,7 @@
 
                   <div
                     class="w-100 h-100 section-background"
-                    [hidden]="selectedIcon != 'run'"
+                    [hidden]="selectedIcon != 'prototype'"
                   >
                     <app-terminal [model]="workflow.value"></app-terminal>
                   </div>
