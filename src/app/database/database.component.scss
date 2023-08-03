@@ -50,6 +50,7 @@ ion-accordion.accordion-expanded > ion-item[slot="header"] {
 .header-button{
   --background: var(--primaryColor) !important;
   --border-color: transparent;
+  --box-shadow: none
 }
 
 .add-item {
