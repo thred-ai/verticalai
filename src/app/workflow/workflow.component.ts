@@ -83,6 +83,16 @@ export class WorkflowComponent implements OnInit {
       // Action on Cmd + S
       await this.save(1, true);
     }
+    if ($event.metaKey && charCode === 'c') {
+      $event.preventDefault();
+      // Action on Cmd + S
+      // await this.save(1, true);
+    }
+    if ($event.metaKey && charCode === 'v') {
+      $event.preventDefault();
+      // Action on Cmd + S
+      // await this.save(1, true);
+    }
   }
 
   async handleWindowsKeyEvents($event: any) {
@@ -91,6 +101,16 @@ export class WorkflowComponent implements OnInit {
       $event.preventDefault();
       // Action on Ctrl + S
       await this.save(1, true);
+    }
+    if ($event.ctrlKey && charCode === 'c') {
+      $event.preventDefault();
+      // Action on Ctrl + S
+      // await this.save(1, true);
+    }
+    if ($event.ctrlKey && charCode === 'v') {
+      $event.preventDefault();
+      // Action on Ctrl + S
+      // await this.save(1, true);
     }
   }
 
@@ -164,7 +184,7 @@ export class WorkflowComponent implements OnInit {
       } else {
         this.activeWorkflow = undefined;
       }
-      await this.selectFile(fileId, this.selectedIcon ?? 'controllers');
+      await this.selectFile(fileId, this.selectedIcon ?? 'design');
     }, 100);
 
     // if (val){
@@ -218,7 +238,7 @@ export class WorkflowComponent implements OnInit {
         this.route.queryParams.subscribe(async (params) => {
           let proj = params['project'];
           let file = params['file'] ?? 'main';
-          let selectedModule = params['module'] ?? 'controllers';
+          let selectedModule = params['module'] ?? 'design';
 
           if (this.dev && this.dev.utils) {
             if (!this.workflow.value || this.workflow.value.id != proj) {

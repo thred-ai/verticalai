@@ -19,6 +19,7 @@ export class TextboxComponent implements OnInit {
   @Input() corners: string = 'rounded';
   @Input() animation: string = 'none';
   @Input() maxHeight: number = 400;
+  @Input() minHeight: number = 70;
 
   @Output() changed = new EventEmitter<any>();
 
