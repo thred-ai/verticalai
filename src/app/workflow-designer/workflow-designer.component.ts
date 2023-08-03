@@ -131,9 +131,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'container',
-          name: 'Sequence',
+          name: 'Group',
           properties: {
-            defaultName: 'Sequence',
+            defaultName: 'Group',
             frequency: 1,
           },
           type: 'container',

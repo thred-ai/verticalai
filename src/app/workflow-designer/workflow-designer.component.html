@@ -187,19 +187,10 @@
           </ng-container>
 
           <ng-container *ngIf="selectedFile.type == 'container'">
-            <div class="w-100 mb-3">
-              <verticalai-text-field
-                [title]="'Frequency'"
-                [value]="selectedFile.properties['frequency'] ?? 1"
-                [type]="'number'"
-                [defaultValue]="1"
-                [placeholder]="'ex. 2'"
-                [range]="{ min: 1, max: 5 }"
-                (changed)="
-                  selectedFile.properties['frequency'] = $event; saveLayout()
-                "
-              >
-              </verticalai-text-field>
+            <div
+              class="w-100 h-100 d-flex justify-content-center align-items-center"
+            >
+              <div class="secondary-text">No settings for this controller</div>
             </div>
           </ng-container>
 
