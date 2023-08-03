@@ -158,13 +158,13 @@ export class WorkflowComponent implements OnInit {
         if (same) {
           this.activeWorkflow = same;
           // same.layout.properties
-          await this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         } else {
           this.activeWorkflow = this.dev.utils[0];
         }
       } else {
         this.activeWorkflow = undefined;
       }
+      await this.selectFile(fileId, this.selectedIcon ?? 'controllers');
     }, 100);
 
     // if (val){

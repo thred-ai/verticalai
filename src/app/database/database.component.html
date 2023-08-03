@@ -1,178 +1,186 @@
-<div
-  class="primary-background w-100 h-100 d-flex justify-content-start align-items-center flex-column"
-  style="overflow: hidden"
->
-  <!-- [value]="openLayouts"
+<div class="d-flex justify-content-center align-items-center w-100 h-100 p-4">
+  <div
+    class="primary-background w-100 d-flex justify-content-start align-items-center flex-column rounded shadow"
+    style="overflow: hidden; max-width: 1300px; aspect-ratio: 1.5"
+  >
+    <!-- [value]="openLayouts"
       (ionChange)="setOpenLayouts($event)" -->
 
-  <ng-container *ngIf="executable && selectedFile">
-    <div
-      class="w-100 primary-text p-3 d-flex justify-content-between align-items-center"
-    >
-      <span class="text-start h5 fw-bold">Training Data</span>
-      <button
-        class="btn bg-transparent shadow-0 border-0 rounded-10 fw-bold primary-text d-flex justify-content-center px-0 align-content-center"
-        (click)="newCollection()"
+    <ng-container *ngIf="executable">
+      <div
+        class="w-100 primary-text p-3 d-flex justify-content-between align-items-center"
       >
-        Add
-        <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1"> add </mat-icon>
-      </button>
-    </div>
+        <span class="text-start h5 fw-bold">Training Data</span>
+        <button
+          class="btn bg-transparent shadow-0 border-0 rounded-10 fw-bold primary-text d-flex justify-content-center px-0 align-content-center"
+          (click)="newCollection()"
+        >
+          Add
+          <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+            add
+          </mat-icon>
+        </button>
+      </div>
 
-    <ng-container *ngIf="items && !loading; else loadingt">
-      <ng-container *ngIf="items.length > 0; else emptyDatabase">
-        <div class="w-100 h-100 p-3" style="overflow-y: scroll">
-          <ng-container
-            *ngTemplateOutlet="recursiveList; context: { $implicit: items }"
-          ></ng-container>
-        </div>
+      <ng-container *ngIf="items && !loading; else loadingt">
+        <ng-container *ngIf="items.length > 0; else emptyDatabase">
+          <div class="w-100 h-100 p-3" style="overflow-y: scroll">
+            <ng-container
+              *ngTemplateOutlet="recursiveList; context: { $implicit: items }"
+            ></ng-container>
+          </div>
 
-        <ng-template #recursiveList let-list>
-          <div class="w-100" *ngFor="let item of list">
-            <ng-container *ngIf="item.type == 'category'; else modelTab">
-              <ion-accordion-group
-                class="example-headers-align bg-transparent"
-                [multiple]="true"
-                (ionChange)="accordionOpened($event, item)"
-                id="accordion"
-              >
-                <ion-accordion class="bg-transparent" [value]="item.id">
-                  <ion-item slot="header" class="primary-text no-padding">
-                    <ion-label class="fw-bold">{{ item.name }}</ion-label>
-                    <ion-icon
-                      class="secondary-text"
-                      [name]="'ellipsis-vertical'"
-                      slot="end"
-                      role="button"
-                      (click)="onRightClick($event, item)"
-                    ></ion-icon>
-                  </ion-item>
-
-                  <div class="ion-padding primary-text" slot="content">
-                    <ion-item
-                      slot="header"
-                      class="primary-text border-0 add-item"
-                      role="button"
-                    >
+          <ng-template #recursiveList let-list>
+            <div class="w-100" *ngFor="let item of list">
+              <ng-container *ngIf="item.type == 'category'; else modelTab">
+                <ion-accordion-group
+                  class="example-headers-align bg-transparent"
+                  [multiple]="true"
+                  (ionChange)="accordionOpened($event, item)"
+                  id="accordion"
+                >
+                  <ion-accordion class="bg-transparent" [value]="item.id">
+                    <ion-item slot="header" class="primary-text no-padding">
+                      <ion-label class="fw-bold">{{ item.name }}</ion-label>
                       <ion-icon
-                        class="primary-text"
-                        [name]="'add'"
+                        class="secondary-text"
+                        [name]="'ellipsis-vertical'"
                         slot="end"
                         role="button"
-                        (click)="newDoc(item)"
+                        (click)="onRightClick($event, item)"
                       ></ion-icon>
                     </ion-item>
 
-                    <ng-template #loadingc>
-                      <div
-                        class="w-100 d-flex flex-column justify-content-center align-items-center"
-                        style="height: 250px"
+                    <div class="ion-padding primary-text" slot="content">
+                      <ion-item
+                        slot="header"
+                        class="primary-text border-0 add-item"
+                        role="button"
                       >
-                        <verticalai-loader [mode]="'light'"></verticalai-loader>
-                      </div>
-                    </ng-template>
+                        <ion-icon
+                          class="primary-text"
+                          [name]="'add'"
+                          slot="end"
+                          role="button"
+                          (click)="newDoc(item)"
+                        ></ion-icon>
+                      </ion-item>
 
-                    <ng-container *ngIf="!loadingCol[item.id]; else loadingc">
-                      <ng-container
-                        *ngIf="item.sequence.length > 0; else emptyCollection"
-                      >
-                        <ng-container
-                          *ngTemplateOutlet="
-                            recursiveList;
-                            context: { $implicit: item.sequence }
-                          "
-                        ></ng-container>
-                      </ng-container>
-
-                      <ng-template #emptyCollection>
+                      <ng-template #loadingc>
                         <div
-                          class="w-100 d-flex justify-content-center align-items-center"
+                          class="w-100 d-flex flex-column justify-content-center align-items-center"
                           style="height: 250px"
                         >
-                          <span class="primary-text text-center">
-                            No documents in this collection
-                          </span>
+                          <verticalai-loader
+                            [mode]="'light'"
+                          ></verticalai-loader>
                         </div>
                       </ng-template>
-                    </ng-container>
-                  </div>
-                </ion-accordion>
-              </ion-accordion-group>
-            </ng-container>
-            <ng-template #modelTab>
-              <ng-container
-                *ngTemplateOutlet="modelItem; context: { $implicit: item }"
-              ></ng-container>
-            </ng-template>
+
+                      <ng-container *ngIf="!loadingCol[item.id]; else loadingc">
+                        <ng-container
+                          *ngIf="item.sequence.length > 0; else emptyCollection"
+                        >
+                          <ng-container
+                            *ngTemplateOutlet="
+                              recursiveList;
+                              context: { $implicit: item.sequence }
+                            "
+                          ></ng-container>
+                        </ng-container>
+
+                        <ng-template #emptyCollection>
+                          <div
+                            class="w-100 d-flex justify-content-center align-items-center"
+                            style="height: 250px"
+                          >
+                            <span class="primary-text text-center">
+                              No documents in this collection
+                            </span>
+                          </div>
+                        </ng-template>
+                      </ng-container>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
+              </ng-container>
+              <ng-template #modelTab>
+                <ng-container
+                  *ngTemplateOutlet="modelItem; context: { $implicit: item }"
+                ></ng-container>
+              </ng-template>
+            </div>
+          </ng-template>
+        </ng-container>
+
+        <ng-template #emptyDatabase>
+          <div
+            class="w-100 h-100 d-flex justify-content-center align-items-center"
+          >
+            <span class="primary-text text-center">
+              No collections to show
+            </span>
           </div>
+        </ng-template>
+
+        <ng-template #modelItem let-item>
+          <ion-item
+            slot="header"
+            class="primary-text w-100 border-0 file-item py-2"
+            role="button"
+          >
+            <ng-container>
+              <ion-textarea
+                [placeholder]="'No Data'"
+                labelPlacement="stacked"
+                [value]="item.metadata.text"
+                [autoGrow]="true"
+                (ionChange)="editDoc($event, item)"
+                id="textArea"
+              >
+                <div
+                  class="secondary-text text-start"
+                  style="font-size: small"
+                  slot="label"
+                >
+                  ID: {{ item.id }}
+                  <!-- item.metadata.embedding.length > 0
+                        ? (item.metadata.embedding | prettifyJson)
+                        : "" -->
+                </div>
+              </ion-textarea>
+            </ng-container>
+            <ion-icon
+              class="primary-text p-0"
+              *ngIf="editingDocs[item.id]"
+              [name]="'checkmark-circle'"
+              slot="end"
+              role="button"
+              (click)="updateDoc(item)"
+            ></ion-icon>
+            <ion-icon
+              class="secondary-text"
+              [name]="'ellipsis-vertical'"
+              slot="end"
+              role="button"
+              (click)="onRightClick($event, item)"
+            ></ion-icon>
+          </ion-item>
         </ng-template>
       </ng-container>
 
-      <ng-template #emptyDatabase>
+      <ng-template #loadingt>
         <div
-          class="w-100 h-100 d-flex justify-content-center align-items-center"
+          class="w-100 h-100 d-flex flex-column justify-content-center align-items-center"
         >
-          <span class="primary-text text-center"> No collections to show </span>
+          <verticalai-loader
+            [mode]="'light'"
+            [text]="'Loading...'"
+          ></verticalai-loader>
         </div>
       </ng-template>
-
-      <ng-template #modelItem let-item>
-        <ion-item
-          slot="header"
-          class="primary-text w-100 border-0 file-item py-2"
-          role="button"
-        >
-          <ng-container>
-            <ion-textarea
-              [placeholder]="'No Data'"
-              labelPlacement="stacked"
-              [value]="item.metadata.text"
-              [autoGrow]="true"
-              (ionChange)="editDoc($event, item)"
-              id="textArea"
-            >
-              <div
-                class="secondary-text text-start"
-                style="font-size: small"
-                slot="label"
-              >
-                ID: {{ item.id }}
-                <!-- item.metadata.embedding.length > 0
-                        ? (item.metadata.embedding | prettifyJson)
-                        : "" -->
-              </div>
-            </ion-textarea>
-          </ng-container>
-          <ion-icon
-            class="primary-text p-0"
-            *ngIf="editingDocs[item.id]"
-            [name]="'checkmark-circle'"
-            slot="end"
-            role="button"
-            (click)="updateDoc(item)"
-          ></ion-icon>
-          <ion-icon
-            class="secondary-text"
-            [name]="'ellipsis-vertical'"
-            slot="end"
-            role="button"
-            (click)="onRightClick($event, item)"
-          ></ion-icon>
-        </ion-item>
-      </ng-template>
     </ng-container>
-
-    <ng-template #loadingt>
-      <div
-        class="w-100 h-100 d-flex flex-column justify-content-center align-items-center"
-      >
-        <verticalai-loader
-          [mode]="'light'"
-          [text]="'Loading...'"
-        ></verticalai-loader>
-      </div>
-    </ng-template>
-  </ng-container>
+  </div>
 </div>
 
 <div

@@ -222,15 +222,14 @@
               <verticalai-select-field
                 *ngIf="
                   loadedDocs &&
-                    loadedDocs.id == selectedFile.id &&
-                    loadedDocs.docs.length > 0;
+                    loadedDocs.length > 0;
                   else empty
                 "
                 [title]="'Training Data'"
                 [value]="
-                  selectedFile.properties['autoId'] ?? loadedDocs.docs[0]
+                  selectedFile.properties['autoId'] ?? loadedDocs[0]
                 "
-                [data]="loadedDocs.docs"
+                [data]="loadedDocs"
                 (changed)="
                   selectedFile.properties['autoId'] = $event; saveLayout()
                 "
@@ -263,17 +262,6 @@
               </verticalai-select-field>
             </div> -->
 
-            <div
-              class="w-100 pb-4 mt-2"
-              *ngIf="selectedFile.properties['training'] != 'none'"
-            >
-              <div
-                class="btn bg-orange text-white fw-bold"
-                (click)="openDatabase(selectedFile)"
-              >
-                Edit Training Data
-              </div>
-            </div>
           </ng-container>
         </div>
       </div>
