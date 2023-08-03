@@ -527,7 +527,7 @@ export class WorkflowDesignerComponent
     if (
       this.workflow &&
       this.selectedFile &&
-      (this.selectedFile.properties['training'] ?? 'auto') == 'auto'
+      (this.selectedFile.properties['training'] ?? 'none') == 'auto'
     ) {
       if (this.selectedFile && !this.selectedFile.properties['autoId'] && this.loadedDocs[0]){
         console.log(this.loadedDocs[0])
