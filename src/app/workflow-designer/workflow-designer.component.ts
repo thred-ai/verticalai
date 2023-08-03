@@ -71,15 +71,11 @@ export class WorkflowDesignerComponent
 
   trainingTypes = [
     {
-      name: 'Auto',
+      name: 'Enabled',
       id: 'auto',
     },
     {
-      name: 'Manual',
-      id: 'manual',
-    },
-    {
-      name: 'None',
+      name: 'Disabled',
       id: 'none',
     },
   ];
