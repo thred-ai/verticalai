@@ -26,6 +26,7 @@
     <div class="w-100" [hidden]="animation != 'none'">
       <ion-textarea
         [style.max-height]="maxHeight > 0 ? maxHeight + 'px' : 'auto'"
+        [style.min-height]="minHeight > 0 ? minHeight + 'px' : 'auto'"
         [style.overflow-y]="maxHeight > 0 ? 'scroll' : 'visible'"
         fill="solid"
         [ngModel]="value | textAreaRender"
