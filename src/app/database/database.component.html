@@ -72,7 +72,7 @@
                           style="height: 250px"
                         >
                           <verticalai-loader
-                            [mode]="'light'"
+                            [mode]="theme"
                           ></verticalai-loader>
                         </div>
                       </ng-template>
@@ -150,14 +150,20 @@
                 </div>
               </ion-textarea>
             </ng-container>
-            <ion-icon
+            <!-- <ion-icon
               class="primary-text p-0"
               *ngIf="editingDocs[item.id]"
               [name]="'checkmark-circle'"
               slot="end"
               role="button"
               (click)="updateDoc(item)"
-            ></ion-icon>
+            ></ion-icon> -->
+
+            <ion-item class="header-button-item" slot="end" *ngIf="editingDocs[item.id]">
+              <ion-button class="header-button" fill="solid" slot="end" (click)="updateDoc(item)">Save</ion-button>
+
+            </ion-item>
+
             <ion-icon
               class="secondary-text"
               [name]="'ellipsis-vertical'"
