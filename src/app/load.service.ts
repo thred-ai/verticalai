@@ -1001,6 +1001,7 @@ export class LoadService {
             }
         }
       default:
+        console.log(type)
         return `assets/${type}.png`;
     }
   }
