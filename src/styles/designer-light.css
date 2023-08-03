@@ -31,7 +31,6 @@
   fill: #3a3a3a;
 }
 
-
 /* light > .sqd-control-bar */
 
 .sqd-theme-light .sqd-control-bar {
@@ -65,7 +64,7 @@
   border-left: #7f7f7f solid 0.5px;
 }
 .sqd-theme-light .sqd-smart-editor-toggle {
-  background: #F4F5F8;
+  background: #f4f5f8;
   fill: #747474;
 }
 
@@ -132,16 +131,19 @@
 /* light > .sqd-placeholder */
 
 .sqd-theme-light .sqd-placeholder .sqd-placeholder-rect {
-  fill: #ffffff;
-  stroke: #b3b3b3;
+  fill: var(--primarySectionHoverColor);
+
+  stroke: var(--primaryColor);
 }
 .sqd-theme-light .sqd-placeholder-icon-path {
   fill: #fff;
 }
+
 .sqd-theme-light .sqd-placeholder.sqd-hover .sqd-placeholder-rect {
-  fill: #e5e5e5;
-  filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.15));
+  fill: var(--primaryBackgroundColor);
+  /* filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.15)); */
 }
+
 .sqd-theme-light .sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
   fill: #fff;
 }

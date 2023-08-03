@@ -3,7 +3,6 @@ import {
   Component,
   HostListener,
   Inject,
-  Input,
   OnInit,
   PLATFORM_ID,
   ViewChild,
@@ -20,8 +19,8 @@ import { BehaviorSubject } from 'rxjs';
 import { Executable } from '../models/workflow/executable.model';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import {
-  Sequence,
   BranchedStep,
+  Sequence,
   SequentialStep,
   Step,
 } from 'vertical-ai-designer';
@@ -110,7 +109,7 @@ export class WorkflowComponent implements OnInit {
         new Date().getTime(),
         0,
         '',
-        'https://storage.googleapis.com/thred-protocol.appspot.com/resources/default_smartutil_app.png'
+        'https://storage.googleapis.com/thred-protocol.appspot.com/resources/default_smartutil_app.png',
       );
     }
 
@@ -152,14 +151,14 @@ export class WorkflowComponent implements OnInit {
 
     this.cdr.detectChanges();
 
-    setTimeout(() => {
+    setTimeout(async () => {
       if (id && this.dev) {
         let same = this.dev.utils?.find((w) => w.id == id);
 
         if (same) {
           this.activeWorkflow = same;
           // same.layout.properties
-          this.selectFile(fileId, this.selectedIcon ?? 'controllers');
+          await this.selectFile(fileId, this.selectedIcon ?? 'controllers');
         } else {
           this.activeWorkflow = this.dev.utils[0];
         }
@@ -186,7 +185,7 @@ export class WorkflowComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private httpClient: HttpClient,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   async ngOnInit() {
@@ -209,78 +208,74 @@ export class WorkflowComponent implements OnInit {
         });
 
         this.classes[id] = { name, path, id, text };
-      })
+      }),
     );
 
     this.loadService.loadedUser.subscribe((user) => {
       if (user) {
-
         this.dev = user;
 
-        this.route.queryParams.subscribe((params) => {
+        this.route.queryParams.subscribe(async (params) => {
           let proj = params['project'];
           let file = params['file'] ?? 'main';
           let selectedModule = params['module'] ?? 'controllers';
 
           if (this.dev && this.dev.utils) {
-              
+            if (!this.workflow.value || this.workflow.value.id != proj) {
+              this.activeWorkflow =
+                this.dev.utils.find((f) => f.id == proj) ?? this.dev.utils[0];
 
-                if (!this.workflow.value || this.workflow.value.id != proj){
-                  this.activeWorkflow =
-                  this.dev.utils.find((f) => f.id == proj) ?? this.dev.utils[0];
+              console.log(this.workflow.value);
+            }
 
-                  console.log(this.workflow.value)
-                }
+            await this.selectFile(
+              file ?? 'main',
+              selectedModule,
+              this.activeWorkflow,
+              false,
+            );
 
-                this.selectFile(
-                  file ?? 'main',
-                  selectedModule,
-                  this.activeWorkflow,
-                  false
-                );
+            if (!this.openStep.value) {
+              await this.selectFile(
+                'main',
+                selectedModule,
+                this.activeWorkflow,
+                true,
+              );
+            }
 
-                if (!this.openStep.value) {
-                  this.selectFile(
-                    'main',
-                    selectedModule,
-                    this.activeWorkflow,
-                    true
-                  );
-                }
-              
+            this.loadService.loadedModels.subscribe((models) => {
+              this.models = models;
+            });
 
-              this.loadService.loadedModels.subscribe((models) => {
-                this.models = models;
-              });
+            this.loadService.theme.subscribe((theme) => {
+              this.theme = theme;
+            });
 
-              this.loadService.theme.subscribe((theme) => {
-                this.theme = theme;
-              });
+            this.loadService.loadedTriggers.subscribe((triggers) => {
+              this.triggers = triggers;
+            });
 
-              this.loadService.loadedTriggers.subscribe((triggers) => {
-                this.triggers = triggers;
-              });
+            this.loadService.loadedKeys.subscribe((data) => {
+              this.apiKeys = data;
+            });
 
-              this.loadService.loadedKeys.subscribe((data) => {
-                this.apiKeys = data;
-              });
+            this.loadService.loading.subscribe((l) => {
+              this.loading = l;
+            });
 
-              this.loadService.loading.subscribe((l) => {
-                this.loading = l;
-              });
-
-              this.workflow.subscribe(async (w) => {
-                if (w) {
-                  this.initExecutable(w);
-                }
-              });
+            this.workflow.subscribe(async (w) => {
+              if (w) {
+                this.initExecutable(w);
+              }
+            });
           }
         });
       }
     });
   }
 
-  async initExecutable(w?: Executable, fetchExecutable = true) {
+  initExecutable(w?: Executable, fetchExecutable = true) {
     if (w) {
       this.items.next([
         new TaskTree(
@@ -293,15 +288,15 @@ export class WorkflowComponent implements OnInit {
             metaType: 'main',
             img: 'assets/main.png',
           }),
-          { type: 'folder', img: w.displayUrl }
+          { type: 'folder', img: w.displayUrl },
         ),
       ]);
     }
   }
 
-  checkSave() {
+  async checkSave() {
     if (this.workflow && this.workflow.value?.creatorId != '') {
-      this.save(1, true);
+      await this.save(1, true);
     }
   }
 
@@ -311,21 +306,20 @@ export class WorkflowComponent implements OnInit {
     if (this.workflow.value) {
       let textFields = ['name'] as 'name'[];
 
-      let validText =
-        textFields.filter(
-          (field) =>
-            this.workflow.value![field] == undefined ||
-            this.workflow.value![field] == null ||
-            this.workflow.value![field]?.trim() == ''
-        ).length == 0;
-
       // let validArray =
       //   arrayFields.filter(
       //     (field) =>
       //       this.workflow![field] == undefined || this.workflow![field] == null
       //   ).length == 0;
 
-      return validText; //&& validArray;
+      return (
+        textFields.filter(
+          (field) =>
+            this.workflow.value![field] == undefined ||
+            this.workflow.value![field] == null ||
+            this.workflow.value![field]?.trim() == '',
+        ).length == 0
+      ); //&& validArray;
     }
 
     return false;
@@ -357,19 +351,19 @@ export class WorkflowComponent implements OnInit {
   }
 
   async fillExecutable(executable: Executable) {
-    var exec = executable;
+    const exec = executable;
 
     await Promise.all(
       exec.layout.sequence.map(async (step) => {
         let s = this.findStep(step.id, exec.layout.sequence);
         if (s) {
           let source = s.properties['source'] as string;
-          if (source == 'None' || source == null || source == undefined) {
+          if (!source || source == 'None' || source == null) {
             console.log(s.type);
             s.properties['source'] = this.defaultCode(s.type);
           }
         }
-      })
+      }),
     );
 
     return exec;
@@ -396,7 +390,7 @@ export class WorkflowComponent implements OnInit {
           val.dev,
           img,
           img != undefined,
-          (result) => {}
+          (result) => {},
         );
       }
     });
@@ -415,7 +409,7 @@ export class WorkflowComponent implements OnInit {
           controllerId != 'main'
             ? this.findStep(
                 controllerId,
-                this.workflow.value?.layout.sequence ?? []
+                this.workflow.value?.layout.sequence ?? [],
               )
             : undefined,
         workflow: this.workflow.value,
@@ -442,7 +436,7 @@ export class WorkflowComponent implements OnInit {
 
         if (val.file) {
           let file = val.file as Step;
-          var step = this.findStep(file.id, workflow.layout.sequence);
+          const step = this.findStep(file.id, workflow.layout.sequence);
 
           if (step) {
             step.name = file.name;
@@ -474,24 +468,24 @@ export class WorkflowComponent implements OnInit {
   async publish(
     workflow = this.workflow.value,
     close = false,
-    callback?: (result?: Executable) => any
+    callback?: (result?: Executable) => any,
   ) {
-    var w = workflow;
+    const w = workflow;
     if (w) {
       this.loading = true;
 
       await this.save(1, false);
       w.executableUrl = await this.loadService.uploadExecutable(w.id, w);
 
-      this.loadService.publishSmartUtil(w, (result) => {
-        this.loading = false;
-        if (callback) {
-          callback(result);
-          if (close && result) {
-            this.close();
-          }
+      let result = await this.loadService.publishSmartUtil(w);
+
+      this.loading = false;
+      if (callback) {
+        callback(result);
+        if (close && result) {
+          this.close();
         }
-      });
+      }
     } else {
       if (callback) {
         callback();
@@ -532,7 +526,7 @@ export class WorkflowComponent implements OnInit {
 
   updateWorkflows(workflow = this.workflow.value) {
     let dev = JSON.parse(
-      JSON.stringify(this.loadService.loadedUser.value)
+      JSON.stringify(this.loadService.loadedUser.value),
     ) as Developer;
 
     if (dev && dev.utils && workflow) {
@@ -585,7 +579,7 @@ export class WorkflowComponent implements OnInit {
 
       if (task.componentType == 'switch') {
         let switchTask = task as BranchedStep;
-        var branches: TaskTree[] = [];
+        const branches: TaskTree[] = [];
         Object.keys(switchTask.branches).forEach((name) => {
           let sequence = switchTask.branches[name];
           branches.push(
@@ -595,8 +589,8 @@ export class WorkflowComponent implements OnInit {
               'category',
               this.analyzeTasks(sequence),
               undefined,
-              { type: 'folder', img: 'assets/branch.png' }
-            )
+              { type: 'folder', img: 'assets/branch.png' },
+            ),
           );
         });
 
@@ -610,7 +604,7 @@ export class WorkflowComponent implements OnInit {
               (switchTask.properties['fileName'] as string) ??
                 this.jsFormattedName(
                   switchTask.name,
-                  sameNames[switchTask.name]
+                  sameNames[switchTask.name],
                 ),
               switchTask.id + '',
               'model',
@@ -620,10 +614,10 @@ export class WorkflowComponent implements OnInit {
                 type: 'model',
                 metaType: switchTask.type,
                 img: 'assets/switch2.png',
-              }
+              },
             ),
-            { type: 'switch', img: 'assets/switch.png' }
-          )
+            { type: 'switch', img: 'assets/switch.png' },
+          ),
         );
       } else if (task.componentType == 'container') {
         let loopTask = task as SequentialStep;
@@ -644,10 +638,10 @@ export class WorkflowComponent implements OnInit {
                 type: 'container',
                 metaType: loopTask.type,
                 img: 'assets/container2.png',
-              }
+              },
             ),
-            { type: 'folder', img: 'assets/container.png' }
-          )
+            { type: 'folder', img: 'assets/container.png' },
+          ),
         );
       } else {
         objects.push(
@@ -663,10 +657,10 @@ export class WorkflowComponent implements OnInit {
               metaType: task.type,
               img: this.loadService.iconUrlForController(
                 task.componentType,
-                task.type
+                task.type,
               ),
-            }
-          )
+            },
+          ),
         );
       }
     });
@@ -674,17 +668,17 @@ export class WorkflowComponent implements OnInit {
     return objects;
   }
 
-  setFieldName(name: string, id: string) {
+  async setFieldName(name: string, id: string) {
     //fileName
 
-    this.save(1, true);
+    await this.save(1, true);
   }
 
-  selectFile(
+  async selectFile(
     fileId: string | undefined,
     selectedModule: string | undefined,
     workflow = this.workflow.value,
-    update = true
+    update = true,
   ) {
     if (workflow && fileId && selectedModule) {
       if (this.openStep.value?.id != fileId) {
@@ -693,7 +687,7 @@ export class WorkflowComponent implements OnInit {
       this.selectedIcon = selectedModule;
 
       if (update) {
-        this.router.navigate([], {
+        await this.router.navigate([], {
           relativeTo: this.route,
           queryParams: {
             project: workflow.id,
@@ -710,7 +704,7 @@ export class WorkflowComponent implements OnInit {
   }
 
   findStep(id: string, tasks: Sequence) {
-    var stepToReturn: Step | undefined;
+    let stepToReturn: Step | undefined;
 
     if (id == 'main') {
       stepToReturn = {

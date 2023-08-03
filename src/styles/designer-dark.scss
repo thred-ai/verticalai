@@ -27,7 +27,6 @@
   background: #c6c6c6;
 }
 
-
 .sqd-control-bar-button.sqd-delete .sqd-icon-path {
   fill: #ffffff;
 }
@@ -136,19 +135,31 @@
 
 /* dark > .sqd-placeholder */
 
-.sqd-placeholder .sqd-placeholder-rect {
-  fill: #0e0e0e89;
-  stroke: #353535;
-}
+// .sqd-placeholder .sqd-placeholder-rect {
+//   fill: #0e0e0e89;
+//   stroke: #353535;
+// }
 .sqd-placeholder-icon-path {
   fill: #fff;
 }
-.sqd-placeholder.sqd-hover .sqd-placeholder-rect {
-  fill: #0e0e0e;
-  stroke: var(--primaryColor);
-}
+// .sqd-placeholder.sqd-hover .sqd-placeholder-rect {
+//   fill: #0e0e0e;
+//   stroke: var(--primaryColor);
+// }
 .sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
   fill: #fff;
+}
+
+.sqd-placeholder .sqd-placeholder-rect {
+  fill: var(--primaryBackgroundColor);
+
+  stroke: var(--primaryColor);
+}
+
+.sqd-placeholder.sqd-hover .sqd-placeholder-rect {
+  fill: var(--primarySectionHoverColor);
+
+  /* filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.15)); */
 }
 
 /* dark > .sqd-validation-error */

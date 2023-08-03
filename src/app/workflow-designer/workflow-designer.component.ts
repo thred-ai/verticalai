@@ -69,6 +69,21 @@ export class WorkflowDesignerComponent
   @Input() models: Dict<AIModelType> = {};
   flowModels: Dict<AIModelType> = {};
 
+  trainingTypes = [
+    {
+      name: 'Auto',
+      id: 'auto',
+    },
+    {
+      name: 'Manual',
+      id: 'manual',
+    },
+    {
+      name: 'None',
+      id: 'none',
+    },
+  ];
+
   // @Input() apiRequests: Dict<APIRequest> = {};
   @Input() theme: 'light' | 'dark' = 'light';
 
@@ -116,9 +131,9 @@ export class WorkflowDesignerComponent
         } as Step,
         {
           componentType: 'container',
-          name: 'Sequence',
+          name: 'Group',
           properties: {
-            defaultName: 'Sequence',
+            defaultName: 'Group',
             frequency: 1,
           },
           type: 'container',
@@ -486,6 +501,7 @@ export class WorkflowDesignerComponent
         if (step) {
           if (step.id != 'main') {
             this.designer?.selectStepById(step.id);
+            this.downloadDB();
           } else {
             this.designer?.clearSelectedStep();
           }
@@ -501,6 +517,34 @@ export class WorkflowDesignerComponent
     //     doc.outerHTML = doc.outerHTML
     //   }
     // }
+  }
+
+  loadedDocs: { id: string | undefined; docs: string[] } = { id: undefined, docs: [] };
+
+  downloadDB() {
+    if (
+      this.workflow &&
+      this.selectedFile &&
+      (this.selectedFile.properties['training'] ?? 'auto') == 'auto'
+    ) {
+      this.loadService.getDatabaseInfo(
+        this.workflow.id,
+        this.selectedFile.id,
+        (docs) => {
+          console.log(docs);
+          this.loadedDocs = {
+            id: this.selectedFile?.id,
+            docs: Object.keys(docs),
+          };
+          if (this.selectedFile && !this.selectedFile.properties['autoId'] && this.loadedDocs.docs[0]){
+            console.log(this.loadedDocs.docs[0])
+            this.selectedFile.properties['autoId'] = this.loadedDocs.docs[0]
+            this.selectedFileChanged.emit(this.selectedFile.id)
+            this.saveLayout()
+          }
+        }
+      );
+    }
   }
 
   stepContext?: StepEditorContext;
@@ -768,7 +812,7 @@ export class WorkflowDesignerComponent
       )[0] as string;
     }
 
-    this.shouldRefresh = true
+    this.shouldRefresh = true;
 
     this.saveLayout();
   }
