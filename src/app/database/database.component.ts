@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   Inject,
+  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -32,6 +33,7 @@ export class DatabaseComponent implements OnInit {
 
   items?: TaskTree[] = undefined;
 
+  @Input() theme: 'light' | 'dark' = 'light';
 
   loading = false;
   loadingCol: Dict<boolean> = {};
