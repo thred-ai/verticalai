@@ -215,6 +215,7 @@ export class LoadService {
   loading = new BehaviorSubject<boolean>(false);
   loadedSources = new BehaviorSubject<Dict<Key>>({});
   theme = new BehaviorSubject<'light' | 'dark'>('light');
+  database = new BehaviorSubject<Dict<Collection>>({});
 
   finishPassReset(
     email: string,
@@ -817,13 +818,12 @@ export class LoadService {
 
   getDatabaseCollection(
     workflowId: string,
-    stepId: string,
     collectionId: string,
     callback: (docs: Dict<Document>) => any,
   ) {
     this.db
       .collection(
-        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs`,
+        `Workflows/${workflowId}/database/${collectionId}/docs`,
         (ref) => ref.where('status', '==', 0),
       )
       .valueChanges()
@@ -842,50 +842,46 @@ export class LoadService {
 
   async deleteDatabaseCollection(
     workflowId: string,
-    stepId: string,
     collectionId: string,
   ) {
     await this.db
       .doc(
-        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}`,
+        `Workflows/${workflowId}/database/${collectionId}`,
       )
       .update({ status: 1 });
   }
 
   async createDatabaseCollection(
     workflowId: string,
-    stepId: string,
     collection: Collection,
   ) {
     await this.db
       .doc(
-        `Workflows/${workflowId}/databases/${stepId}/collections/${collection.id}`,
+        `Workflows/${workflowId}/database/${collection.id}`,
       )
       .set(JSON.parse(JSON.stringify(collection)));
   }
 
   async deleteDatabaseCollectionDoc(
     workflowId: string,
-    stepId: string,
     collectionId: string,
     docId: string,
   ) {
     await this.db
       .doc(
-        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs/${docId}`,
+        `Workflows/${workflowId}/database/${collectionId}/docs/${docId}`,
       )
       .delete();
   }
 
   async checkCollectionName(
     workflowId: string,
-    stepId: string,
     collectionId: string,
   ): Promise<Boolean> {
     return new Promise((resolve, reject) => {
       let d = this.db
         .doc(
-          `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}`,
+          `Workflows/${workflowId}/database/${collectionId}`,
         )
         .valueChanges()
         .subscribe((doc) => {
@@ -901,26 +897,24 @@ export class LoadService {
 
   async updateDatabaseCollectionDoc(
     workflowId: string,
-    stepId: string,
     collectionId: string,
     docId: string,
     doc: Document,
   ) {
     await this.db
       .doc(
-        `Workflows/${workflowId}/databases/${stepId}/collections/${collectionId}/docs/${docId}`,
+        `Workflows/${workflowId}/database/${collectionId}/docs/${docId}`,
       )
       .set(JSON.parse(JSON.stringify(doc)), { merge: true });
   }
 
   getDatabaseInfo(
     workflowId: string,
-    stepId: string,
     callback: (docs: Dict<Collection>) => any,
   ) {
     this.db
       .collection(
-        `Workflows/${workflowId}/databases/${stepId}/collections`,
+        `Workflows/${workflowId}/database`,
         (ref) => ref.where('status', '==', 0),
       )
       .valueChanges()
@@ -932,6 +926,8 @@ export class LoadService {
         data.forEach((d) => {
           returnData[d['id'] as string] = d;
         });
+
+        this.database.next(returnData)
 
         callback(returnData);
       });

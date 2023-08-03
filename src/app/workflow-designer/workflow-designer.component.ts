@@ -391,6 +391,12 @@ export class WorkflowDesignerComponent
       }
     });
 
+    this.loadService.database.subscribe(d => {
+      if (d){
+        this.loadedDocs = Object.keys(d)
+      }
+    })
+
     this.done = true;
 
     if (this.toolboxConfiguration.groups.length == 0) {
@@ -519,7 +525,7 @@ export class WorkflowDesignerComponent
     // }
   }
 
-  loadedDocs: { id: string | undefined; docs: string[] } = { id: undefined, docs: [] };
+  loadedDocs: string[] = []
 
   downloadDB() {
     if (
@@ -527,23 +533,12 @@ export class WorkflowDesignerComponent
       this.selectedFile &&
       (this.selectedFile.properties['training'] ?? 'auto') == 'auto'
     ) {
-      this.loadService.getDatabaseInfo(
-        this.workflow.id,
-        this.selectedFile.id,
-        (docs) => {
-          console.log(docs);
-          this.loadedDocs = {
-            id: this.selectedFile?.id,
-            docs: Object.keys(docs),
-          };
-          if (this.selectedFile && !this.selectedFile.properties['autoId'] && this.loadedDocs.docs[0]){
-            console.log(this.loadedDocs.docs[0])
-            this.selectedFile.properties['autoId'] = this.loadedDocs.docs[0]
-            this.selectedFileChanged.emit(this.selectedFile.id)
-            this.saveLayout()
-          }
-        }
-      );
+      if (this.selectedFile && !this.selectedFile.properties['autoId'] && this.loadedDocs[0]){
+        console.log(this.loadedDocs[0])
+        this.selectedFile.properties['autoId'] = this.loadedDocs[0]
+        this.selectedFileChanged.emit(this.selectedFile.id)
+        this.saveLayout()
+      }
     }
   }
 
@@ -566,32 +561,6 @@ export class WorkflowDesignerComponent
     context.notifyNameChanged();
   }
 
-  openDatabase(step: Step) {
-    let ref = this.dialog.open(DatabaseComponent, {
-      width: '70vw',
-      maxWidth: '800px',
-      height: '500px',
-      minHeight: '500px',
-      maxHeight: 'calc(var(--vh, 1vh) * 100)',
-      panelClass: 'app-full-bleed-dialog',
-
-      data: {
-        step,
-        workflow: this.workflow,
-      },
-    });
-
-    ref.afterClosed().subscribe(async (val) => {
-      if (val && val != '' && val != '0') {
-        // let description = val.description ?? '';
-        // let title = val.title ?? '';
-        // this.setBranchName(title, step, branch);
-        // this.setBranchDescription(title, step, description);
-        // this.shouldRefresh = true;
-        // this.saveLayout();
-      }
-    });
-  }
 
   onInput(ev: any) {
     var value = ev.target!.value;

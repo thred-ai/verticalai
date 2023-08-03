@@ -37,7 +37,6 @@ export class CollectionInfoComponent implements OnInit {
   async isNameTaken(id: string) {
     let canUse = await this.loadService.checkCollectionName(
       this.data.workflow.id,
-      this.data.file.id,
       id
     );
     return canUse;
