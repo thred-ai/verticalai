@@ -71,9 +71,7 @@
                           class="w-100 d-flex flex-column justify-content-center align-items-center"
                           style="height: 250px"
                         >
-                          <verticalai-loader
-                            [mode]="theme"
-                          ></verticalai-loader>
+                          <verticalai-loader [mode]="theme"></verticalai-loader>
                         </div>
                       </ng-template>
 
@@ -159,9 +157,18 @@
               (click)="updateDoc(item)"
             ></ion-icon> -->
 
-            <ion-item class="header-button-item" slot="end" *ngIf="editingDocs[item.id]">
-              <ion-button class="header-button" fill="solid" slot="end" (click)="updateDoc(item)">Save</ion-button>
-
+            <ion-item
+              class="header-button-item"
+              slot="end"
+              *ngIf="editingDocs[item.id]"
+            >
+              <ion-button
+                class="header-button"
+                fill="solid"
+                slot="end"
+                (click)="updateDoc(item)"
+                >Save</ion-button
+              >
             </ion-item>
 
             <ion-icon
