@@ -41,13 +41,12 @@
 
     <div
       class="primary-background h-100"
-      style="width: 350px"
+      style="width: 250px"
       [hidden]="selectedFile && selectedFile.id == 'main'"
     >
       <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
 
       <mat-tab-group
-        mat-stretch-tabs
         #menu
         class="w-100 h-100"
         dynamicHeight
@@ -201,10 +200,7 @@
                       <div class="w-100 pb-3">
                         <verticalai-select-field
                           [title]="'Training'"
-                          [value]="
-                            training ??
-                            trainingTypes[0].id
-                          "
+                          [value]="training ?? trainingTypes[0].id"
                           [data]="trainingTypes"
                           [valueField]="'id'"
                           [displayField]="'name'"
@@ -335,7 +331,7 @@
       class="w-100 h-100"
       id="container"
       [style.padding-right]="
-        nav.opened ? (selectedFile.id == 'main' ? '250px' : '350px') : '0'
+        nav.opened ? (selectedFile.id == 'main' ? '250px' : '250px') : '0'
       "
     >
       <div class="h-100 w-100" style="position: relative" #parent>
