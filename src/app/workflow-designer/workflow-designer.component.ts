@@ -22,7 +22,7 @@ import {
   StepsConfiguration,
   ToolboxConfiguration,
   ToolboxGroupConfiguration,
-} from 'vertical-ai-designer';
+} from 'sequential-workflow-designer';
 import { DesignerComponent } from 'vertical-ai-designer-angular';
 import { Dict, LoadService } from '../load.service';
 import { Executable } from '../models/workflow/executable.model';
@@ -355,6 +355,9 @@ export class WorkflowDesignerComponent
       return true;
     },
     isDraggable: (step, parentSequence) => {
+      return true;
+    },
+    isDuplicable: (step, parentSequence) => {
       return true;
     },
   };

@@ -3,7 +3,7 @@ import {
   BranchedStep,
   Sequence,
   SequentialStep,
-} from 'vertical-ai-designer';
+} from 'sequential-workflow-designer';
 import { LoadService } from './load.service';
 import { AIModel } from './models/workflow/ai-model.model';
 import { Executable } from './models/workflow/executable.model';
