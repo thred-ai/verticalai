@@ -12,7 +12,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -207,7 +206,6 @@ import {MatDividerModule} from '@angular/material/divider';
     MatToolbarModule,
     MatIconModule,
     AngularFireModule.initializeApp(environment.firebase),
-    NgbModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
@@ -229,7 +227,6 @@ import {MatDividerModule} from '@angular/material/divider';
     AngularFireFunctionsModule,
     LazyLoadImageModule,
     MatSidenavModule,
-    NgbModule,
     MatTabsModule,
     MatTableModule,
     MatCheckboxModule,
