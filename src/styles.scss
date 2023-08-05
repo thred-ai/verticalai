@@ -12,14 +12,18 @@
  */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "~@fortawesome/fontawesome-free/scss/solid.scss";
-@import "~@fortawesome/fontawesome-free/scss/regular.scss";
-@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+// @import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
+// @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+// @import "~@fortawesome/fontawesome-free/scss/solid.scss";
+// @import "~@fortawesome/fontawesome-free/scss/regular.scss";
+// @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 @import "~@ionic/core/css/ionic.bundle.css";
-@import '~codemirror/lib/codemirror';
-@import '~codemirror/theme/ayu-dark';
+// @import '~codemirror/lib/codemirror';
+// @import '~codemirror/theme/ayu-dark';
+
+mat-icon{
+  // font-size: 19px !important;
+}
 
 :root {
   --bs-blue: #0d6efd;

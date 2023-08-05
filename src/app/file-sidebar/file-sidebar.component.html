@@ -13,7 +13,7 @@
       class="my-auto"
       [matTooltip]="'Save \' ' + (executable?.name ?? 'Project') + ' \''"
     >
-      <button
+      <a
         class="btn primary-background rounded-10 shadow-0 fw-bold primary-text d-flex justify-content-start px-0 align-content-center py-2"
         (click)="saveLayout()"
       >
@@ -31,15 +31,15 @@
         </ng-container>
 
         <ng-template #buttonTitles>
-          <ng-container> {{ "Save" }}</ng-container>
-          <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+          <!-- <ng-container> {{ "Save" }}</ng-container> -->
+          <mat-icon class="fw-bold" style="aspect-ratio: 1;">
             cloud_upload
           </mat-icon>
         </ng-template>
-      </button>
+      </a>
     </div>
     <div class="ms-2 my-auto" [matTooltip]="'Browse Projects'">
-      <button
+      <a
         class="btn primary-background shadow-0 rounded-10 fw-bold primary-text d-flex justify-content-center py-2 px-0 align-content-center"
         [mdbPopover]="template2"
         placement="bottom"
@@ -47,7 +47,7 @@
         #folderToggle
       >
         <mat-icon class="fw-bold" style="aspect-ratio: 1"> folder </mat-icon>
-      </button>
+    </a>
     </div>
   </div>
 
