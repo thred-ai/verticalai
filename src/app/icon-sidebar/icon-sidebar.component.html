@@ -1,11 +1,10 @@
 <div
-  class="section-background h-100 d-flex flex-column justify-content-between align-items-center"
-  style="width: 70px !important; min-width: 70px !important"
+  class="primary-background-dark w-100 d-flex justify-content-between align-items-center"
+  [class.border-table-bottom]="theme == 'dark'"
+  style="height: 50px !important"
 >
-  <div
-    class="w-100 h-100 d-flex flex-column justify-content-start align-items-center"
-  >
-    <div class="w-100" style="aspect-ratio: 1">
+  <div class="w-100 h-100 d-flex justify-content-start align-items-center">
+    <div class="h-100" style="aspect-ratio: 1">
       <div
         class="w-100 proj mt-0 d-flex justify-content-center align-items-center"
         style="aspect-ratio: 1"
@@ -15,7 +14,7 @@
         *ngIf="loadedUser"
       >
         <div
-          class="rounded-circle mx-3 icons secondary-background shadow"
+          class="rounded-circle mx-3 icons secondary-background-dark shadow"
           style="
             border-style: solid;
             border-width: 0.1rem;
@@ -37,7 +36,7 @@
 
           <ng-template #template>
             <div
-              class="popover-body-padding primary-background border-table rounded text-center px-3"
+              class="popover-body-padding primary-background-dark border-table rounded text-center px-3"
               id="profile-menu"
               style="min-width: 250px; overflow: hidden"
               (clickOutside)="profileToggle.click()"
@@ -60,13 +59,13 @@
                 />
               </div>
               <span
-                class="fw-bolder primary-text px-2 d-none d-md-block"
+                class="fw-bolder primary-text-dark px-2 d-none d-md-block"
                 style="font-size: medium"
               >
                 {{ loadedUser.name ? loadedUser.name : "" }}
               </span>
               <b
-                class="fw-bold mb-4 primary-text text-center"
+                class="fw-bold mb-4 primary-text-dark text-center"
                 style="font-size: small"
                 >{{
                   loadedUser.email != null ? loadedUser.email : "Not Signed In"
@@ -85,7 +84,7 @@
                 </a>
                 <!-- <a
             role="button"
-            class="w-100 btn primary-text  secondary-background px-1 py-2 mt-2 fw-bold rounded"
+            class="w-100 btn primary-text-dark  secondary-background-dark px-1 py-2 mt-2 fw-bold rounded"
             style="font-size: small"
             (click)="editBilling()"
           >
@@ -93,7 +92,7 @@
           </a> -->
                 <a
                   role="button"
-                  class="w-100 btn primary-background primary-text px-1 py-2 mt-2 fw-bold rounded"
+                  class="w-100 btn primary-background-dark primary-text-dark px-1 py-2 mt-2 fw-bold rounded"
                   style="font-size: small"
                   (click)="root.signOut()"
                   *ngIf="loadedUser.email"
@@ -116,7 +115,7 @@
     role="button"
   >
     <div
-      class="mx-2 primary-text  fw-bold d-flex justify-content-center align-items-center"
+      class="mx-2 primary-text-dark  fw-bold d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
       [mdbPopover]="template2"
       placement="right"
@@ -133,13 +132,13 @@
       <ng-template #template2>
         <ng-container *ngIf="loadedUser && loadedUser.utils">
           <div
-            class="primary-background border-table text-start pt-3 rounded"
+            class="primary-background-dark border-table text-start pt-3 rounded"
             id="profile-menu"
             style="min-width: 350px; max-height: 300px; overflow-y: scroll"
             (clickOutside)="folderToggle.click()"
           >
             <div class="big-design-header px-3">
-              <b class="fw-bold primary-text  ">Projects</b>
+              <b class="fw-bold primary-text-dark  ">Projects</b>
               <p
                 class="rounded-circle fw-bold text-orange d-flex justify-content-center align-content-center"
                 style="aspect-ratio: 1"
@@ -176,18 +175,18 @@
                     />
                   </div>
                   <div class="text-start w-100 ms-2">
-                    <div class="w-100 ps-2 primary-text  text-start fw-normal">
+                    <div class="w-100 ps-2 primary-text-dark  text-start fw-normal">
                       {{ n.name }}
                     </div>
                     <div
-                      class="w-100 ps-2 primary-text  text-start fw-normal"
+                      class="w-100 ps-2 primary-text-dark  text-start fw-normal"
                       style="font-size: 10px"
                     >
                       {{ n.created | date }}
                     </div>
                   </div>
                 </div>
-                <mat-icon class="secondary-text"> chevron_right </mat-icon>
+                <mat-icon class="secondary-text-dark"> chevron_right </mat-icon>
               </div>
             </div>
           </div>
@@ -208,7 +207,7 @@
     [trigger]="'hover'"
   >
     <div
-      class="mx-2 primary-text  fw-bold d-flex justify-content-center align-items-center"
+      class="mx-2 primary-text-dark  fw-bold d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
     >
       <div class="w-100 h-100">
@@ -220,10 +219,8 @@
     </div>
   </div> -->
 
-    
-
     <div
-      class="w-100 proj{{
+      class="h-100 proj{{
         selectedIcon == 'prototype' ? '-select' : ''
       }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
@@ -233,7 +230,7 @@
       [matTooltipPosition]="'right'"
     >
       <div
-        class="mx-2 primary-text fw-bold d-flex justify-content-center align-items-center"
+        class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center"
         style="aspect-ratio: 1"
       >
         <div class="w-100 h-100">
@@ -243,7 +240,7 @@
     </div>
 
     <div
-      class="w-100 proj{{
+      class="h-100 proj{{
         selectedIcon == 'design' ? '-select' : ''
       }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
@@ -253,7 +250,7 @@
       [matTooltipPosition]="'right'"
     >
       <div
-        class="mx-2 primary-text fw-bold d-flex justify-content-center align-items-center mt-0"
+        class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center mt-0"
         style="aspect-ratio: 1"
         role="button"
       >
@@ -262,7 +259,7 @@
     </div>
 
     <div
-      class="w-100 proj{{
+      class="h-100 proj{{
         selectedIcon == 'database' ? '-select' : ''
       }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
@@ -272,7 +269,7 @@
       [matTooltipPosition]="'right'"
     >
       <div
-        class="mx-2 primary-text fw-bold d-flex justify-content-center align-items-center"
+        class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center"
         style="aspect-ratio: 1"
         role="button"
       >
@@ -291,7 +288,7 @@
       [matTooltipPosition]="'right'"
     >
       <div
-        class="mx-2 primary-text  fw-bold d-flex justify-content-center align-items-center mt-0"
+        class="mx-2 primary-text-dark  fw-bold d-flex justify-content-center align-items-center mt-0"
         style="aspect-ratio: 1"
         role="button"
       >
@@ -299,12 +296,12 @@
       </div>
     </div> -->
   </div>
-
+  <!-- 
   <div class="rounded-circle icons w-100 p-1" style="aspect-ratio: 1">
     <img
       class="px-2 h-100 logo"
       style="object-fit: contain"
       [src]="'assets/verticalai_short_' + theme + '.png'"
     />
-  </div>
+  </div> -->
 </div>

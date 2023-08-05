@@ -1,19 +1,210 @@
-<mat-sidenav-container
-  class="w-100 h-100"
-  [hasBackdrop]="false"
-  (backdropClick)="nav.close()"
-  *ngIf="selectedFile && this.workflow"
->
-  <mat-sidenav
-    class="primary-background border-0"
-    #nav
-    [position]="'end'"
-    [opened]="true"
-    (openedChange)="resize()"
-  >
+<div class="w-100 h-100 d-flex justify-content-between align-items-center" *ngIf="selectedFile">
+  <div class="w-100 h-100" id="container">
+    <div class="h-100 w-100" style="position: relative" #parent>
+      <!-- 
+        <div
+          class="position-absolute d-flex justify-content-between align-items-center m-3"
+          style="z-index: 55; left: 0; bottom: 0"
+        >
+          <div class="primary-background btn-shadow rounded-10 ps-2 pe-1 py-1">
+            <mat-slide-toggle
+              #gridModeSwitch
+              class="primary-text"
+              [ngModel]="showingGrid"
+              (ngModelChange)="showGrid = $event"
+              [matTooltip]="'Toggle Grid'"
+            ></mat-slide-toggle>
+          </div>
+        </div> -->
+
+      <ng-container *ngIf="workflow">
+        <sqd-designer
+          [theme]="theme"
+          [undoStackSize]="0"
+          [definition]="workflow.layout"
+          [toolboxConfiguration]="toolboxConfiguration"
+          [stepsConfiguration]="stepsConfiguration"
+          [areEditorsHidden]="true"
+          [controlBar]="true"
+          [stepEditor]="stepEditor"
+          [globalEditor]="globalEditor"
+          (onReady)="onDesignerReady($event)"
+          (onDefinitionChanged)="definitionChanged($event)"
+        >
+        </sqd-designer>
+
+        <ng-template #globalEditor let-editor> </ng-template>
+
+        <ng-template #stepEditor stepEditor let-editor>
+          <!-- <div
+            class="w-100"
+            style="overflow-y: scroll"
+            [style.height.px]="parent.clientHeight"
+          >
+            <ion-accordion-group
+              class="example-headers-align bg-transparent animate__animated animate__fadeIn"
+              [multiple]="true"
+              [value]="openLayouts"
+              *ngIf="workflow"
+              (ionChange)="setOpenLayouts($event)"
+              id="accordion"
+            >
+              <ion-accordion class="bg-transparent" value="general">
+                <ion-item slot="header" class="primary-text   " [color]="theme">
+                  <ion-label>General</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                  <div class="w-100 mb-3">
+                    <verticalai-text-field
+                      [title]="'Label'"
+                      [value]="editor.step.name"
+                      [bgColor]="'#1F1F1F'"
+                      [defaultValue]="editor.step.properties.defaultName"
+                      [placeholder]="'Task Label'"
+                      (changed)="
+                        editor.step.name = $event;
+                        editor.context.notifyNameChanged()
+                      "
+                    >
+                    </verticalai-text-field>
+                  </div>
+                </div>
+              </ion-accordion>
+    
+              <ng-container *ngIf="editor.step.type != 'break'">
+                <ion-accordion
+                  value="config"
+                  class="bg-transparent"
+                  *ngIf="editor.step.properties.type != 'model'"
+                >
+                  <ion-item slot="header" class="primary-text   " [color]="theme">
+                    <ion-label>Configuration</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ng-container *ngIf="editor.step.componentType == 'switch'">
+                      <div
+                        class="w-100 d-flex justify-content-between align-content-center mb-3 mt-4 text-white"
+                      >
+                        <p class="w-100">Branches</p>
+                        <mat-icon
+                          class="m-auto text-orange"
+                          role="button"
+                          (click)="newBranch(editor.step, editor.context, editor)"
+                        >
+                          add
+                        </mat-icon>
+                      </div>
+    
+                      <div
+                        *ngFor="
+                          let branch of (editor.step.branches | dictToArr) ?? [];
+                          index as i
+                        "
+                      >
+                        <div class="w-100 mb-3">
+                          <verticalai-text-field
+                            [value]="branch.name"
+                            [defaultValue]="'Option ' + (i + 1)"
+                            [placeholder]="'Branch Name'"
+                            [btn]="true"
+                            [simplify]="true"
+                            [btnIcon]="'close'"
+                            [bgColor]="'#1F1F1F'"
+                            (btnClicked)="
+                              deleteBranch(editor.step, editor.context, branch.name)
+                            "
+                            (changed)="
+                              isNameTaken($event, editor.step)
+                                ? null
+                                : changeBranchName(
+                                    $event,
+                                    editor.step,
+                                    i,
+                                    editor.context
+                                  )
+                            "
+                          >
+                          </verticalai-text-field>
+                        </div>
+                      </div>
+                    </ng-container>
+    
+                    <ng-container *ngIf="editor.step.componentType == 'container'">
+                      <div class="w-100 mb-3">
+                        <verticalai-text-field
+                          [title]="'Frequency'"
+                          [value]="editor.step.properties['frequency'] ?? 1"
+                          [type]="'number'"
+                          [defaultValue]="1"
+                          [placeholder]="'ex. 2'"
+                          [bgColor]="'#1F1F1F'"
+                          [range]="{ min: 1, max: 5 }"
+                          (changed)="
+                            editor.step.properties['frequency'] = $event;
+                            editor.context.notifyPropertiesChanged();
+                            saveLayout(); 
+                          "
+                          (refresh)="refreshStepEditor(editor.step)"
+                        >
+                        </verticalai-text-field>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-accordion>
+    
+                <ion-accordion value="advanced" class="bg-transparent">
+                  <ion-item slot="header" class="primary-text   " [color]="theme">
+                    <ion-label>Advanced</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ng-container
+                      *ngIf="
+                        editor.step.properties.type == 'model' ||
+                        editor.step.properties.type == 'web'
+                      "
+                    >
+                      <ng-container
+                        *ngIf="
+                          apiKeys[editor.step.id] ??
+                          { id: editor.step.id, key: '' } as apiKey
+                        "
+                      >
+                        <div
+                          class="w-100 mb-3"
+                          *ngIf="
+                            editor.step.properties.type == 'model'
+                              ? 'Model'
+                              : 'SerpApi' as prefix
+                          "
+                        >
+                          <verticalai-text-field
+                            [title]="prefix + ' API Key'"
+                            [value]="apiKey.key"
+                            [bgColor]="'#1F1F1F'"
+                            [type]="'text'"
+                            [defaultValue]="''"
+                            [placeholder]="'API Key'"
+                            (refresh)="refreshStepEditor(editor.step)"
+                            (changed)="saveAPIKey(editor.step.id, $event)"
+                          >
+                          </verticalai-text-field>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+    
+                  </div>
+                </ion-accordion>
+              </ng-container>
+          </ion-accordion-group>
+          </div> -->
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="h-100 border-table-left" style="width: 300px">
     <div
-      class="primary-background h-100"
-      style="width: 250px"
+      class="primary-background h-100 w-100"
       [hidden]="selectedFile && selectedFile.id != 'main'"
     >
       <!-- [class.rightBarNoExtend]="selectedFile && selectedFile.id == 'main'" -->
@@ -25,7 +216,7 @@
           class="w-100 p-3 pb-0 pt-4 d-flex justify-content-start align-items-center"
         >
           <span class="fw-bold primary-text">
-            Controllers <br /><span class="fw-normal" style="font-size: x-small"
+            Components <br /><span class="fw-normal" style="font-size: x-small"
               >Drag and drop</span
             ></span
           >
@@ -40,8 +231,7 @@
     </div>
 
     <div
-      class="primary-background h-100"
-      style="width: 250px"
+      class="primary-background h-100 w-10o"
       [hidden]="selectedFile && selectedFile.id == 'main'"
     >
       <!-- [class.rightBarExtend]="selectedFile && selectedFile.id != 'main'" -->
@@ -325,233 +515,8 @@
         </mat-tab>
       </mat-tab-group>
     </div>
-  </mat-sidenav>
-  <mat-sidenav-content class="secondary-background">
-    <div
-      class="w-100 h-100"
-      id="container"
-      [style.padding-right]="
-        nav.opened ? (selectedFile.id == 'main' ? '250px' : '250px') : '0'
-      "
-    >
-      <div class="h-100 w-100" style="position: relative" #parent>
-        <div
-          class="position-absolute d-flex justify-content-between align-items-center m-3"
-          style="z-index: 55; right: 0; top: 0"
-        >
-          <a
-            class="btn primary-background rounded-10 border-0 fw-bold primary-text d-flex justify-content-center p-1 align-content-center"
-            (click)="nav.toggle(); setToolbarLoc()"
-            [matTooltip]="'Toggle Controller Menu'"
-            [matTooltipPosition]="'left'"
-          >
-            <mat-icon class="fw-bold" style="aspect-ratio: 1">
-              {{ nav.opened ? "close" : "add" }}
-            </mat-icon>
-          </a>
-        </div>
-
-        <div
-          class="position-absolute d-flex justify-content-between align-items-center m-3"
-          style="z-index: 55; left: 0; bottom: 0"
-        >
-          <div class="primary-background btn-shadow rounded-10 px-2 py-1">
-            <mat-slide-toggle
-              #gridModeSwitch
-              class="primary-text"
-              [ngModel]="showingGrid"
-              (ngModelChange)="showGrid = $event"
-              [matTooltip]="'Toggle Grid'"
-            ></mat-slide-toggle>
-          </div>
-        </div>
-
-        <ng-container *ngIf="workflow">
-          <sqd-designer
-            [theme]="theme"
-            [undoStackSize]="0"
-            [definition]="workflow.layout"
-            [toolboxConfiguration]="toolboxConfiguration"
-            [stepsConfiguration]="stepsConfiguration"
-            [areEditorsHidden]="true"
-            [controlBar]="true"
-            [stepEditor]="stepEditor"
-            [globalEditor]="globalEditor"
-            (onReady)="onDesignerReady($event)"
-            (onDefinitionChanged)="definitionChanged($event)"
-          >
-          </sqd-designer>
-
-          <ng-template #globalEditor let-editor> </ng-template>
-
-          <ng-template #stepEditor stepEditor let-editor>
-            <!-- <div
-            class="w-100"
-            style="overflow-y: scroll"
-            [style.height.px]="parent.clientHeight"
-          >
-            <ion-accordion-group
-              class="example-headers-align bg-transparent animate__animated animate__fadeIn"
-              [multiple]="true"
-              [value]="openLayouts"
-              *ngIf="workflow"
-              (ionChange)="setOpenLayouts($event)"
-              id="accordion"
-            >
-              <ion-accordion class="bg-transparent" value="general">
-                <ion-item slot="header" class="primary-text   " [color]="theme">
-                  <ion-label>General</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                  <div class="w-100 mb-3">
-                    <verticalai-text-field
-                      [title]="'Label'"
-                      [value]="editor.step.name"
-                      [bgColor]="'#1F1F1F'"
-                      [defaultValue]="editor.step.properties.defaultName"
-                      [placeholder]="'Task Label'"
-                      (changed)="
-                        editor.step.name = $event;
-                        editor.context.notifyNameChanged()
-                      "
-                    >
-                    </verticalai-text-field>
-                  </div>
-                </div>
-              </ion-accordion>
-    
-              <ng-container *ngIf="editor.step.type != 'break'">
-                <ion-accordion
-                  value="config"
-                  class="bg-transparent"
-                  *ngIf="editor.step.properties.type != 'model'"
-                >
-                  <ion-item slot="header" class="primary-text   " [color]="theme">
-                    <ion-label>Configuration</ion-label>
-                  </ion-item>
-                  <div class="ion-padding" slot="content">
-                    <ng-container *ngIf="editor.step.componentType == 'switch'">
-                      <div
-                        class="w-100 d-flex justify-content-between align-content-center mb-3 mt-4 text-white"
-                      >
-                        <p class="w-100">Branches</p>
-                        <mat-icon
-                          class="m-auto text-orange"
-                          role="button"
-                          (click)="newBranch(editor.step, editor.context, editor)"
-                        >
-                          add
-                        </mat-icon>
-                      </div>
-    
-                      <div
-                        *ngFor="
-                          let branch of (editor.step.branches | dictToArr) ?? [];
-                          index as i
-                        "
-                      >
-                        <div class="w-100 mb-3">
-                          <verticalai-text-field
-                            [value]="branch.name"
-                            [defaultValue]="'Option ' + (i + 1)"
-                            [placeholder]="'Branch Name'"
-                            [btn]="true"
-                            [simplify]="true"
-                            [btnIcon]="'close'"
-                            [bgColor]="'#1F1F1F'"
-                            (btnClicked)="
-                              deleteBranch(editor.step, editor.context, branch.name)
-                            "
-                            (changed)="
-                              isNameTaken($event, editor.step)
-                                ? null
-                                : changeBranchName(
-                                    $event,
-                                    editor.step,
-                                    i,
-                                    editor.context
-                                  )
-                            "
-                          >
-                          </verticalai-text-field>
-                        </div>
-                      </div>
-                    </ng-container>
-    
-                    <ng-container *ngIf="editor.step.componentType == 'container'">
-                      <div class="w-100 mb-3">
-                        <verticalai-text-field
-                          [title]="'Frequency'"
-                          [value]="editor.step.properties['frequency'] ?? 1"
-                          [type]="'number'"
-                          [defaultValue]="1"
-                          [placeholder]="'ex. 2'"
-                          [bgColor]="'#1F1F1F'"
-                          [range]="{ min: 1, max: 5 }"
-                          (changed)="
-                            editor.step.properties['frequency'] = $event;
-                            editor.context.notifyPropertiesChanged();
-                            saveLayout(); 
-                          "
-                          (refresh)="refreshStepEditor(editor.step)"
-                        >
-                        </verticalai-text-field>
-                      </div>
-                    </ng-container>
-                  </div>
-                </ion-accordion>
-    
-                <ion-accordion value="advanced" class="bg-transparent">
-                  <ion-item slot="header" class="primary-text   " [color]="theme">
-                    <ion-label>Advanced</ion-label>
-                  </ion-item>
-                  <div class="ion-padding" slot="content">
-                    <ng-container
-                      *ngIf="
-                        editor.step.properties.type == 'model' ||
-                        editor.step.properties.type == 'web'
-                      "
-                    >
-                      <ng-container
-                        *ngIf="
-                          apiKeys[editor.step.id] ??
-                          { id: editor.step.id, key: '' } as apiKey
-                        "
-                      >
-                        <div
-                          class="w-100 mb-3"
-                          *ngIf="
-                            editor.step.properties.type == 'model'
-                              ? 'Model'
-                              : 'SerpApi' as prefix
-                          "
-                        >
-                          <verticalai-text-field
-                            [title]="prefix + ' API Key'"
-                            [value]="apiKey.key"
-                            [bgColor]="'#1F1F1F'"
-                            [type]="'text'"
-                            [defaultValue]="''"
-                            [placeholder]="'API Key'"
-                            (refresh)="refreshStepEditor(editor.step)"
-                            (changed)="saveAPIKey(editor.step.id, $event)"
-                          >
-                          </verticalai-text-field>
-                        </div>
-                      </ng-container>
-                    </ng-container>
-    
-                  </div>
-                </ion-accordion>
-              </ng-container>
-          </ion-accordion-group>
-          </div> -->
-          </ng-template>
-        </ng-container>
-      </div>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</div>
 
 <div
   style="visibility: hidden; position: fixed"

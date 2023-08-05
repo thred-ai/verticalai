@@ -256,22 +256,15 @@ export class WorkflowDesignerComponent
     this.setIcon();
   }
 
+  off = "M464.75 400.25 434.75 370.25V322.75H387.25L357.25 292.75H434.75V198.25H344.25V279.75L314.25 249.75V198.25H262.75L232.75 168.25H314.25V77.75H219.25V154.75L189.25 124.75V77.75H142.25L112.25 47.75H434.75Q446.25 47.75 455.5 57T464.75 77.75V400.25ZM344.25 168.25H434.75V77.75H344.25V168.25ZM475.75 496.25 426.75 447.75H94.75Q83.25 447.75 74 438.5T64.75 417.75V85.25L15.25 36.25 36.75 15.75 496.75 475.25 475.75 496.25ZM344.25 417.75H396.75L344.25 365.25V417.75ZM219.25 292.75H272.75L219.25 240.25V292.75ZM219.25 417.75H314.25V334.75L301.75 322.75H219.25V417.75ZM94.75 168.25H147.25L94.75 114.75V168.25ZM94.75 292.75H189.25V210.25L177.25 198.25H94.75V292.75ZM189.25 417.75V322.75H94.75V417.75H189.25Z"
+  on = "M106 436q-12 0-21-9t-9-21v-300q0-12 9-21t21-9h300q12 0 21 9t9 21v300q0 12-9 21t-21 9H106Zm0-30h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80ZM106 296h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80ZM106 186h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80Z"
+
+
   setIcon() {
     if (this.element) {
-      const targetSpan: HTMLElement = this.element.nativeElement.querySelector(
-        '.mat-slide-toggle-thumb'
-      );
-      while (targetSpan.firstChild) {
-        targetSpan.firstChild.remove();
-      }
-      const elem = this.renderer.createElement('mat-icon');
-      const icon = this.showingGrid ? 'grid_on' : 'grid_off';
-      elem.setAttribute(
-        'class',
-        'mat-icon notranslate material-icons mat-icon-no-color light-mode-switch-icon rounded-circle'
-      );
-      elem.textContent = icon;
-      targetSpan.appendChild(elem);
+      
+      this.element.nativeElement.querySelector('.mdc-switch__icon--on').firstChild.setAttribute('d', this.on);
+      this.element.nativeElement.querySelector('.mdc-switch__icon--off').firstChild.setAttribute('d', this.off);
     }
   }
 
@@ -284,8 +277,10 @@ export class WorkflowDesignerComponent
   setToolbarLoc() {
     setTimeout(() => {
       var content = document.getElementsByClassName(
-        'sqd-scrollbox'
+        'sqd-scrollbox-body'
       )[0] as HTMLDivElement;
+
+      
       var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
 
       if (content && parent) {
@@ -375,6 +370,7 @@ export class WorkflowDesignerComponent
 
   public ngOnInit() {
     this.shouldRefresh = true;
+    this.showGrid = false
     this.workflowComponent.workflow.subscribe((w) => {
       if (w && this.shouldRefresh) {
         this.workflow = undefined;
