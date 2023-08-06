@@ -5,6 +5,7 @@
             [selectedIcon]="selectedIcon"
             [theme]="theme"
             (selectedIconChanged)="selectFile(openStep.value!.id, $event)"
+            (openPrototype)="openPrototype($event)"
           ></app-icon-sidebar>
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
@@ -51,12 +52,12 @@
                 </verticalai-workflow-designer>
               </ng-container>
 
-              <div
+              <!-- <div
                 class="w-100 h-100 section-background"
                 [hidden]="selectedIcon != 'prototype'"
               >
                 <app-terminal [model]="workflow.value"></app-terminal>
-              </div>
+              </div> -->
 
               <ng-container *ngIf="selectedIcon == 'upload'">
                 <app-coming-soon [title]="'Upload Project'"> </app-coming-soon>

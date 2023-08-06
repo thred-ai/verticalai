@@ -71,11 +71,13 @@
     </div>
 
     <div
-      class="h-100 proj mt-0 d-flex justify-content-center align-items-center"
+      class="h-100 proj{{
+        showing ? '-select' : ''
+      }} mt-0 d-flex justify-content-center align-items-center"
       style="aspect-ratio: 1"
       [matTooltip]="'Components'"
       [matTooltipPosition]="'below'"
-      (click)="sets = {}"
+      (click)="sets = {}; showing = true"
     >
       <div
         class="w-100 d-fflex justify-content-center align-items-center"
@@ -95,112 +97,6 @@
     </div>
 
     <div class="w-100 h-100 d-flex justify-content-end align-items-center">
-      <div class="h-100" style="aspect-ratio: 1">
-        <div
-          class="w-100 proj mt-0 d-flex justify-content-center align-items-center"
-          style="aspect-ratio: 1"
-          [matTooltip]="'View Profile'"
-          [matTooltipPosition]="'right'"
-          role="button"
-          *ngIf="loadedUser"
-        >
-          <div
-            class="rounded-circle mx-3 icons secondary-background-dark shadow"
-            style="
-              border-style: solid;
-              border-width: 0.1rem;
-              border-color: rgb(117, 117, 117);
-              height: fit-content;
-            "
-            [mdbPopover]="template"
-            placement="right"
-            [trigger]="'click'"
-            id="profile-toggle"
-            #profileToggle
-          >
-            <img
-              *ngIf="loadedUser.url"
-              class="w-100 p-0 m-auto rounded-circle"
-              style="object-fit: cover; aspect-ratio: 1"
-              [src]="loadedUser.url"
-            />
-
-            <ng-template #template>
-              <div
-                class="popover-body-padding primary-background-dark border-table rounded text-center px-3"
-                id="profile-menu"
-                style="min-width: 250px; overflow: hidden"
-                (clickOutside)="profileToggle.click()"
-              >
-                <div
-                  class="rounded-circle icons bg-pink mx-auto mb-4"
-                  style="
-                    border-style: solid;
-                    border-width: 0.2rem;
-                    border-color: rgb(255, 232, 248);
-                    width: fit-content;
-                    height: 80px;
-                  "
-                >
-                  <img
-                    *ngIf="
-                      loadedUser.url != null && loadedUser.url != undefined
-                    "
-                    class="h-100 p-0 m-auto rounded-circle"
-                    style="object-fit: contain; aspect-ratio: 1"
-                    [src]="loadedUser.url"
-                  />
-                </div>
-                <span
-                  class="fw-bolder primary-text-dark px-2 d-none d-md-block"
-                  style="font-size: medium"
-                >
-                  {{ loadedUser.name ? loadedUser.name : "" }}
-                </span>
-                <b
-                  class="fw-bold mb-4 primary-text-dark text-center"
-                  style="font-size: small"
-                  >{{
-                    loadedUser.email != null
-                      ? loadedUser.email
-                      : "Not Signed In"
-                  }}</b
-                >
-                <br />
-                <div class="w-100 text-start mt-3">
-                  <a
-                    role="button"
-                    class="w-100 btn bg-orange text-white px-1 py-2 fw-bold rounded"
-                    style="font-size: small"
-                    (click)="workflowComponent.openProfileSettings(loadedUser)"
-                    *ngIf="loadedUser.email != null"
-                  >
-                    Edit Profile
-                  </a>
-                  <!-- <a
-            role="button"
-            class="w-100 btn primary-text-dark  secondary-background-dark px-1 py-2 mt-2 fw-bold rounded"
-            style="font-size: small"
-            (click)="editBilling()"
-          >
-            View Billing
-          </a> -->
-                  <a
-                    role="button"
-                    class="w-100 btn primary-background-dark primary-text-dark px-1 py-2 mt-2 fw-bold rounded"
-                    style="font-size: small"
-                    (click)="root.signOut()"
-                    *ngIf="loadedUser.email"
-                  >
-                    Sign Out
-                  </a>
-                </div>
-              </div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-
       <!-- <div
     class="w-100 proj mt-0 d-flex justify-content-center align-items-center"
     style="aspect-ratio: 1"
@@ -320,9 +216,9 @@
         }} mt-0 d-flex justify-content-center align-items-center"
         style="aspect-ratio: 1"
         role="button"
-        (click)="selectedIconChanged.emit('prototype')"
+        (click)="openPrototype.emit('window')"
         [matTooltip]="'Prototype'"
-        [matTooltipPosition]="'right'"
+        [matTooltipPosition]="'below'"
       >
         <div
           class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center"
@@ -334,7 +230,112 @@
         </div>
       </div>
 
-      <div
+      <div class="h-100" style="aspect-ratio: 1">
+        <div
+          class="w-100 proj p-3 d-flex justify-content-center align-items-center"
+          style="aspect-ratio: 1"
+          [matTooltip]="'View Profile'"
+          [matTooltipPosition]="'below'"
+          role="button"
+          *ngIf="loadedUser"
+        >
+          <div
+            class="rounded-circle icons secondary-background-dark shadow w-100 h-100"
+            style="
+              border-style: solid;
+              border-width: 0.1rem;
+              border-color: rgb(117, 117, 117);
+            "
+            [mdbPopover]="template"
+            placement="left"
+            [trigger]="'click'"
+            id="profile-toggle"
+            #profileToggle
+          >
+            <img
+              *ngIf="loadedUser.url"
+              class="w-100 p-0 m-0 rounded-circle"
+              style="object-fit: cover; aspect-ratio: 1"
+              [src]="loadedUser.url"
+            />
+
+            <ng-template #template>
+              <div
+                class="popover-body-padding secondary-background-dark rounded text-center px-3"
+                id="profile-menu"
+                style="min-width: 250px; overflow: hidden"
+                (clickOutside)="profileToggle.click()"
+              >
+                <div
+                  class="rounded-circle icons bg-pink mx-auto mb-4"
+                  style="
+                    border-style: solid;
+                    border-width: 0.2rem;
+                    border-color: rgb(255, 232, 248);
+                    width: fit-content;
+                    height: 80px;
+                  "
+                >
+                  <img
+                    *ngIf="
+                      loadedUser.url != null && loadedUser.url != undefined
+                    "
+                    class="h-100 p-0 m-auto rounded-circle"
+                    style="object-fit: contain; aspect-ratio: 1"
+                    [src]="loadedUser.url"
+                  />
+                </div>
+                <span
+                  class="fw-bolder primary-text-dark px-2 d-none d-md-block"
+                  style="font-size: medium"
+                >
+                  {{ loadedUser.name ? loadedUser.name : "" }}
+                </span>
+                <b
+                  class="fw-bold mb-4 primary-text-dark text-center"
+                  style="font-size: small"
+                  >{{
+                    loadedUser.email != null
+                      ? loadedUser.email
+                      : "Not Signed In"
+                  }}</b
+                >
+                <br />
+                <div class="w-100 text-start mt-3">
+                  <a
+                    role="button"
+                    class="w-100 btn bg-orange text-white px-1 py-2 fw-bold rounded"
+                    style="font-size: small"
+                    (click)="workflowComponent.openProfileSettings(loadedUser)"
+                    *ngIf="loadedUser.email != null"
+                  >
+                    Edit Profile
+                  </a>
+                  <!-- <a
+            role="button"
+            class="w-100 btn primary-text-dark  secondary-background-dark px-1 py-2 mt-2 fw-bold rounded"
+            style="font-size: small"
+            (click)="editBilling()"
+          >
+            View Billing
+          </a> -->
+                  <a
+                    role="button"
+                    class="w-100 btn primary-background-dark primary-text-dark px-1 py-2 mt-2 fw-bold rounded"
+                    style="font-size: small"
+                    (click)="root.signOut()"
+                    *ngIf="loadedUser.email"
+                  >
+                    Sign Out
+                  </a>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div
         class="h-100 proj{{
           selectedIcon == 'design' ? '-select' : ''
         }} mt-0 d-flex justify-content-center align-items-center"
@@ -342,7 +343,7 @@
         role="button"
         (click)="selectedIconChanged.emit('design')"
         [matTooltip]="'Design'"
-        [matTooltipPosition]="'right'"
+        [matTooltipPosition]="'below'"
       >
         <div
           class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center mt-0"
@@ -370,7 +371,7 @@
         >
           <mat-icon class="fw-bold">storage</mat-icon>
         </div>
-      </div>
+      </div> -->
 
       <!-- <div
       class="w-100 proj{{
@@ -404,13 +405,13 @@
 
 <ng-template #template2>
   <div
-    class="primary-background text-start rounded d-flex justify-content-center align-items-center flex-column"
+    class="secondary-background-dark text-start rounded d-flex justify-content-center align-items-center flex-column"
     id="profile-menu"
     style="min-width: 300px; max-height: 700px"
-    (clickOutside)="folderToggle.click()"
+    (clickOutside)="folderToggle.click(); showing = false"
   >
     <div class="big-design-header p-3 pb-3">
-      <b class="fw-bold primary-text">Components</b>
+      <b class="fw-bold primary-text-dark">Components</b>
       <!-- <p
           class="rounded-circle fw-bold primary-text d-flex justify-content-center align-content-center"
           style="aspect-ratio: 1"
@@ -426,7 +427,12 @@
       #toolboxGroup
     >
       <ng-container *ngFor="let tool of items">
-        <div class="w-100 my-2 px-3 tool" role="button" style="height: 40px" #elem>
+        <div
+          class="w-100 my-2 px-3 proj"
+          role="button"
+          style="height: 40px"
+          #elem
+        >
           <ng-container
             *ngIf="
               !sets[tool.type]
@@ -439,10 +445,10 @@
             >
               <img
                 [src]="images[tool.type]"
-                class="h-100 rounded border-table"
+                class="h-100 rounded border-table-dark"
                 style="aspect-ratio: 1"
               />
-              <span class="ms-3 w-100 text-start">{{ tool.name }}</span>
+              <span class="ms-3 w-100 primary-text-dark">{{ tool.name }}</span>
             </div>
           </ng-container>
         </div>

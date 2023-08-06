@@ -137,6 +137,7 @@ import { DatabaseComponent } from './database/database.component';
 import { CollectionInfoComponent } from './collection-info/collection-info.component';
 import { TextAreaRenderPipe } from './text-area-render.pipe';
 import {MatDividerModule} from '@angular/material/divider';
+import { ResizableModule } from 'angular-resizable-element';
 
 @NgModule({
   declarations: [
@@ -216,6 +217,7 @@ import {MatDividerModule} from '@angular/material/divider';
     MatExpansionModule,
     HttpClientModule,
     FormsModule,
+    ResizableModule,
     MatSlideToggleModule,
     MatButtonToggleModule,
     MatSliderModule,

@@ -40,6 +40,10 @@ export class IconSidebarComponent implements OnInit {
   @Output() selectedIconChanged = new EventEmitter<string>();
   @Input() theme: 'light' | 'dark' = 'light';
 
+
+  @Output() openPrototype = new EventEmitter<string>();
+
+
   expandedProjects = true;
 
   zoomIn() {
@@ -69,6 +73,7 @@ export class IconSidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.showGrid = false;
     this.loadService.loadedUser.subscribe((l) => {
       if (l) {
         this.loadedUser = l;
@@ -105,37 +110,18 @@ export class IconSidebarComponent implements OnInit {
 
   sets: Dict<any> = {};
 
+  showing = false
+
   setToolbarLoc(
     parent?: HTMLElement,
     template?: HTMLElement,
     step?: StepDefinition,
     setting = true
   ) {
-    if (setting && parent && template && step) {
+    if (parent && template && step) {
       this.sets[step.type] = true;
       setTimeout(() => {
-        // var content = document.getElementsByClassName(
-        //   'sqd-scrollbox-body'
-        // )[0] as HTMLDivElement;
-
-        // var parent = document.getElementById('toolboxGroup') as HTMLDivElement;
-
-        // if (content && parent) {
-        //   let f = $('.sqd-scrollbox-body').clone(true, true)[0]
-
-        //   if (f.eventListeners){
-        //     let listeners = f.eventListeners()
-        //     console.log(listeners)
-        //   }
-
-        //   console.log(f)
-        //   console.log(f.eventListeners)
-        //   $('.sqd-scrollbox-body').clone(true, true).appendTo('#toolboxGroup');
-
-        //   window.dispatchEvent(new Event('resize'));
-        // }
-
-        let item = ToolboxItem.create(
+        ToolboxItem.create(
           parent,
           template,
           step,
@@ -144,11 +130,8 @@ export class IconSidebarComponent implements OnInit {
       }, 0);
 
       return this.sets[step.type];
-    } else {
-      setTimeout(() => {
-        this.sets = {};
-      }, 0);
-      return false;
     }
+
+    return undefined;
   }
 }

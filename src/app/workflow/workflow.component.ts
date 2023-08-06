@@ -30,6 +30,7 @@ import * as verticalkit from 'verticalkit/compiled';
 import { HttpClient } from '@angular/common/http';
 import { SettingsComponent } from '../settings/settings.component';
 import { WorkflowDesignerComponent } from '../workflow-designer/workflow-designer.component';
+import { ApiTesterComponent } from '../api-tester/api-tester.component';
 
 @Component({
   selector: 'app-workflow',
@@ -129,7 +130,7 @@ export class WorkflowComponent implements OnInit {
         new Date().getTime(),
         0,
         '',
-        'https://storage.googleapis.com/thred-protocol.appspot.com/resources/default_smartutil_app.png',
+        'https://storage.googleapis.com/thred-protocol.appspot.com/resources/default_smartutil_app.png'
       );
     }
 
@@ -205,7 +206,7 @@ export class WorkflowComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private httpClient: HttpClient,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {}
 
   async ngOnInit() {
@@ -228,7 +229,7 @@ export class WorkflowComponent implements OnInit {
         });
 
         this.classes[id] = { name, path, id, text };
-      }),
+      })
     );
 
     this.loadService.loadedUser.subscribe((user) => {
@@ -252,7 +253,7 @@ export class WorkflowComponent implements OnInit {
               file ?? 'main',
               selectedModule,
               this.activeWorkflow,
-              false,
+              false
             );
 
             if (!this.openStep.value) {
@@ -260,7 +261,7 @@ export class WorkflowComponent implements OnInit {
                 'main',
                 selectedModule,
                 this.activeWorkflow,
-                true,
+                true
               );
             }
 
@@ -308,7 +309,7 @@ export class WorkflowComponent implements OnInit {
             metaType: 'main',
             img: 'assets/main.png',
           }),
-          { type: 'folder', img: w.displayUrl },
+          { type: 'folder', img: w.displayUrl }
         ),
       ]);
     }
@@ -337,7 +338,7 @@ export class WorkflowComponent implements OnInit {
           (field) =>
             this.workflow.value![field] == undefined ||
             this.workflow.value![field] == null ||
-            this.workflow.value![field]?.trim() == '',
+            this.workflow.value![field]?.trim() == ''
         ).length == 0
       ); //&& validArray;
     }
@@ -370,6 +371,35 @@ export class WorkflowComponent implements OnInit {
     }
   }
 
+  openPrototype(mode: string = 'window') {
+    if (mode == 'window') {
+      let ref = this.dialog.open(ApiTesterComponent, {
+    
+        panelClass: 'prototype-dialog',
+        hasBackdrop: false,
+        data: {
+          user: this.dev,
+          workflow: this.workflow.value,
+
+        },
+      });
+
+      ref.afterClosed().subscribe(async (val) => {
+        if (val && val != '' && val != '0' && val.dev) {
+          // let img = val.img as File;
+
+          // await this.loadService.saveUserInfo(
+          //   val.dev,
+          //   img,
+          //   img != undefined,
+          //   (result) => {}
+          // );
+        }
+      });
+    } else {
+    }
+  }
+
   async fillExecutable(executable: Executable) {
     const exec = executable;
 
@@ -383,7 +413,7 @@ export class WorkflowComponent implements OnInit {
             s.properties['source'] = this.defaultCode(s.type);
           }
         }
-      }),
+      })
     );
 
     return exec;
@@ -410,7 +440,7 @@ export class WorkflowComponent implements OnInit {
           val.dev,
           img,
           img != undefined,
-          (result) => {},
+          (result) => {}
         );
       }
     });
@@ -429,7 +459,7 @@ export class WorkflowComponent implements OnInit {
           controllerId != 'main'
             ? this.findStep(
                 controllerId,
-                this.workflow.value?.layout.sequence ?? [],
+                this.workflow.value?.layout.sequence ?? []
               )
             : undefined,
         workflow: this.workflow.value,
@@ -488,7 +518,7 @@ export class WorkflowComponent implements OnInit {
   async publish(
     workflow = this.workflow.value,
     close = false,
-    callback?: (result?: Executable) => any,
+    callback?: (result?: Executable) => any
   ) {
     const w = workflow;
     if (w) {
@@ -546,7 +576,7 @@ export class WorkflowComponent implements OnInit {
 
   updateWorkflows(workflow = this.workflow.value) {
     let dev = JSON.parse(
-      JSON.stringify(this.loadService.loadedUser.value),
+      JSON.stringify(this.loadService.loadedUser.value)
     ) as Developer;
 
     if (dev && dev.utils && workflow) {
@@ -609,8 +639,8 @@ export class WorkflowComponent implements OnInit {
               'category',
               this.analyzeTasks(sequence),
               undefined,
-              { type: 'folder', img: 'assets/branch.png' },
-            ),
+              { type: 'folder', img: 'assets/branch.png' }
+            )
           );
         });
 
@@ -624,7 +654,7 @@ export class WorkflowComponent implements OnInit {
               (switchTask.properties['fileName'] as string) ??
                 this.jsFormattedName(
                   switchTask.name,
-                  sameNames[switchTask.name],
+                  sameNames[switchTask.name]
                 ),
               switchTask.id + '',
               'model',
@@ -634,10 +664,10 @@ export class WorkflowComponent implements OnInit {
                 type: 'model',
                 metaType: switchTask.type,
                 img: 'assets/switch2.png',
-              },
+              }
             ),
-            { type: 'switch', img: 'assets/switch.png' },
-          ),
+            { type: 'switch', img: 'assets/switch.png' }
+          )
         );
       } else if (task.componentType == 'container') {
         let loopTask = task as SequentialStep;
@@ -658,10 +688,10 @@ export class WorkflowComponent implements OnInit {
                 type: 'container',
                 metaType: loopTask.type,
                 img: 'assets/container2.png',
-              },
+              }
             ),
-            { type: 'folder', img: 'assets/container.png' },
-          ),
+            { type: 'folder', img: 'assets/container.png' }
+          )
         );
       } else {
         objects.push(
@@ -677,10 +707,10 @@ export class WorkflowComponent implements OnInit {
               metaType: task.type,
               img: this.loadService.iconUrlForController(
                 task.componentType,
-                task.type,
+                task.type
               ),
-            },
-          ),
+            }
+          )
         );
       }
     });
@@ -698,7 +728,7 @@ export class WorkflowComponent implements OnInit {
     fileId: string | undefined,
     selectedModule: string | undefined,
     workflow = this.workflow.value,
-    update = true,
+    update = true
   ) {
     if (workflow && fileId && selectedModule) {
       if (this.openStep.value?.id != fileId) {
