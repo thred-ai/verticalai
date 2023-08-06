@@ -22,7 +22,7 @@ import {
   StepsConfiguration,
   ToolboxConfiguration,
   ToolboxGroupConfiguration,
-} from 'sequential-workflow-designer';
+} from 'verticalai-workflow-designer';
 import { DesignerComponent } from 'vertical-ai-designer-angular';
 import { Dict, LoadService } from '../load.service';
 import { Executable } from '../models/workflow/executable.model';
