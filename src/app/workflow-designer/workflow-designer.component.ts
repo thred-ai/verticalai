@@ -41,6 +41,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import { SettingsComponent } from '../settings/settings.component';
 import { DatabaseComponent } from '../database/database.component';
+import { DesignerService } from '../designer.service';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -67,7 +68,6 @@ export class WorkflowDesignerComponent
 
   //
   @Input() models: Dict<AIModelType> = {};
-  flowModels: Dict<AIModelType> = {};
 
   trainingTypes = [
     {
@@ -82,115 +82,6 @@ export class WorkflowDesignerComponent
 
   // @Input() apiRequests: Dict<APIRequest> = {};
   @Input() theme: 'light' | 'dark' = 'light';
-
-  get pluginGroup(): ToolboxGroupConfiguration {
-    return {
-      name: 'Plugins',
-      steps: [
-        {
-          componentType: 'task',
-          name: 'Twilio',
-          properties: {
-            defaultName: 'Twilio',
-          },
-          type: 'twilio',
-        },
-      ],
-    };
-  }
-
-  get flowGroup(): ToolboxGroupConfiguration {
-    return {
-      name: 'Vertical AI',
-      steps: [
-        {
-          componentType: 'switch',
-          name: 'Decision',
-          properties: {
-            defaultName: 'Decision',
-            default: 'Option 1',
-            order: {
-              'Option 1': 0,
-              'Option 2': 1,
-            },
-            branches: {
-              'Option 1': { description: '' },
-              'Option 2': { description: '' },
-            },
-          },
-          type: 'switch',
-          id: 'decision',
-          branches: {
-            'Option 1': [],
-            'Option 2': [],
-          },
-        } as Step,
-        {
-          componentType: 'container',
-          name: 'Group',
-          properties: {
-            defaultName: 'Group',
-            frequency: 1,
-          },
-          type: 'container',
-          id: 'loop',
-          sequence: [],
-        } as Step,
-        // {
-        //   componentType: 'task',
-        //   name: 'Break',
-        //   properties: {
-        //     defaultName: 'Break',
-        //     type: 'break',
-        //   },
-        //   type: 'break',
-        //   id: 'break',
-        //   sequence: [],
-        // } as Step,
-      ],
-    };
-  }
-
-  get taskGroup(): ToolboxGroupConfiguration {
-    return {
-      name: 'Tasks',
-      steps: [
-        {
-          componentType: 'task',
-          name: 'Custom Agent',
-          properties: {
-            defaultName: 'Custom Agent',
-            type: 'api',
-          },
-          type: 'api',
-          id: 'api',
-          sequence: [],
-        } as Step,
-        {
-          componentType: 'task',
-          name: 'Web Agent',
-          properties: {
-            defaultName: 'Web Agent',
-            type: 'web',
-          },
-          type: 'web',
-          id: 'web',
-          sequence: [],
-        } as Step,
-        {
-          componentType: 'task',
-          name: 'Script Agent',
-          properties: {
-            defaultName: 'Script Agent',
-            type: 'js',
-          },
-          type: 'js',
-          id: 'js',
-          sequence: [],
-        } as Step,
-      ],
-    };
-  }
 
   @Output() detailsChanged = new EventEmitter<Executable>();
   @Output() iconChanged = new EventEmitter<File>();
@@ -208,7 +99,8 @@ export class WorkflowDesignerComponent
     private renderer: Renderer2,
     private loadService: LoadService,
     private workflowComponent: WorkflowComponent,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private designerService: DesignerService
   ) {}
 
   @ViewChildren('geditor') divs?: QueryList<ElementRef>;
@@ -256,15 +148,19 @@ export class WorkflowDesignerComponent
     this.setIcon();
   }
 
-  off = "M464.75 400.25 434.75 370.25V322.75H387.25L357.25 292.75H434.75V198.25H344.25V279.75L314.25 249.75V198.25H262.75L232.75 168.25H314.25V77.75H219.25V154.75L189.25 124.75V77.75H142.25L112.25 47.75H434.75Q446.25 47.75 455.5 57T464.75 77.75V400.25ZM344.25 168.25H434.75V77.75H344.25V168.25ZM475.75 496.25 426.75 447.75H94.75Q83.25 447.75 74 438.5T64.75 417.75V85.25L15.25 36.25 36.75 15.75 496.75 475.25 475.75 496.25ZM344.25 417.75H396.75L344.25 365.25V417.75ZM219.25 292.75H272.75L219.25 240.25V292.75ZM219.25 417.75H314.25V334.75L301.75 322.75H219.25V417.75ZM94.75 168.25H147.25L94.75 114.75V168.25ZM94.75 292.75H189.25V210.25L177.25 198.25H94.75V292.75ZM189.25 417.75V322.75H94.75V417.75H189.25Z"
-  on = "M106 436q-12 0-21-9t-9-21v-300q0-12 9-21t21-9h300q12 0 21 9t9 21v300q0 12-9 21t-21 9H106Zm0-30h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80ZM106 296h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80ZM106 186h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80Z"
-
+  off =
+    'M464.75 400.25 434.75 370.25V322.75H387.25L357.25 292.75H434.75V198.25H344.25V279.75L314.25 249.75V198.25H262.75L232.75 168.25H314.25V77.75H219.25V154.75L189.25 124.75V77.75H142.25L112.25 47.75H434.75Q446.25 47.75 455.5 57T464.75 77.75V400.25ZM344.25 168.25H434.75V77.75H344.25V168.25ZM475.75 496.25 426.75 447.75H94.75Q83.25 447.75 74 438.5T64.75 417.75V85.25L15.25 36.25 36.75 15.75 496.75 475.25 475.75 496.25ZM344.25 417.75H396.75L344.25 365.25V417.75ZM219.25 292.75H272.75L219.25 240.25V292.75ZM219.25 417.75H314.25V334.75L301.75 322.75H219.25V417.75ZM94.75 168.25H147.25L94.75 114.75V168.25ZM94.75 292.75H189.25V210.25L177.25 198.25H94.75V292.75ZM189.25 417.75V322.75H94.75V417.75H189.25Z';
+  on =
+    'M106 436q-12 0-21-9t-9-21v-300q0-12 9-21t21-9h300q12 0 21 9t9 21v300q0 12-9 21t-21 9H106Zm0-30h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80ZM106 296h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80ZM106 186h80v-80H106v80Zm110 0h80v-80H216v80Zm110 0h80v-80H326v80Z';
 
   setIcon() {
     if (this.element) {
-      
-      this.element.nativeElement.querySelector('.mdc-switch__icon--on').firstChild.setAttribute('d', this.on);
-      this.element.nativeElement.querySelector('.mdc-switch__icon--off').firstChild.setAttribute('d', this.off);
+      this.element.nativeElement
+        .querySelector('.mdc-switch__icon--on')
+        .firstChild.setAttribute('d', this.on);
+      this.element.nativeElement
+        .querySelector('.mdc-switch__icon--off')
+        .firstChild.setAttribute('d', this.off);
     }
   }
 
@@ -274,42 +170,8 @@ export class WorkflowDesignerComponent
     groups: [],
   };
 
-  setToolbarLoc() {
-    setTimeout(() => {
-      var content = document.getElementsByClassName(
-        'sqd-scrollbox-body'
-      )[0] as HTMLDivElement;
-
-      
-      var parent = document.getElementById('toolbar-nav') as HTMLDivElement;
-
-      if (content && parent) {
-        // let newElem = content.cloneNode(true);
-        parent.firstChild?.remove();
-        parent.appendChild(content);
-
-        window.dispatchEvent(new Event('resize'));
-      }
-    }, 0);
-  }
-
   resize() {
     window.dispatchEvent(new Event('resize'));
-  }
-
-  showingGrid = true;
-
-  set showGrid(value: boolean) {
-    this.showingGrid = value;
-    this.setIcon();
-    if (value) {
-      document.documentElement.style.setProperty(
-        '--gridColor',
-        this.loadService.themes[this.theme].gridColor
-      );
-    } else {
-      document.documentElement.style.setProperty('--gridColor', `transparent`);
-    }
   }
 
   // changeTriggerType(newType: string, context: GlobalEditorContext) {
@@ -370,7 +232,9 @@ export class WorkflowDesignerComponent
 
   public ngOnInit() {
     this.shouldRefresh = true;
-    this.showGrid = false
+
+    this.designerService.loadGroups(this.models);
+
     this.workflowComponent.workflow.subscribe((w) => {
       if (w && this.shouldRefresh) {
         this.workflow = undefined;
@@ -386,80 +250,48 @@ export class WorkflowDesignerComponent
       }
     });
 
-    this.loadService.database.subscribe(d => {
-      if (d){
-        this.loadedDocs = Object.keys(d)
+    this.designerService.toolboxConfiguration.subscribe((tool) => {
+      console.log(tool);
+      this.toolboxConfiguration = tool;
+    });
+
+    this.loadService.database.subscribe((d) => {
+      if (d) {
+        this.loadedDocs = Object.keys(d);
       }
-    })
+    });
 
     this.done = true;
 
-    if (this.toolboxConfiguration.groups.length == 0) {
-      let modelGroups: ToolboxGroupConfiguration[] = Object.values(
-        this.models
-      ).map((modelType) => {
-        return {
-          name: `${modelType.name}`,
-          steps: Object.values(modelType.models).map((model) => {
-            return {
-              componentType: 'task',
-              name: model.name,
-              properties: {
-                defaultName: model.name,
-                type: 'model',
-              },
-              type: model.id,
-            };
-          }),
-        };
-      });
+    var elementResizeDetectorMaker = require('element-resize-detector');
 
-      let gpt = this.models['LLM'].models['gpt-LLM'];
+    var erd = elementResizeDetectorMaker();
 
-      if (gpt) {
-        this.flowModels['FLOW'] = new AIModelType('Flow', 'FLOW', {
-          switch: gpt,
-        });
+    // // With the ultra fast scroll-based approach.
+    // // This is the recommended strategy.
+    // var erdUltraFast = elementResizeDetectorMaker({
+    //   strategy: "scroll" //<- For ultra performance.
+    // });
+
+    // erd.listenTo(
+    //   document.getElementById('container'),
+    //   (element: HTMLElement) => {
+    //     var width = element.offsetWidth;
+    //     var height = element.offsetHeight;
+    //     window.dispatchEvent(new Event('resize'));
+    //   }
+    // );
+
+    this.workflowComponent.openStep.subscribe((step) => {
+      if (step) {
+        this.selectedFile = step;
       }
-
-      this.toolboxConfiguration.groups = modelGroups.concat([
-        this.flowGroup,
-        // this.taskGroup,
-      ]);
-
-      var elementResizeDetectorMaker = require('element-resize-detector');
-
-      var erd = elementResizeDetectorMaker();
-
-      // // With the ultra fast scroll-based approach.
-      // // This is the recommended strategy.
-      // var erdUltraFast = elementResizeDetectorMaker({
-      //   strategy: "scroll" //<- For ultra performance.
-      // });
-
-      this.setToolbarLoc();
-
-      // erd.listenTo(
-      //   document.getElementById('container'),
-      //   (element: HTMLElement) => {
-      //     var width = element.offsetWidth;
-      //     var height = element.offsetHeight;
-      //     window.dispatchEvent(new Event('resize'));
-      //   }
-      // );
-
-      this.workflowComponent.openStep.subscribe((step) => {
-        if (step) {
-          this.selectedFile = step;
-        }
-        this.rerenderDesigner();
-      });
-    }
+      this.rerenderDesigner();
+    });
   }
 
   rerenderDesigner() {
     window.dispatchEvent(new Event('resize'));
-    this.setToolbarLoc();
     this.cdr.detectChanges();
   }
 
@@ -520,7 +352,7 @@ export class WorkflowDesignerComponent
     // }
   }
 
-  loadedDocs: string[] = []
+  loadedDocs: string[] = [];
 
   downloadDB() {
     if (
@@ -528,11 +360,15 @@ export class WorkflowDesignerComponent
       this.selectedFile &&
       (this.selectedFile.properties['training'] ?? 'none') == 'auto'
     ) {
-      if (this.selectedFile && !this.selectedFile.properties['autoId'] && this.loadedDocs[0]){
-        console.log(this.loadedDocs[0])
-        this.selectedFile.properties['autoId'] = this.loadedDocs[0]
-        this.selectedFileChanged.emit(this.selectedFile.id)
-        this.saveLayout()
+      if (
+        this.selectedFile &&
+        !this.selectedFile.properties['autoId'] &&
+        this.loadedDocs[0]
+      ) {
+        console.log(this.loadedDocs[0]);
+        this.selectedFile.properties['autoId'] = this.loadedDocs[0];
+        this.selectedFileChanged.emit(this.selectedFile.id);
+        this.saveLayout();
       }
     }
   }
@@ -555,7 +391,6 @@ export class WorkflowDesignerComponent
     step.name = (event.target as HTMLInputElement).value;
     context.notifyNameChanged();
   }
-
 
   onInput(ev: any) {
     var value = ev.target!.value;
