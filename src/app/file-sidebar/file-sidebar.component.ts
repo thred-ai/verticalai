@@ -7,11 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {
-  Sequence,
-  BranchedStep,
-  SequentialStep,
-} from 'sequential-workflow-designer';
+ 
 import { Dict, LoadService } from '../load.service';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { APIRequest } from '../models/workflow/api-request.model';
