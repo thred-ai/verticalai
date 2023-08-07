@@ -19,14 +19,31 @@
   height: auto !important;
 }
 
+// :host ::ng-deep .ion-padding {
+//   padding-right: 0px;
+//   padding-left: 7.5px;
+//   border-top-left-radius: 10px;
+//   border-bottom-left-radius: 10px;
+//   overflow: hidden;
+// }
+
 
 .proj:hover{
-  background-color: var(--primarySectionHoverColor);
+  background-color: var(--dark--primarySectionHoverColor);
 }
 
 .proj-select{
-  background-color: var(--primarySectionHoverColor);
+  background-color: var(--dark--primaryColor);
 }
+
+.project:hover{
+  background-color: var(--dark--secondarySectionHoverColor);
+}
+
+.project-select{
+  background-color: var(--dark--primarySectionHoverColor);
+}
+
 
 
 // .logo{

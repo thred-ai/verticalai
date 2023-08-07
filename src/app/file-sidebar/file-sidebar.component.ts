@@ -7,11 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {
-  Sequence,
-  BranchedStep,
-  SequentialStep,
-} from 'vertical-ai-designer';
+ 
 import { Dict, LoadService } from '../load.service';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
 import { APIRequest } from '../models/workflow/api-request.model';
@@ -47,8 +43,6 @@ export class FileSidebarComponent implements OnInit {
 
   @Output() detailsChanged = new EventEmitter<Executable>();
   @Output() selectedFileChanged = new EventEmitter<string>();
-  @Output() publish = new EventEmitter<Executable>();
-  @Output() openProj = new EventEmitter<string | undefined>();
 
   loadedUser?: Developer;
 
@@ -56,21 +50,13 @@ export class FileSidebarComponent implements OnInit {
 
   selectedFile?: string;
 
-  loading: Boolean = false;
-
   constructor(
     private workflowComponent: WorkflowComponent,
     private loadService: LoadService,
     private cdr: ChangeDetectorRef
   ) {}
 
-  public saveLayout() {
-    // this.definition = definition;
 
-    this.loading = true;
-
-    this.publish.emit(this.workflow);
-  }
 
   removeFile(id: string) {
     let file = this.workflowComponent.findSequenceOfStep(
@@ -119,21 +105,8 @@ export class FileSidebarComponent implements OnInit {
     //   }
     // });
 
-    this.loadService.loading.subscribe((l) => {
-      this.loading = l;
-    });
   }
 
-  saveFieldName(obj: TaskTree, newName: any = '') {
-    let name = newName as string;
-
-    if (name && name.trim() != '') {
-      obj.name = newName;
-    }
-    this.editingTask = undefined;
-
-    this.saveLayout();
-  }
 
   checkName() {}
 

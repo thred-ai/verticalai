@@ -19,7 +19,7 @@ import {
   Definition,
   Sequence,
   SequentialStep,
-} from 'vertical-ai-designer';
+} from 'verticalai-workflow-designer';
 import { TrainingData } from './models/workflow/training-data.model';
 import { Key } from './models/workflow/key.model';
 import { APIRequest } from './models/workflow/api-request.model';
@@ -62,27 +62,37 @@ export class LoadService {
     private storage: AngularFireStorage,
     private http: HttpClient,
     private metaService: Meta,
-    private titleService: Title,
+    private titleService: Title
   ) {
     this.activeTheme = 'light';
+
+    Object.keys(this.themes).forEach((theme) => {
+      Object.keys(this.themes[theme]).forEach((colorKey) => {
+        document.documentElement.style.setProperty(
+          `--${theme}--${colorKey}`,
+          `${this.themes[theme][colorKey]}`
+        );
+      });
+    });
   }
 
-  themes = {
+  themes: Dict<any> = {
     dark: {
-      primaryColor: '#0A99FF',
+      primaryColor: '#0C8CE9',
       secondaryColor: '#0A99FF',
       primaryTextColor: '#ffffff',
       secondaryTextColor: '#6c757d',
       primaryHoverColor: '#34aafe',
       sectionBackgroundColor: '#151515',
-      primarySectionHoverColor: '#1E293B',
+      primarySectionHoverColor: '#000000',
       secondarySectionHoverColor: '#2e2e2e5f',
       gridColor: '#242424',
-      primaryBackgroundColor: '#1F1F1F',
-      secondaryBackgroundColor: '#151515',
+      primaryBackgroundColor: '#2c2c2c',
+      secondaryBackgroundColor: '#1e1e1e',
+      borderColor: '#444444',
     },
     light: {
-      primaryColor: '#0A99FF',
+      primaryColor: '#0C8CE9',
       secondaryColor: '#F8F9FA',
       primaryTextColor: '#4f5a63',
       secondaryTextColor: '#bbbfc4',
@@ -93,6 +103,7 @@ export class LoadService {
       gridColor: '#e6e6e6',
       primaryBackgroundColor: '#f8f9fa',
       secondaryBackgroundColor: '#f1f1f1',
+      borderColor: '#e6e6e6',
     },
   };
 
@@ -105,58 +116,72 @@ export class LoadService {
   // }
 
   confirmDelete() {
-    return confirm('Are you sure you want to delete this controller?');
+    return confirm('Are you sure you want to delete this component?');
   }
 
   set activeTheme(value: 'light' | 'dark') {
-    document.documentElement.style.setProperty(
-      '--primaryColor',
-      `${this.themes[value].primaryColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--primaryColor',
+    //   `${this.themes[value].primaryColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--secondaryColor',
-      `${this.themes[value].secondaryColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--secondaryColor',
+    //   `${this.themes[value].secondaryColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--primaryTextColor',
-      `${this.themes[value].primaryTextColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--primaryTextColor',
+    //   `${this.themes[value].primaryTextColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--secondaryTextColor',
-      `${this.themes[value].secondaryTextColor}`,
-    );
-    document.documentElement.style.setProperty(
-      '--primaryHoverColor',
-      `${this.themes[value].primaryHoverColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--secondaryTextColor',
+    //   `${this.themes[value].secondaryTextColor}`,
+    // );
+    // document.documentElement.style.setProperty(
+    //   '--primaryHoverColor',
+    //   `${this.themes[value].primaryHoverColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--sectionBackgroundColor',
-      `${this.themes[value].sectionBackgroundColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--sectionBackgroundColor',
+    //   `${this.themes[value].sectionBackgroundColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--primarySectionHoverColor',
-      `${this.themes[value].primarySectionHoverColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--primarySectionHoverColor',
+    //   `${this.themes[value].primarySectionHoverColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--secondarySectionHoverColor',
-      `${this.themes[value].secondarySectionHoverColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--secondarySectionHoverColor',
+    //   `${this.themes[value].secondarySectionHoverColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--primaryBackgroundColor',
-      `${this.themes[value].primaryBackgroundColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--borderColor',
+    //   `${this.themes[value].borderColor}`,
+    // );
 
-    document.documentElement.style.setProperty(
-      '--secondaryBackgroundColor',
-      `${this.themes[value].secondaryBackgroundColor}`,
-    );
+    // document.documentElement.style.setProperty(
+    //   '--primaryBackgroundColor',
+    //   `${this.themes[value].primaryBackgroundColor}`,
+    // );
+
+    // document.documentElement.style.setProperty(
+    //   '--secondaryBackgroundColor',
+    //   `${this.themes[value].secondaryBackgroundColor}`,
+    // );
+
+    Object.keys(this.themes[value]).forEach((colorKey) => {
+      if (colorKey != 'gridColor') {
+        document.documentElement.style.setProperty(
+          `--${colorKey}`,
+          `${this.themes[value][colorKey]}`
+        );
+      }
+    });
 
     if (
       document.documentElement.style.getPropertyValue('--gridColor') !=
@@ -164,7 +189,7 @@ export class LoadService {
     ) {
       document.documentElement.style.setProperty(
         '--gridColor',
-        `${this.themes[value].gridColor}`,
+        `${this.themes[value].gridColor}`
       );
     }
     //fix
@@ -174,7 +199,7 @@ export class LoadService {
   finishSignUp(
     email: string,
     password: string,
-    callback: (result: { status: boolean; msg: string }) => any,
+    callback: (result: { status: boolean; msg: string }) => any
   ) {
     this.auth
       .createUserWithEmailAndPassword(email, password)
@@ -192,7 +217,7 @@ export class LoadService {
   finishSignIn(
     email: string,
     password: string,
-    callback: (result: { status: boolean; msg: string }) => any,
+    callback: (result: { status: boolean; msg: string }) => any
   ) {
     this.auth
       .signInWithEmailAndPassword(email, password)
@@ -219,7 +244,7 @@ export class LoadService {
 
   finishPassReset(
     email: string,
-    callback: (result: { status: boolean; msg: string }) => any,
+    callback: (result: { status: boolean; msg: string }) => any
   ) {}
 
   async openAuth(id: string) {
@@ -242,7 +267,7 @@ export class LoadService {
       date.getHours(),
       date.getMinutes(),
       date.getSeconds(),
-      date.getMilliseconds(),
+      date.getMilliseconds()
     );
   }
 
@@ -276,7 +301,7 @@ export class LoadService {
         async (resp) => {},
         (err) => {
           console.error({ err });
-        },
+        }
       );
   }
 
@@ -363,7 +388,7 @@ export class LoadService {
     data: Developer,
     imgFile: File,
     uploadImage: boolean,
-    callback: (result?: Developer) => any,
+    callback: (result?: Developer) => any
   ) {
     var dev = data;
 
@@ -443,7 +468,7 @@ export class LoadService {
         ref
           .where('search_name', '>=', term)
           .where('search_name', '<=', term + '\uf8ff')
-          .limit(3),
+          .limit(3)
       )
       .valueChanges()
       .subscribe((docs2) => {
@@ -464,7 +489,7 @@ export class LoadService {
             ref
               .where('search_name', '>=', term)
               .where('search_name', '<=', term + '\uf8ff')
-              .limit(3),
+              .limit(3)
           )
           .valueChanges()
           .subscribe((docs3) => {
@@ -485,7 +510,7 @@ export class LoadService {
   getWorkflow(
     id: string,
     callback: (result?: Executable) => any,
-    getProfiles = false,
+    getProfiles = false
   ) {
     let sub2 = this.db
       .collection(`Workflows`, (ref) => ref.where('id', '==', id))
@@ -554,7 +579,7 @@ export class LoadService {
 
           this.db
             .collection('Models', (ref) =>
-              ref.where('status', '==', 0).orderBy('rank', 'asc'),
+              ref.where('status', '==', 0).orderBy('rank', 'asc')
             )
             .valueChanges()
             .subscribe((docs) => {
@@ -569,7 +594,7 @@ export class LoadService {
                   d.type,
                   d.status,
                   d.description,
-                  d.variations,
+                  d.variations
                 );
               });
               this.loadedModels.next(models);
@@ -598,7 +623,7 @@ export class LoadService {
               d.id,
               d.imgUrl,
               d.status,
-              d.execution,
+              d.execution
             );
           });
           this.loadedTriggers.next(models);
@@ -628,7 +653,7 @@ export class LoadService {
               d.overageUnit,
               d.overagePriceCents,
               d.flatPriceCents,
-              d.backgroundColor,
+              d.backgroundColor
             );
           });
           this.loadedPlans.next(models);
@@ -643,7 +668,7 @@ export class LoadService {
   getNewWorkflows(callback: (result: Executable[]) => any) {
     this.db
       .collectionGroup('Workflows', (ref) =>
-        ref.where('status', '==', 0).orderBy('created', 'desc'),
+        ref.where('status', '==', 0).orderBy('created', 'desc')
       )
       .valueChanges()
       .subscribe((docs) => {
@@ -655,7 +680,7 @@ export class LoadService {
   getPopularWorkflows(callback: (result: Executable[]) => any) {
     this.db
       .collectionGroup('Workflows', (ref) =>
-        ref.where('status', '==', 0).orderBy('views', 'desc'),
+        ref.where('status', '==', 0).orderBy('views', 'desc')
       )
       .valueChanges()
       .subscribe((docs) => {
@@ -686,7 +711,7 @@ export class LoadService {
             (result) => {
               callback(result);
             },
-            true,
+            true
           );
         } else {
           callback(undefined);
@@ -698,10 +723,10 @@ export class LoadService {
     uid: string,
     fetchworkflows = true,
     fetchOnlyAvailableworkflows = true,
-    callback: (result?: Developer) => any,
+    callback: (result?: Developer) => any
   ): void {
     var query = this.db.collection('Users', (ref) =>
-      ref.where(firebase.firestore.FieldPath.documentId(), '==', uid),
+      ref.where(firebase.firestore.FieldPath.documentId(), '==', uid)
     );
 
     query.valueChanges().subscribe(async (docs) => {
@@ -732,7 +757,7 @@ export class LoadService {
               ref
                 .where('status', '==', 0)
                 .where('creatorId', '==', uid)
-                .orderBy('created', 'asc'),
+                .orderBy('created', 'asc')
             );
           }
 
@@ -819,12 +844,12 @@ export class LoadService {
   getDatabaseCollection(
     workflowId: string,
     collectionId: string,
-    callback: (docs: Dict<Document>) => any,
+    callback: (docs: Dict<Document>) => any
   ) {
     this.db
       .collection(
         `Workflows/${workflowId}/database/${collectionId}/docs`,
-        (ref) => ref.where('status', '==', 0),
+        (ref) => ref.where('status', '==', 0)
       )
       .valueChanges()
       .subscribe((docs2) => {
@@ -840,49 +865,35 @@ export class LoadService {
       });
   }
 
-  async deleteDatabaseCollection(
-    workflowId: string,
-    collectionId: string,
-  ) {
+  async deleteDatabaseCollection(workflowId: string, collectionId: string) {
     await this.db
-      .doc(
-        `Workflows/${workflowId}/database/${collectionId}`,
-      )
+      .doc(`Workflows/${workflowId}/database/${collectionId}`)
       .update({ status: 1 });
   }
 
-  async createDatabaseCollection(
-    workflowId: string,
-    collection: Collection,
-  ) {
+  async createDatabaseCollection(workflowId: string, collection: Collection) {
     await this.db
-      .doc(
-        `Workflows/${workflowId}/database/${collection.id}`,
-      )
+      .doc(`Workflows/${workflowId}/database/${collection.id}`)
       .set(JSON.parse(JSON.stringify(collection)));
   }
 
   async deleteDatabaseCollectionDoc(
     workflowId: string,
     collectionId: string,
-    docId: string,
+    docId: string
   ) {
     await this.db
-      .doc(
-        `Workflows/${workflowId}/database/${collectionId}/docs/${docId}`,
-      )
+      .doc(`Workflows/${workflowId}/database/${collectionId}/docs/${docId}`)
       .delete();
   }
 
   async checkCollectionName(
     workflowId: string,
-    collectionId: string,
+    collectionId: string
   ): Promise<Boolean> {
     return new Promise((resolve, reject) => {
       let d = this.db
-        .doc(
-          `Workflows/${workflowId}/database/${collectionId}`,
-        )
+        .doc(`Workflows/${workflowId}/database/${collectionId}`)
         .valueChanges()
         .subscribe((doc) => {
           let d = doc as any;
@@ -899,23 +910,20 @@ export class LoadService {
     workflowId: string,
     collectionId: string,
     docId: string,
-    doc: Document,
+    doc: Document
   ) {
     await this.db
-      .doc(
-        `Workflows/${workflowId}/database/${collectionId}/docs/${docId}`,
-      )
+      .doc(`Workflows/${workflowId}/database/${collectionId}/docs/${docId}`)
       .set(JSON.parse(JSON.stringify(doc)), { merge: true });
   }
 
   getDatabaseInfo(
     workflowId: string,
-    callback: (docs: Dict<Collection>) => any,
+    callback: (docs: Dict<Collection>) => any
   ) {
     this.db
-      .collection(
-        `Workflows/${workflowId}/database`,
-        (ref) => ref.where('status', '==', 0),
+      .collection(`Workflows/${workflowId}/database`, (ref) =>
+        ref.where('status', '==', 0)
       )
       .valueChanges()
       .subscribe((docs2) => {
@@ -927,7 +935,7 @@ export class LoadService {
           returnData[d['id'] as string] = d;
         });
 
-        this.database.next(returnData)
+        this.database.next(returnData);
 
         callback(returnData);
       });
@@ -1001,6 +1009,7 @@ export class LoadService {
             }
         }
       default:
+        console.log(type);
         return `assets/${type}.png`;
     }
   }
@@ -1017,7 +1026,7 @@ export class LoadService {
           (err) => {
             console.error({ err });
             resolve(undefined);
-          },
+          }
         );
     });
     return url;
@@ -1037,7 +1046,7 @@ export class LoadService {
   async getCode(
     app: Executable,
     uid: string,
-    callback: (file: Executable) => any,
+    callback: (file: Executable) => any
   ) {
     this.loading.next(true);
 
@@ -1075,7 +1084,7 @@ export class LoadService {
           (err) => {
             console.error({ err });
             resolve(undefined);
-          },
+          }
         );
     });
 
@@ -1095,7 +1104,7 @@ export class LoadService {
         (err) => {
           console.error({ err });
           callback([]);
-        },
+        }
       );
   }
 
@@ -1104,7 +1113,7 @@ export class LoadService {
     stepId: string,
     input: any,
     sessionId: string,
-    callback: (data: any) => any,
+    callback: (data: any) => any
   ) {
     this.functions
       .httpsCallable('apiTest')({ id, input, stepId, sessionId })
@@ -1117,7 +1126,7 @@ export class LoadService {
         (err) => {
           console.error({ err });
           callback('');
-        },
+        }
       );
   }
 
@@ -1165,7 +1174,7 @@ export class LoadService {
     uid: string,
     date1: Date,
     date2: Date,
-    callback: (views?: Dict<any>[]) => any,
+    callback: (views?: Dict<any>[]) => any
   ) {
     // var views: Dict<any>[] = [];
     // let sub = this.db
@@ -1258,7 +1267,7 @@ export class LoadService {
     layout: any,
     workflow: Executable,
     step = 1,
-    callback: (layout: any) => any,
+    callback: (layout: any) => any
   ) {
     try {
       if (workflow && layout) {
@@ -1280,7 +1289,7 @@ export class LoadService {
               (err) => {
                 console.error({ err });
                 callback(layout);
-              },
+              }
             );
         } else {
           callback(layout);
@@ -1295,7 +1304,7 @@ export class LoadService {
   async addLayout(
     layout: any,
     workflow: Executable,
-    callback: (layout: any) => any,
+    callback: (layout: any) => any
   ) {
     try {
       if (workflow && layout) {
@@ -1315,7 +1324,7 @@ export class LoadService {
               (err) => {
                 console.error({ err });
                 callback(layout);
-              },
+              }
             );
         } else {
           callback(layout);
@@ -1338,7 +1347,7 @@ export class LoadService {
   registerPlan(
     planId: string,
     modelId: string,
-    callback: (result: string, needsBilling: boolean) => any,
+    callback: (result: string, needsBilling: boolean) => any
   ) {
     this.functions
       .httpsCallable('registerPlan')({ planId, modelId })
@@ -1350,7 +1359,7 @@ export class LoadService {
         (err) => {
           console.error({ err });
           callback('', false);
-        },
+        }
       );
   }
 
@@ -1365,7 +1374,7 @@ export class LoadService {
         (err) => {
           console.error({ err });
           callback(null);
-        },
+        }
       );
   }
 
@@ -1397,7 +1406,7 @@ export class LoadService {
       workflow.url,
       workflow.apiKey,
       workflow.plan,
-      workflow.executableUrl,
+      workflow.executableUrl
     );
   }
 

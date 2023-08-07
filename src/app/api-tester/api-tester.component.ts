@@ -13,6 +13,7 @@ import { Developer } from '../models/user/developer.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import * as uuid from 'uuid';
 import { WorkflowComponent } from '../workflow/workflow.component';
+import * as interact from 'interactjs';
 
 @Component({
   selector: 'app-api-tester',
@@ -27,36 +28,53 @@ export class ApiTesterComponent implements OnInit {
   request = '';
 
   currentStep?: string;
-  sessionId: string
+  sessionId: string;
 
   chats: { type: string; msg: string }[] = [];
+
+  private workflowComponent?: WorkflowComponent;
 
   model?: Executable;
   user?: Developer;
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private loadService: LoadService,
+    public dialogRef: MatDialogRef<ApiTesterComponent>,
     private clipboard: Clipboard,
-    private cdr: ChangeDetectorRef,
-    private workflowComponent: WorkflowComponent
+    private cdr: ChangeDetectorRef
   ) {
-    this.sessionId = uuid.v4()
+    this.sessionId = uuid.v4();
+    this.workflowComponent = data.workflowComponent;
+    this.user = this.data.user;
   }
 
   ngOnInit(): void {
-
-    this.workflowComponent.workflow.subscribe(w => {
-      this.model = w
-
-      if (this.model && this.model.layout.sequence[0] && !this.currentStep){
+    this.workflowComponent?.workflow.subscribe((w) => {
+      this.model = w;
+      if (this.model && this.model.layout.sequence[0]) {
         this.currentStep = this.model.layout.sequence[0].id;
       }
-    })
+    });
 
+    interact.default('.prototype-dialog').resizable({
+      edges: { top: false, left: true, bottom: true, right: true },
+      listeners: {
+        move: function (event) {
+          let { x, y } = event.target.dataset;
 
-    this.loadService.loadedUser.subscribe((l) => {
-      if (l) {
-        this.user = l;
-      }
+          // var bounds = verticalTextarea.getBoundingClientRect();
+
+          x = (parseFloat(x) || 0) + event.deltaRect.left;
+          y = (parseFloat(y) || 0) + event.deltaRect.top;
+
+          Object.assign(event.target.style, {
+            width: `${event.rect.width}px`,
+            height: `${event.rect.height}px`,
+          });
+
+          Object.assign(event.target.dataset, { x, y });
+        },
+      },
     });
   }
 
@@ -95,7 +113,9 @@ export class ApiTesterComponent implements OnInit {
               this.image = undefined;
               if (result.result && result.nextId) {
                 this.currentStep =
-                  result.nextId != 'none' ? result.nextId : result.stepId ?? this.currentStep;
+                  result.nextId != 'none'
+                    ? result.nextId
+                    : result.stepId ?? this.currentStep;
                 if (typeof result.result == 'string') {
                   let str = result.result as string;
                   let match = str.match(/^https?:\/\/.+\/.+$/) != null;

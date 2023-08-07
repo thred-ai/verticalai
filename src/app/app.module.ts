@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -12,7 +12,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -92,7 +91,7 @@ import { LayoutSliderComponent } from './layout-slider/layout-slider.component';
 import { WorkflowStatusPipe } from './workflow-status.pipe';
 import { IonicModule } from '@ionic/angular';
 import { WorkflowDesignerComponent } from './workflow-designer/workflow-designer.component';
-import { VerticalAIDesignerModule } from 'vertical-ai-designer-angular';
+import { SequentialWorkflowDesignerModule } from 'vertical-ai-designer-angular';
 import { SelectFieldComponent } from './select-field/select-field.component';
 import { TextFieldComponent } from './text-field/text-field.component';
 import { DictToArrPipe } from './dict-to-arr.pipe';
@@ -137,7 +136,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { DatabaseComponent } from './database/database.component';
 import { CollectionInfoComponent } from './collection-info/collection-info.component';
 import { TextAreaRenderPipe } from './text-area-render.pipe';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
+import { ResizableModule } from 'angular-resizable-element';
 
 @NgModule({
   declarations: [
@@ -207,20 +207,17 @@ import {MatDividerModule} from '@angular/material/divider';
     MatToolbarModule,
     MatIconModule,
     AngularFireModule.initializeApp(environment.firebase),
-    NgbModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
     MatMenuModule,
     MatSnackBarModule,
-    DragScrollModule,
     MatDialogModule,
     MatExpansionModule,
-    InViewportModule,
     HttpClientModule,
     FormsModule,
-    NgxCurrencyModule,
+    ResizableModule,
     MatSlideToggleModule,
     MatButtonToggleModule,
     MatSliderModule,
@@ -229,13 +226,11 @@ import {MatDividerModule} from '@angular/material/divider';
     AngularFireFunctionsModule,
     LazyLoadImageModule,
     MatSidenavModule,
-    NgbModule,
     MatTabsModule,
     MatTableModule,
     MatCheckboxModule,
     MatNativeDateModule,
     ScrollingModule,
-    NgRouterOutletCommModule,
     MdbAccordionModule,
     MdbCarouselModule,
     MdbCheckboxModule,
@@ -256,10 +251,7 @@ import {MatDividerModule} from '@angular/material/divider';
     MatDividerModule,
     NgxDropzoneModule,
     DragDropModule,
-    ColorPickerModule,
-    NgxSliderModule,
-    NgxDefaultImageModule,
-    VerticalAIDesignerModule,
+    SequentialWorkflowDesignerModule,
     IonicModule,
     ClipboardModule,
     AngularSplitModule,
@@ -285,7 +277,16 @@ import {MatDividerModule} from '@angular/material/divider';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(router: Router, functions: AngularFireFunctions) {
+  constructor(
+    router: Router,
+    functions: AngularFireFunctions,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
     // functions.useEmulator('localhost', 5001)
+    this.matIconRegistry.addSvgIcon(
+      `vertical_ai_icon`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/verticalai_icon.svg")
+    );
   }
 }
