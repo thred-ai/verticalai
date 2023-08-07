@@ -385,7 +385,7 @@ export class WorkflowComponent implements OnInit {
         height: "calc(var(--vh, 1vh) * 70)",
         maxHeight: '750px',
         data: {
-          workflow: this.workflow,
+          workflow: this.workflow.value,
           theme: this.theme
         },
       });
