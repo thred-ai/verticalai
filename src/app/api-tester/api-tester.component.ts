@@ -32,6 +32,8 @@ export class ApiTesterComponent implements OnInit {
 
   chats: { type: string; msg: string }[] = [];
 
+  private workflowComponent?: WorkflowComponent;
+
   model?: Executable;
   user?: Developer;
   constructor(
@@ -42,19 +44,17 @@ export class ApiTesterComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     this.sessionId = uuid.v4();
-    this.model = this.data.workflow;
-    if (this.model && this.model.layout.sequence[0] && !this.currentStep) {
-      this.currentStep = this.model.layout.sequence[0].id;
-    }
+    this.workflowComponent = data.workflowComponent;
     this.user = this.data.user;
   }
 
   ngOnInit(): void {
-
-
-
-
-
+    this.workflowComponent?.workflow.subscribe((w) => {
+      this.model = w;
+      if (this.model && this.model.layout.sequence[0]) {
+        this.currentStep = this.model.layout.sequence[0].id;
+      }
+    });
 
     interact.default('.prototype-dialog').resizable({
       edges: { top: false, left: true, bottom: true, right: true },
@@ -63,7 +63,6 @@ export class ApiTesterComponent implements OnInit {
           let { x, y } = event.target.dataset;
 
           // var bounds = verticalTextarea.getBoundingClientRect();
-
 
           x = (parseFloat(x) || 0) + event.deltaRect.left;
           y = (parseFloat(y) || 0) + event.deltaRect.top;

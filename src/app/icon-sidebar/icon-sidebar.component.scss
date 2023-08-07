@@ -36,6 +36,14 @@
   background-color: var(--dark--primaryColor);
 }
 
+.project:hover{
+  background-color: var(--dark--secondarySectionHoverColor);
+}
+
+.project-select{
+  background-color: var(--dark--primarySectionHoverColor);
+}
+
 
 
 // .logo{

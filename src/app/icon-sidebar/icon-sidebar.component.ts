@@ -11,6 +11,7 @@ import {
   ToolboxItem,
 } from 'verticalai-workflow-designer';
 import { DesignerService } from '../designer.service';
+import { Executable } from '../models/workflow/executable.model';
 
 @Component({
   selector: 'app-icon-sidebar',
@@ -28,6 +29,9 @@ export class IconSidebarComponent implements OnInit {
   loadedUser?: Developer;
 
   selectedWorkflow?: string;
+  executable?: Executable;
+
+  loading: Boolean = false;
 
   get config() {
     return (window as any).designerConfig;
@@ -40,8 +44,10 @@ export class IconSidebarComponent implements OnInit {
   @Output() selectedIconChanged = new EventEmitter<string>();
   @Input() theme: 'light' | 'dark' = 'light';
 
-
   @Output() openPrototype = new EventEmitter<string>();
+  @Output() openProj = new EventEmitter<string | undefined>();
+
+  @Output() publish = new EventEmitter<Executable>();
 
 
   expandedProjects = true;
@@ -80,9 +86,14 @@ export class IconSidebarComponent implements OnInit {
       }
     });
 
+    this.loadService.loading.subscribe((l) => {
+      this.loading = l;
+    });
+
     this.workflowComponent.workflow.subscribe((w) => {
       if (w) {
         this.selectedWorkflow = w.id;
+        this.executable = w;
       }
     });
 
@@ -110,8 +121,6 @@ export class IconSidebarComponent implements OnInit {
 
   sets: Dict<any> = {};
 
-  showing = false
-
   setToolbarLoc(
     parent?: HTMLElement,
     template?: HTMLElement,
@@ -121,17 +130,20 @@ export class IconSidebarComponent implements OnInit {
     if (parent && template && step) {
       this.sets[step.type] = true;
       setTimeout(() => {
-        ToolboxItem.create(
-          parent,
-          template,
-          step,
-          this.config.toolbox
-        );
+        ToolboxItem.create(parent, template, step, this.config.toolbox);
       }, 0);
 
       return this.sets[step.type];
     }
 
     return undefined;
+  }
+
+  public saveLayout() {
+    // this.definition = definition;
+
+    this.loading = true;
+
+    this.publish.emit(this.executable);
   }
 }

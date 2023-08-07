@@ -20,6 +20,7 @@ import { Executable } from '../models/workflow/executable.model';
 import { TaskTree } from '../models/workflow/task-tree.model';
 import {
   BranchedStep,
+  Definition,
   Sequence,
   SequentialStep,
   Step,
@@ -287,7 +288,10 @@ export class WorkflowComponent implements OnInit {
 
             this.workflow.subscribe(async (w) => {
               if (w) {
+
                 this.initExecutable(w);
+
+
               }
             });
           }
@@ -374,20 +378,17 @@ export class WorkflowComponent implements OnInit {
   openPrototype(mode: string = 'window') {
     if (mode == 'window') {
       let ref = this.dialog.open(ApiTesterComponent, {
-    
         panelClass: 'prototype-dialog',
         hasBackdrop: false,
         data: {
           user: this.dev,
-          workflow: this.workflow.value,
-
+          workflowComponent: this,
         },
       });
 
       ref.afterClosed().subscribe(async (val) => {
         if (val && val != '' && val != '0' && val.dev) {
           // let img = val.img as File;
-
           // await this.loadService.saveUserInfo(
           //   val.dev,
           //   img,

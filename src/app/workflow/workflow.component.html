@@ -1,36 +1,33 @@
 <div
   class="layout-container-full secondary-background my-0 d-flex justify-content-between align-content-center flex-column"
 >
-    <app-icon-sidebar
-            [selectedIcon]="selectedIcon"
-            [theme]="theme"
-            (selectedIconChanged)="selectFile(openStep.value!.id, $event)"
-            (openPrototype)="openPrototype($event)"
-          ></app-icon-sidebar>
+  <app-icon-sidebar
+    [selectedIcon]="selectedIcon"
+    [theme]="theme"
+    (selectedIconChanged)="selectFile(openStep.value!.id, $event)"
+    (openPrototype)="openPrototype($event)"
+    (openProj)="setWorkflow($event)"
+    (publish)="publish()"
+  ></app-icon-sidebar>
   <div
     class="w-100 h-100 d-flex justify-content-between align-content-start"
     style="overflow-y: hidden"
     *ngIf="workflow.value && openStep.value && items.value; else noWorkflow"
   >
-
-
-
-      <app-file-sidebar
-        [hidden]="mode != 'sidebar'"
-        [models]="models"
-        [selectedIcon]="selectedIcon"
-        [triggers]="triggers"
-        [apiKeys]="apiKeys"
-        [apiRequests]="apiRequests"
-        [workflow]="workflow.value"
-        [executable]="workflow.value"
-        [items]="items.value"
-        (detailsChanged)="edited = true; workflow.next($event); save(1, true)"
-        (openProj)="setWorkflow($event)"
-        (publish)="publish()"
-        (selectedFileChanged)="selectFile($event, selectedIcon)"
-      >
-      </app-file-sidebar>
+    <app-file-sidebar
+      [hidden]="mode != 'sidebar'"
+      [models]="models"
+      [selectedIcon]="selectedIcon"
+      [triggers]="triggers"
+      [apiKeys]="apiKeys"
+      [apiRequests]="apiRequests"
+      [workflow]="workflow.value"
+      [executable]="workflow.value"
+      [items]="items.value"
+      (detailsChanged)="edited = true; workflow.next($event); save(1, true)"
+      (selectedFileChanged)="selectFile($event, selectedIcon)"
+    >
+    </app-file-sidebar>
 
     <div class="w-100 h-100">
       <as-split class="w-100 h-100" class="vertical" direction="vertical">

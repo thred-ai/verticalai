@@ -79,13 +79,17 @@ mat-icon {
 
   --mdc-typography-font-family: "Inter", sans-serif;
   --mdc-typography-body1-font-size: 12px;
-  --mdc-theme-text-primary-on-background: var(--primaryTextColor)
+  --mdc-theme-text-primary-on-background: var(--primaryTextColor);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;
   }
+}
+
+.rounded-panel {
+  border-radius: var(--mdc-shape-medium, 4px) !important;
 }
 
 input[matinput]::-webkit-outer-spin-button,
@@ -724,13 +728,12 @@ progress {
   }
 }
 
-
-button.mat-mdc-menu-item{
-  color: white;
-  font-size: inherit;
+button.toolButton.mat-mdc-menu-item {
+  .mdc-list-item__primary-text,
+  .mat-icon, .mat-mdc-menu-submenu-icon {
+    color: var(--dark--primaryTextColor) !important;
+  }
 }
-
-
 
 @media (min-width: 576px) {
   .position-sm-static {

@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -136,7 +136,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { DatabaseComponent } from './database/database.component';
 import { CollectionInfoComponent } from './collection-info/collection-info.component';
 import { TextAreaRenderPipe } from './text-area-render.pipe';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { ResizableModule } from 'angular-resizable-element';
 
 @NgModule({
@@ -277,7 +277,16 @@ import { ResizableModule } from 'angular-resizable-element';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(router: Router, functions: AngularFireFunctions) {
+  constructor(
+    router: Router,
+    functions: AngularFireFunctions,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
     // functions.useEmulator('localhost', 5001)
+    this.matIconRegistry.addSvgIcon(
+      `vertical_ai_icon`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/verticalai_icon.svg")
+    );
   }
 }
