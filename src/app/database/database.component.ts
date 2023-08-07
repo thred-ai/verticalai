@@ -39,8 +39,6 @@ export class DatabaseComponent implements OnInit {
 
   editingDocs: Dict<string> = {};
 
-  workflowComponent?: WorkflowComponent
-
   constructor(
     private loadService: LoadService,
     private cdr: ChangeDetectorRef,
