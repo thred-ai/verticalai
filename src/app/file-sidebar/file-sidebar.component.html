@@ -82,7 +82,7 @@
         <!-- --border-radius: 50%; -->
 
         <ion-thumbnail slot="start" [style.--border-radius]="'50%'">
-          <img class="border-table p-0" [src]="item.metadata.img ?? ''" />
+          <img class="border-table p-0" style="object-fit: cover;" [src]="item.metadata.img ?? ''" />
         </ion-thumbnail>
         <ion-label
           style="font-size: small"
