@@ -1,7 +1,7 @@
-<div class="d-flex justify-content-center align-items-center w-100 h-100 p-4">
+<div class="d-flex justify-content-center align-items-center w-100 h-100">
   <div
-    class="primary-background w-100 d-flex justify-content-start align-items-center flex-column rounded shadow"
-    style="overflow: hidden; max-width: 1300px; aspect-ratio: 1.5"
+    class="primary-background w-100 h-100 d-flex justify-content-start align-items-center flex-column"
+    style="overflow: hidden;"
   >
     <!-- [value]="openLayouts"
       (ionChange)="setOpenLayouts($event)" -->
@@ -11,15 +11,15 @@
         class="w-100 primary-text p-3 d-flex justify-content-between align-items-center"
       >
         <span class="text-start h5 fw-bold">Database</span>
-        <button
+        <a
           class="btn bg-transparent shadow-0 border-0 rounded-10 fw-bold primary-text d-flex justify-content-center px-0 align-content-center"
           (click)="newCollection()"
         >
           Add
-          <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1">
+          <mat-icon class="fw-bold ms-2" style="aspect-ratio: 1; font-size: 18px;">
             add
           </mat-icon>
-        </button>
+        </a>
       </div>
 
       <ng-container *ngIf="items && !loading; else loadingt">

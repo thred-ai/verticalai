@@ -32,6 +32,7 @@ import { HttpClient } from '@angular/common/http';
 import { SettingsComponent } from '../settings/settings.component';
 import { WorkflowDesignerComponent } from '../workflow-designer/workflow-designer.component';
 import { ApiTesterComponent } from '../api-tester/api-tester.component';
+import { DatabaseComponent } from '../database/database.component';
 
 @Component({
   selector: 'app-workflow',
@@ -373,6 +374,34 @@ export class WorkflowComponent implements OnInit {
       }
     } else {
     }
+  }
+
+
+  openDatabase() {
+      let ref = this.dialog.open(DatabaseComponent, {
+        panelClass: 'app-full-bleed-dialog',
+        width: 'calc(var(--vh, 1vh) * 70)',
+        maxWidth: '750px',
+        height: "calc(var(--vh, 1vh) * 70)",
+        maxHeight: '750px',
+        data: {
+          workflow: this.workflow,
+          theme: this.theme
+        },
+      });
+
+      ref.afterClosed().subscribe(async (val) => {
+        if (val && val != '' && val != '0' && val.dev) {
+          // let img = val.img as File;
+          // await this.loadService.saveUserInfo(
+          //   val.dev,
+          //   img,
+          //   img != undefined,
+          //   (result) => {}
+          // );
+        }
+      });
+
   }
 
   openPrototype(mode: string = 'window') {

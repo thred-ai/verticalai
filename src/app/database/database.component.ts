@@ -32,32 +32,28 @@ export class DatabaseComponent implements OnInit {
 
   items?: TaskTree[] = undefined;
 
-  @Input() theme: 'light' | 'dark' = 'light';
+  theme: 'light' | 'dark' = 'light';
 
   loading = false;
   loadingCol: Dict<boolean> = {};
 
   editingDocs: Dict<string> = {};
 
+  workflowComponent?: WorkflowComponent
+
   constructor(
     private loadService: LoadService,
     private cdr: ChangeDetectorRef,
-    private workflowComponent: WorkflowComponent,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<DatabaseComponent>,
+  ) {
+    this.executable = data.workflow
+    this.theme = data.theme
+  }
 
   ngOnInit(): void {
     this.loading = true;
-
-    this.workflowComponent.openStep.subscribe((step) => {
-      if (step) {
-
-        this.workflowComponent.workflow.subscribe((w) => {
-          this.executable = w;
-
-        });
-      }
-    });
 
     if (this.executable) {
       this.loadService.getDatabaseInfo(

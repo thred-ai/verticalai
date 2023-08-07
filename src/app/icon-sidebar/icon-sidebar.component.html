@@ -100,7 +100,7 @@
       class="h-100 proj mt-0 ps-3 pe-2 d-flex justify-content-center align-items-center border-table-right-dark"
       [matTooltip]="'Components'"
       [matTooltipPosition]="'below'"
-      (click)="sets = {};"
+      (click)="sets = {}"
     >
       <div
         class="w-100 d-flex justify-content-center align-items-center"
@@ -144,7 +144,6 @@
         <mat-icon>delete_outline</mat-icon>
       </div>
     </div>
-
   </div>
 
   <a
@@ -291,31 +290,14 @@ placement="right"
 </div>
 </div> -->
 
-    <div
-      class="h-100 proj{{
-        selectedIcon == 'prototype' ? '-select' : ''
-      }} mt-0 d-flex justify-content-center align-items-center"
-      style="aspect-ratio: 1"
-      role="button"
-      (click)="openPrototype.emit('window')"
-      [matTooltip]="'Prototype'"
-      [matTooltipPosition]="'below'"
-    >
-      <div
-        class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center"
-        style="aspect-ratio: 1"
-      >
-        <div class="w-100 h-100">
-          <mat-icon class="fw-bold">play_arrow</mat-icon>
-        </div>
-      </div>
-    </div>
+
+
 
     <div class="h-100" style="aspect-ratio: 1">
       <div
         class="w-100 proj p-3 d-flex justify-content-center align-items-center"
         style="aspect-ratio: 1"
-        [matTooltip]="'View Profile'"
+        [matTooltip]="'Profile'"
         [matTooltipPosition]="'below'"
         role="button"
         *ngIf="loadedUser"
@@ -412,6 +394,47 @@ placement="right"
       </div>
     </div>
 
+
+    <div
+      class="h-100 proj{{
+        selectedIcon == 'prototype' ? '-select' : ''
+      }} mt-0 d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+      role="button"
+      (click)="openPrototype.emit('window')"
+      [matTooltip]="'Prototype'"
+      [matTooltipPosition]="'below'"
+    >
+      <div
+        class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center"
+        style="aspect-ratio: 1"
+      >
+        <div class="w-100 h-100">
+          <mat-icon class="fw-bold">play_arrow</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div
+    class="h-100 proj{{
+      selectedIcon == 'prototype' ? '-select' : ''
+    }} mt-0 d-flex justify-content-center align-items-center"
+    style="aspect-ratio: 1"
+    role="button"
+    (click)="openDatabase.emit()"
+    [matTooltip]="'Database'"
+    [matTooltipPosition]="'below'"
+  >
+    <div
+      class="mx-2 primary-text-dark fw-bold d-flex justify-content-center align-items-center"
+      style="aspect-ratio: 1"
+    >
+      <div class="w-100 h-100">
+        <mat-icon class="fw-bold">storage</mat-icon>
+      </div>
+    </div>
+  </div>
+
     <!-- <div
     class="h-100 proj{{
       selectedIcon == 'design' ? '-select' : ''
@@ -490,7 +513,11 @@ placement="right"
       New Project
     </button>
 
-    <button mat-menu-item class="proj toolButton" [matMenuTriggerFor]="projects">
+    <button
+      mat-menu-item
+      class="proj toolButton"
+      [matMenuTriggerFor]="projects"
+    >
       <mat-icon
         class="my-auto me-2 d-flex justify-content-center align-items-center"
         style="font-size: 16px"
@@ -499,7 +526,11 @@ placement="right"
       Open Project
     </button>
 
-    <button class="border-table-top-dark proj toolButton" mat-menu-item (click)="saveLayout()">
+    <button
+      class="border-table-top-dark proj toolButton"
+      mat-menu-item
+      (click)="saveLayout()"
+    >
       <mat-icon
         class="my-auto me-2 d-flex justify-content-center align-items-center"
         style="font-size: 16px"
@@ -600,7 +631,7 @@ placement="right"
     class="secondary-background-dark text-start rounded-panel d-flex justify-content-center align-items-center flex-column"
     id="profile-menu"
     style="min-width: 300px; max-height: 700px"
-    (clickOutside)="folderToggle.click();"
+    (clickOutside)="folderToggle.click()"
   >
     <div class="big-design-header p-3 pb-3">
       <b class="fw-bold primary-text-dark">Components</b>

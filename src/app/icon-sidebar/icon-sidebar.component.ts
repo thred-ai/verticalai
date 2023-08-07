@@ -45,6 +45,8 @@ export class IconSidebarComponent implements OnInit {
   @Input() theme: 'light' | 'dark' = 'light';
 
   @Output() openPrototype = new EventEmitter<string>();
+  @Output() openDatabase = new EventEmitter<any>();
+
   @Output() openProj = new EventEmitter<string | undefined>();
 
   @Output() publish = new EventEmitter<Executable>();

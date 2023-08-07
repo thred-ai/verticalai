@@ -6,6 +6,7 @@
     [theme]="theme"
     (selectedIconChanged)="selectFile(openStep.value!.id, $event)"
     (openPrototype)="openPrototype($event)"
+    (openDatabase)="openDatabase()"
     (openProj)="setWorkflow($event)"
     (publish)="publish()"
   ></app-icon-sidebar>
@@ -80,12 +81,12 @@
                   ></app-workflow-code>
                 </ng-container> -->
 
-              <div
+              <!-- <div
                 class="w-100 h-100 section-background"
                 [hidden]="selectedIcon != 'database'"
               >
                 <app-database [theme]="theme"></app-database>
-              </div>
+              </div> -->
             </as-split-area>
           </as-split>
         </as-split-area>
