@@ -116,7 +116,7 @@ export class LoadService {
   // }
 
   confirmDelete() {
-    return confirm('Are you sure you want to delete this controller?');
+    return confirm('Are you sure you want to delete this component?');
   }
 
   set activeTheme(value: 'light' | 'dark') {

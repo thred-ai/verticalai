@@ -49,6 +49,8 @@ export class IconSidebarComponent implements OnInit {
 
   @Output() publish = new EventEmitter<Executable>();
 
+  selectedStep?: Step
+
 
   expandedProjects = true;
 
@@ -86,6 +88,10 @@ export class IconSidebarComponent implements OnInit {
       }
     });
 
+    this.workflowComponent.openStep.subscribe(s => {
+      this.selectedStep = s
+    })
+
     this.loadService.loading.subscribe((l) => {
       this.loading = l;
     });
@@ -118,6 +124,11 @@ export class IconSidebarComponent implements OnInit {
   openSettings() {
     this.workflowComponent.openControllerSettings('main');
   }
+
+  delete(step: string){
+    (window as any).designerConfig.controlBar.tryDelete(step)
+  }
+
 
   sets: Dict<any> = {};
 

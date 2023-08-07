@@ -300,10 +300,10 @@ export class WorkflowDesignerComponent
 
     this.rerenderDesigner();
 
-    if (document.eventListeners) {
-      let l = document.eventListeners('keyup')[0];
-      document.removeEventListener('keyup', l);
-    }
+    // if (document.eventListeners) {
+    //   let l = document.eventListeners('keyup')[0];
+    //   document.removeEventListener('keyup', l);
+    // }
 
     // window.addEventListener(
     //   'keypress',
