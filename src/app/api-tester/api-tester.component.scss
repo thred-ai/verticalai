@@ -20,10 +20,10 @@
 
 :host ::ng-deep .horizontal-terminal {
   .as-split-gutter-icon {
-    color: var(--sectionBackgroundColor) !important;
-    background-color: var(--sectionBackgroundColor) !important;
+    color: var(--secondaryBackgroundColor) !important;
+    background-color: var(--secondaryBackgroundColor) !important;
     // border-right: 1px solid #7f7f7f !important;
-    border-top: 1px solid var(--sectionBackgroundColor) !important;
+    border-top: 1px solid var(--secondaryBackgroundColor) !important;
     border-bottom: 0px !important;
   }
 }
