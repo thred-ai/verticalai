@@ -21,27 +21,22 @@ import {
   StepEditorContext,
   StepsConfiguration,
   ToolboxConfiguration,
-  ToolboxGroupConfiguration,
 } from 'verticalai-workflow-designer';
 import { DesignerComponent } from 'vertical-ai-designer-angular';
 import { Dict, LoadService } from '../load.service';
 import { Executable } from '../models/workflow/executable.model';
 import { AIModelType } from '../models/workflow/ai-model-type.model';
-import { Trigger } from '../models/workflow/trigger.model';
 import { TrainingData } from '../models/workflow/training-data.model';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Key } from '../models/workflow/key.model';
 import { APIRequest } from '../models/workflow/api-request.model';
-import { ApiEditorComponent } from '../api-editor/api-editor.component';
 import { MatDialog } from '@angular/material/dialog';
-import { CodeEditorComponent } from '../code-editor/code-editor.component';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { TaskTree } from '../models/workflow/task-tree.model';
 import { SettingsComponent } from '../settings/settings.component';
-import { DatabaseComponent } from '../database/database.component';
 import { DesignerService } from '../designer.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'verticalai-workflow-designer',
@@ -59,6 +54,25 @@ export class WorkflowDesignerComponent
 
   BranchedStep!: BranchedStep;
   any!: any;
+
+  timePeriods = [
+    'Bronze age',
+    'Iron age',
+    'Middle ages',
+    'Early modern period',
+    'Long nineteenth century',
+    'Middle ages',
+    'Early modern period',
+    'Long nineteenth century',  'Middle ages',
+    'Early modern period',
+    'Long nineteenth century',  'Middle ages',
+    'Early modern period',
+    'Long nineteenth century',
+  ];
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.timePeriods, event.previousIndex, event.currentIndex);
+  }
 
   @ViewChild('gridModeSwitch', { read: ElementRef }) element:
     | ElementRef

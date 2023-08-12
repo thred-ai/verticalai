@@ -15,7 +15,6 @@ import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { DragScrollModule } from 'ngx-drag-scroll';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { InViewportModule } from 'ng-in-viewport';
@@ -138,6 +137,7 @@ import { CollectionInfoComponent } from './collection-info/collection-info.compo
 import { TextAreaRenderPipe } from './text-area-render.pipe';
 import { MatDividerModule } from '@angular/material/divider';
 import { ResizableModule } from 'angular-resizable-element';
+import { SceneComponent } from './scene/scene.component';
 
 @NgModule({
   declarations: [
@@ -196,6 +196,7 @@ import { ResizableModule } from 'angular-resizable-element';
     DatabaseComponent,
     CollectionInfoComponent,
     TextAreaRenderPipe,
+    SceneComponent,
   ],
   imports: [
     CommonModule,

@@ -1,26 +1,34 @@
 <div
-  class="w-100 h-100 d-flex justify-content-between align-items-center"
+  class="w-100 h-100 d-flex justify-content-between align-items-center section-background"
   *ngIf="selectedFile"
+  #parent
 >
-  <div class="w-100 h-100" id="container">
-    <div class="h-100 w-100" style="position: relative" #parent>
-      <!-- 
-        <div
-          class="position-absolute d-flex justify-content-between align-items-center m-3"
-          style="z-index: 55; left: 0; bottom: 0"
-        >
-          <div class="primary-background btn-shadow rounded-10 ps-2 pe-1 py-1">
-            <mat-slide-toggle
-              #gridModeSwitch
-              class="primary-text"
-              [ngModel]="showingGrid"
-              (ngModelChange)="showGrid = $event"
-              [matTooltip]="'Toggle Grid'"
-            ></mat-slide-toggle>
-          </div>
-        </div> -->
+  <div
+    class="mx-0"
+    style="overflow-x: auto"
+    [style.width.px]="parent.clientWidth"
+    cdkScrollable
+    #frame
+  >
+    <div
+      class="d-inline-flex"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
+        class="p-3"
+        style="aspect-ratio: 0.75; max-width: 300px"
+        [style.width.px]="frame.clientWidth / 3"
+        cdkDrag
+        *ngFor="let timePeriod of timePeriods"
+      >
+        <app-scene> </app-scene>
+      </div>
+    </div>
+  </div>
 
-      <ng-container *ngIf="workflow && toolboxConfiguration.groups.length > 0">
+  <!-- <ng-container *ngIf="workflow && toolboxConfiguration.groups.length > 0">
         <sqd-designer
           [theme]="theme"
           [undoStackSize]="0"
@@ -39,7 +47,7 @@
         <ng-template #globalEditor let-editor> </ng-template>
 
         <ng-template #stepEditor stepEditor let-editor>
-          <!-- <div
+          <div
             class="w-100"
             style="overflow-y: scroll"
             [style.height.px]="parent.clientHeight"
@@ -199,11 +207,12 @@
                 </ion-accordion>
               </ng-container>
           </ion-accordion-group>
-          </div> -->
+          </div>
+        
+        
+        
         </ng-template>
-      </ng-container>
-    </div>
-  </div>
+      </ng-container> -->
 
   <div
     *ngIf="selectedFile && selectedFile.id != 'main'"
@@ -473,7 +482,6 @@
                     </verticalai-select-field>
                   </div>
                 </ng-container>
-
               </div>
             </div>
           </ng-template>

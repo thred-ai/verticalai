@@ -12326,22 +12326,22 @@ ion-select {
 
 .layout-container {
   height: calc(calc(var(--vh, 1vh) * 100) - 70px);
-  width: 100%;
+  width: 100vw;
 }
 
 .layout-container-grow {
   min-height: calc(calc(var(--vh, 1vh) * 100) - 70px);
-  width: 100%;
+  width: 100vw;
 }
 
 .layout-container-grow-full {
   min-height: calc(calc(var(--vh, 1vh) * 100));
-  width: 100%;
+  width: 100vw;
 }
 
 .layout-container-full {
   height: calc(calc(var(--vh, 1vh) * 100));
-  width: 100%;
+  width: 100vw;
 }
 
 .mat-expansion-panel-header-description,
